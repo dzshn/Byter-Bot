@@ -1,9 +1,10 @@
-import discord,ka
+import discord, ka, requests
 from os import environ
 class byterbot(discord.Client):
 	async def on_ready(self):
 		ka.status = "online"
 		print("[Bot - Info]: > Ready")
+		print("[Bot - Info]: > logged in as %s" % self.user)
 
 	async def on_message(self,m):
 		if m.content.startswith('%'):
@@ -18,6 +19,10 @@ class byterbot(discord.Client):
 				await self.close()
 
 			else: await m.channel.send(cm+": command not found")
+
+		elif m.author.name == "PriVer" and "byter" in m.content and "good night" in m.content or "goodnight" in m.content: await m.add_reaction("♥")
+
+		elif m.author.name == "PriVer" and "good night" in m.content or "goodnight" in m.content: await m.channel.send("Good night Pri!")
 			
 		elif self.user in m.mentions: await m.channel.send('Hey, my prefix here is %')
 
