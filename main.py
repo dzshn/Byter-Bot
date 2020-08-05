@@ -20,7 +20,7 @@ class byterbot(discord.Client):
 
 			else: await m.channel.send(cm+": command not found")
 
-		elif m.author.name == "PriVer" and "byter" in m.content and "good night" in m.content or "goodnight" in m.content: await m.add_reaction("♥")
+		elif ("good night", "goodnight", "gn",) in m.content: await m.add_reaction("♥")
 
 		elif m.author.name == "PriVer" and "good night" in m.content or "goodnight" in m.content: await m.channel.send("Good night Pri!")
 			
