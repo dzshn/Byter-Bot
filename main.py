@@ -1,10 +1,17 @@
 import discord, ka, requests
 from os import environ
 class byterbot(discord.Client):
+	gifDb = {}
+
 	async def on_ready(self):
 		ka.status = "online"
-		print("[Bot - Info]: > Ready")
-		print("[Bot - Info]: > logged in as %s" % self.user)
+		print("[Bot - Main]: Ready")
+		print("[Bot - Info]: (i) logged in as %s" % self.user)
+		print("[Bot - Info]: (l) loading gif database")
+		async for i in self.get_channel(740539699134857337).history():
+			self.gifDb[i.content] = i.attachments[0].url
+
+		print("[Bot - Info]: (l) loaded %s gifs" % len(self.gifDb))
 
 	async def on_message(self,m):
 		if m.content.startswith('%'):
@@ -18,9 +25,11 @@ class byterbot(discord.Client):
 				await m.channel.send('Shutting down...')
 				await self.close()
 
+			elif cm in self.gifDb: await m.channel.send(self.gifDb[cm])
+
 			else: await m.channel.send(cm+": command not found")
 
-		elif ("good night", "goodnight", "gn",) in m.content: await m.add_reaction("♥")
+		elif "good night" in m.content.lower() or "goodnight" in m.content.lower() or "gn" in m.content.lower(): await m.add_reaction("❤️")
 
 		elif m.author.name == "PriVer" and "good night" in m.content or "goodnight" in m.content: await m.channel.send("Good night Pri!")
 			
