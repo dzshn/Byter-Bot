@@ -24,6 +24,7 @@ class byterbot(discord.Client):
             cm = ctx[0]
             if cm == "t":
                 await m.channel.send('Bot online')
+                print(m.content)
 
             elif cm == "dcnt" and m.author.id == 310449948011528192:
                 await m.channel.send('Shutting down...')
@@ -39,22 +40,18 @@ class byterbot(discord.Client):
             if m.content in self.reDb:
                 self.reDb[m.content].append(m.attachments[0].url)
             else:
-                self.reDb[m.content] = [m.attachments[0].url]				
-            print("[Bot - Info]: (l) new gif detected, added to db, now %s gifs loaded" % len(self.reDb))
+                self.reDb[m.content] = [m.attachments[0].url]
+            print("[Bot - Info]: (l) new gif detected, added to db, now %s categories loaded" % len(self.reDb))
 
         elif m.content.startswith('request:'):
             await m.add_reaction("⬆")
             await m.add_reaction("⬇")
 
-        elif "good night" in m.content.lower() or "goodnight" in m.content.lower() or "gn" in m.content.lower():
+        elif "good night" in m.content.lower() or "goodnight" in m.content.lower():
             await m.add_reaction("❤️")
-
-        elif m.author.id == 724720098077573202 and "good night" in m.content.lower() or "goodnight" in m.content.lower():
-            await m.channel.send("Good night Pri!")
-
-        elif self.user in m.mentions:
-            await m.channel.send('Hey!')
-
+        
+        elif "virus" in m.content.lower():
+            await m.add_reaction(self.get_emoji(726611950200553502))
 
 ka.ka()
 ka.status = "starting"
