@@ -30,6 +30,12 @@ class byterbot(discord.Client):
                 await m.channel.send('Shutting down...')
                 await self.close()
 
+            elif cm == "gifs":
+                await m.channel.send(
+                    "Hey, there are %s categories loaded:\n%s"
+                    % (len(self.reDb), str(self.reDb.keys())[10:].strip("()[]"))
+                )
+
             elif cm in self.reDb:
                 await m.channel.send(choice(self.reDb[cm]))
 
