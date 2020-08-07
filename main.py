@@ -19,9 +19,9 @@ class byterbot(discord.Client):
         print("[Bot - Info]: (l) loaded %s categories" % len(self.reDb))
 
     async def on_message(self, m):
-        if m.content.startswith('%'):
-            ctx = m.content[1:].split(' ')
-            cm = ctx[0]
+        if m.content.startswith(('%','b!')):
+            ctx = m.content[1:].split(' ') if m.content.startswith('%') else m.content[2:].split(' ')
+            cm = ctx[0] if ctx[0] != '' else ctx[1]
 
             if cm == "help":
                 embed=discord.Embed(color=0x301baa)
