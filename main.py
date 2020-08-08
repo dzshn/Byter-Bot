@@ -39,12 +39,11 @@ class byterbot(discord.Client):
                                         **help** - show this info
                                         **gifs** - lists all loaded categories of gifs/images
                                         **stats** - shows some useful stats
-                                        **poll title, *options ** - makes a poll, options may be none (yes/no) or phrases separated by a comma (up to 20)
+                                        **poll title, *options ** - makes a poll, options may be none (yes/no) or phrases separated by a comma (up to 20), title may also be omitted if there arent other arguments
                                       ''',
                                 inline=False)
                 embed.add_field(name="And functions",
                                 value='''
-                                        **request: / suggestion:** - a message starting with these will be added and up and down arrow reaction, for voting
                                         **gifs / images !** - use the command %gifs to see what categories are avaiable and use % plus the name for me to pick a gif/image for you!
                                       ''',
                                 inline=False)
@@ -54,7 +53,22 @@ class byterbot(discord.Client):
 
             elif cm == "info":
                 if ctx[1] in ["character", "char"]:
-                    if ctx[2].lower in ["creu", "créu"]:
+                    if len(ctx) == 2:
+                        embed = discord.Embed(color=0x00002a)
+                        embed.add_field(name="Characters!",
+                                        value='''
+                                                Want to know about the créu characters? this is the way to go!
+
+                                                Just put the name of the character you want to know in front of this command! they are Créu, Petita, Liu-Liu, Muji, Printy, Mek & Krek, Rona & mou and of course me!
+                                              ''',
+                                        inline=False)
+                        embed.set_thumbnail(url=choice(["https://cdn.discordapp.com/attachments/741457274530299954/741615794340888586/selocreu2.gif", "https://cdn.discordapp.com/attachments/741457274530299954/741616136134852678/selocreu1.gif"]))
+                        embed.set_footer(text="creucat.com/characters © PriVer - bot developed by leninnog",
+                                         icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
+                        await m.channel.send('', embed=embed)
+                        return 1
+
+                    elif ctx[2].lower() in ["creu", "créu"]:
                         color = 0xf2f4f5
                         thumbUrl = "https://cdn.discordapp.com/attachments/741457274530299954/741460429733101678/BUTTON_creu.webp"
                         name = "Créu"
@@ -144,7 +158,7 @@ class byterbot(discord.Client):
             elif cm == "gifs":
                 embed = discord.Embed(color=0x301baa)
                 embed.add_field(name="Hey, there are %s categories loaded" % len(self.reDb),
-                                value="%s" % str(self.reDb.keys())[10:].strip("()[]").replace("'", ''),
+                                value="**categories:** %s\n\nyou may use the categories as a command, and I'll pick an image/gif from there!" % str(self.reDb.keys())[10:].strip("()[]").replace("'", ''),
                                 inline=False)
                 await m.channel.send('', embed=embed)
 
@@ -159,10 +173,12 @@ class byterbot(discord.Client):
                                 inline=False)
                 await m.channel.send('', embed=embed)
 
-            elif cm == "poll":
+            elif cm == "poll":    
                 embed = discord.Embed(color=0xb20ac5)
                 options = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮', '🇯', '🇰', '🇱', '🇲', '🇳', '🇴', '🇵', '🇶', '🇷' ,'🇸', '🇹']
                 poll = m.content.replace('b!', '%')[5:].split(',')
+                if len(ctx) == 1:
+                    poll[0] = 'poll'
                 pollText = ''
                 for i in poll[1:]:
                     pollText += options[poll[1:].index(i)]+' '+i+'\n'
@@ -189,10 +205,6 @@ class byterbot(discord.Client):
             else:
                 self.reDb[m.content] = [m.attachments[0].url]
             print("[Bot - Info]: (l) new gif detected, added to db, now %s categories loaded" % len(self.reDb))
-
-        elif m.content.startswith(('request:', 'suggestion:')):
-            await m.add_reaction("⬆")
-            await m.add_reaction("⬇")
 
         elif "virus" in m.content.lower():
             await m.add_reaction(self.get_emoji(726611950200553502))
