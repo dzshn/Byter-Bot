@@ -39,6 +39,7 @@ class byterbot(discord.Client):
                                         **help** - show this info
                                         **gifs** - lists all loaded categories of gifs/images
                                         **stats** - shows some useful stats
+                                        **poll title, *options ** - makes a poll, options may be none (yes/no) or phrases separated by a comma (up to 20)
                                       ''',
                                 inline=False)
                 embed.add_field(name="And functions",
@@ -160,16 +161,21 @@ class byterbot(discord.Client):
 
             elif cm == "poll":
                 embed = discord.Embed(color=0xb20ac5)
-                options = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮', '🇯', '🇰', '🇱', '🇲', '🇳', '🇴', '🇵', '🇶', '🇷' ,'🇸', '🇹', '🇺', '🇻', '🇼', '🇽', '🇾', '🇿']
+                options = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮', '🇯', '🇰', '🇱', '🇲', '🇳', '🇴', '🇵', '🇶', '🇷' ,'🇸', '🇹']
                 poll = m.content.replace('b!', '%')[5:].split(',')
                 pollText = ''
                 for i in poll[1:]:
-                    pollText += options[poll[1:].index(i)]+' '+i+', ' 
+                    pollText += options[poll[1:].index(i)]+' '+i+'\n'
+                if len(poll) == 1:
+                    pollText = '✅ / ❎'
                 embed.add_field(name=poll[0].strip().title(),
                                 value=pollText)
                 pollMsg = await m.channel.send('', embed=embed)
                 for i in range(len(poll[1:])):
                     await pollMsg.add_reaction(options[i])
+                if len(poll) == 1:
+                    await pollMsg.add_reaction('✅')
+                    await pollMsg.add_reaction('❎')
 
             elif cm in self.reDb:
                 await m.channel.send(choice(self.reDb[cm]))
