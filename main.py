@@ -51,7 +51,7 @@ class byterbot(discord.Client):
                                  icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
                 await m.channel.send('', embed=embed)
 
-            if cm == "info":
+            elif cm == "info":
                 if ctx[1] in ["character", "char"]:
                     if ctx[2].lower in ["creu", "créu"]:
                         color = 0xf2f4f5
@@ -157,6 +157,19 @@ class byterbot(discord.Client):
                                       ''' % (round(time()-initTime, 2), round(self.readyTime-initTime, 2), round(self.loadTime-self.readyTime, 2)),
                                 inline=False)
                 await m.channel.send('', embed=embed)
+
+            elif cm == "poll":
+                embed = discord.Embed(color=0xb20ac5)
+                options = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮', '🇯', '🇰', '🇱', '🇲', '🇳', '🇴', '🇵', '🇶', '🇷' ,'🇸', '🇹', '🇺', '🇻', '🇼', '🇽', '🇾', '🇿']
+                poll = m.content.replace('b!', '%')[5:].split(',')
+                pollText = ''
+                for i in poll[1:]:
+                    pollText += options[poll[1:].index(i)]+' '+i+', ' 
+                embed.add_field(name=poll[0].strip().title(),
+                                value=pollText)
+                pollMsg = await m.channel.send('', embed=embed)
+                for i in range(len(poll[1:])):
+                    await pollMsg.add_reaction(options[i])
 
             elif cm in self.reDb:
                 await m.channel.send(choice(self.reDb[cm]))
