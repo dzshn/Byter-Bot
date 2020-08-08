@@ -27,7 +27,7 @@ class byterbot(discord.Client):
         self.loadTime = time()
 
     async def on_message(self, m):
-        if m.content.startswith(('%','b!')):
+        if m.content.startswith(('%', 'b!')):
             ctx = m.content[1:].split(' ') if m.content.startswith('%') else m.content[2:].split(' ')
             cm = ctx[0]
 
@@ -44,7 +44,7 @@ class byterbot(discord.Client):
                 embed.add_field(name="And functions",
                                 value='''
                                         **request: / suggestion:** - a message starting with these will be added and up and down arrow reaction, for voting
-                                        **gifs / images !** - use the command %gifs to see what categories are avaiable and use % plus the name for me to pick a gif/image for you!                                        
+                                        **gifs / images !** - use the command %gifs to see what categories are avaiable and use % plus the name for me to pick a gif/image for you!
                                       ''',
                                 inline=False)
                 embed.set_footer(text="creucat.com © PriVer - bot developed by leninnog",
@@ -58,11 +58,7 @@ class byterbot(discord.Client):
                         thumbUrl = "https://cdn.discordapp.com/attachments/741457274530299954/741460429733101678/BUTTON_creu.webp"
                         name = "Créu"
                         desc = "While naive and sometimes  clueless, Créu is a friend for life and brings joy to everyone he meets! A little out of touch with reality, Créu enjoys the world of the wide Web. Has a crush on Petita and loves to dance!"
-                        favs = '''
-                                <:coffee:741469635492446268> Latte\n
-                                <:ice_cream:741469513773613118> Coconut\n
-                                <:music:741469877143076946> Funk\n
-                               '''
+                        favs = "<:coffee:741469635492446268> Latte\n\n<:ice_cream:741469513773613118> Coconut\n\n<:music:741469877143076946> Funk"
                         imgUrl = "https://cdn.discordapp.com/attachments/741457274530299954/741460469960802424/CHARCREUcreu.webp"
 
                     elif ctx[2].lower() == "petita":
@@ -70,11 +66,7 @@ class byterbot(discord.Client):
                         thumbUrl = "https://cdn.discordapp.com/attachments/741457274530299954/741476662469984316/BUTTON_petita.webp"
                         name = "Petita"
                         desc = "Petita loves a little friendly competition! and can be a little jealous of Créu sometimes. She will speak up for what’s right and never gives up!"
-                        favs = '''
-                                <:coffee:741469635492446268> Brewed, no cream\n
-                                <:ice_cream:741469513773613118> Strawberry Vanilla\n
-                                <:music:741469877143076946> Pop, Samba\n
-                               '''
+                        favs = "<:coffee:741469635492446268> Brewed, no cream\n\n<:ice_cream:741469513773613118> Strawberry Vanilla\n\n<:music:741469877143076946> Pop, Samba"
                         imgUrl = "https://cdn.discordapp.com/attachments/741457274530299954/741476770276048986/CHARCREUpetita.webp"
 
                     elif ctx[2].lower() in ["liu-liu", "liuliu"]:
@@ -82,11 +74,7 @@ class byterbot(discord.Client):
                         thumbUrl = "https://cdn.discordapp.com/attachments/741457274530299954/741479280831103076/BUTTON_liuliu.webp"
                         name = "Liu-Liu"
                         desc = "Liu-Liu loves great food and dreams of becoming a famous chef someday. Usually doesn’t care what anyone says. Always down for ice cream and coffee!"
-                        favs = '''
-                                <:coffee:741469635492446268> Cappuccino\n
-                                <:ice_cream:741469513773613118> Cookie Dough\n
-                                <:music:741469877143076946> Swing\n
-                               '''
+                        favs = "<:coffee:741469635492446268> Cappuccino\n\n<:ice_cream:741469513773613118> Cookie Dough\n\n<:music:741469877143076946> Swing"
                         imgUrl = "https://cdn.discordapp.com/attachments/741457274530299954/741479323999141978/CHARCREUliuliu.webp"
 
                     elif ctx[2].lower() == "muji":
@@ -94,11 +82,7 @@ class byterbot(discord.Client):
                         thumbUrl = "https://cdn.discordapp.com/attachments/741457274530299954/741480701693788200/BUTTON_muji.webp"
                         name = "Muji"
                         desc = "Muji is Créu's cousin who lives abroad. She runs a beauty vlog and loves the world of social media. She believes change is beautiful! As someone who enjoys philosophy and reading, she may get upset when others judge her by her looks."
-                        favs = '''
-                                <:coffee:741469635492446268> Caramel Macchiato\n
-                                <:ice_cream:741469513773613118> Red Velvet\n
-                                <:music:741469877143076946> Rock n' Roll\n
-                               '''
+                        favs = "<:coffee:741469635492446268> Caramel Macchiato\n\n<:ice_cream:741469513773613118> Red Velvet\n\n<:music:741469877143076946> Rock n' Roll"
                         imgUrl = "https://cdn.discordapp.com/attachments/741457274530299954/741480741413584946/CHARCREUmuji.webp"
 
                     elif ctx[2].lower() == "printy":
@@ -106,11 +90,7 @@ class byterbot(discord.Client):
                         thumbUrl = "https://cdn.discordapp.com/attachments/741457274530299954/741481764589142046/BUTTON_printy.webp"
                         name = "Printy"
                         desc = "Petita's little sister. Even though she's the youngest of the group, Printy's got a keen interest on vintage artifacts, especially from the 90’s and 2000’s. Always curious and wanting to learn and discover. She absolutely loves Pixel art!"
-                        favs = '''
-                                <:coffee:741469635492446268> Frappe\n
-                                <:ice_cream:741469513773613118> Tutti Frutti Popsicle\n
-                                <:music:741469877143076946> Video Game Music\n
-                               '''
+                        favs = "<:coffee:741469635492446268> Frappe\n\n<:ice_cream:741469513773613118> Tutti Frutti Popsicle\n\n<:music:741469877143076946> Video Game Music"
                         imgUrl = "https://cdn.discordapp.com/attachments/741457274530299954/741481809262542928/CHARCREUprinty.webp"
 
                     elif ctx[2].lower() in ["mek", "krek", "mek&krek"]:
@@ -118,11 +98,7 @@ class byterbot(discord.Client):
                         thumbUrl = "https://cdn.discordapp.com/attachments/741457274530299954/741483630534328351/BUTTON_mekrek.webp"
                         name = "Mek & Krek"
                         desc = "Like two rival corporations, these two are inseparable but tend to fight a lot. They often find that the thing one accuses the other of doing is exactly what they're guilty of."
-                        favs = '''
-                                <:coffee:741469635492446268> Espresso / Americano\n
-                                <:ice_cream:741469513773613118> Green tea Mochi / Mint Dippin Dots\n
-                                <:music:741469877143076946> Dubstep / Classical\n
-                               '''
+                        favs = "<:coffee:741469635492446268> Espresso / Americano\n\n<:ice_cream:741469513773613118> Green tea Mochi / Mint Dippin Dots\n\n<:music:741469877143076946> Dubstep / Classical"
                         imgUrl = "https://cdn.discordapp.com/attachments/741457274530299954/741483723740151868/CHARCREUmekkrek.webp"
 
                     elif ctx[2].lower() == "byter":
@@ -130,11 +106,7 @@ class byterbot(discord.Client):
                         thumbUrl = "https://cdn.discordapp.com/attachments/741457274530299954/741457798705184830/BUTTON_byter.webp"
                         name = "Byter"
                         desc = "Byter is a tiny hero who lives inside your computer. He makes sure no malware gets through and despises spam! Many have heard of him but never truly seen him."
-                        favs = '''
-                                <:coffee:741469635492446268> ?\n
-                                <:ice_cream:741469513773613118> ?\n
-                                <:music:741469877143076946> Eletronic\n
-                               '''
+                        favs = "<:coffee:741469635492446268> ?\n\n<:ice_cream:741469513773613118> ?\n\n<:music:741469877143076946> Eletronic"
                         imgUrl = "https://cdn.discordapp.com/attachments/741457274530299954/741460380710207588/CHARCREUbyter.webp"
 
                     elif ctx[2].lower() in ["rona", "mou", "rona&mou"]:
@@ -142,12 +114,16 @@ class byterbot(discord.Client):
                         thumbUrl = "https://cdn.discordapp.com/attachments/741457274530299954/741486168578981888/BUTTON_ronamou.webp"
                         name = "Rona & Mou"
                         desc = "Créu's parents! Always eager to help. They make sure the kitties don’t get into too much trouble or mischievousness!"
-                        favs = '''
-                                <:coffee:741469635492446268> Irish Coffee / Bicerin\n
-                                <:ice_cream:741469513773613118> Butter Pecan / Pistachio\n
-                                <:music:741469877143076946> Bossa Nova / New Age\n
-                               '''
+                        favs = "<:coffee:741469635492446268> Irish Coffee / Bicerin\n\n<:ice_cream:741469513773613118> Butter Pecan / Pistachio\n\n<:music:741469877143076946> Bossa Nova / New Age"
                         imgUrl = "https://cdn.discordapp.com/attachments/741457274530299954/741486251319885824/CHARCREUronamou.webp"
+
+                    else:
+                        color = 0xD3D152
+                        thumbUrl = "https://cdn.discordapp.com/attachments/741457274530299954/741553915740422204/thonk.png"
+                        name="%s: Not found\n" % ctx[2]
+                        desc="???"
+                        favs="<:coffee:741469635492446268> ???\n\n<:ice_cream:741469513773613118> ???\n\n<:music:741469877143076946> ???"
+                        imgUrl="https://cdn.discordapp.com/attachments/741457274530299954/741553915740422204/thonk.png"
 
                     if ctx[2] != "":
                         embed = discord.Embed(color=color)
