@@ -1,4 +1,5 @@
 from secrets import choice
+from asyncio import sleep
 from os import environ
 from time import time
 import discord
@@ -205,6 +206,13 @@ class byterbot(discord.Client):
             else:
                 self.reDb[m.content] = [m.attachments[0].url]
             print("[Bot - Info]: (l) new gif detected, added to db, now %s categories loaded" % len(self.reDb))
+        elif m.content.startswith("wait, it's all ") and m.content.endswith('?'):
+            async with m.channel.typing():
+                await sleep(2)
+            await m.channel.send('always has been')
+            async with m.channel.typing():
+                await sleep (3)
+            await m.channel.send("I'm sorry "+m.author.name)
 
         elif "virus" in m.content.lower():
             await m.add_reaction(self.get_emoji(726611950200553502))
