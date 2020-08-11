@@ -3,7 +3,6 @@ from asyncio import sleep
 from os import environ
 from time import time
 import discord
-import ka
 
 initTime = time()
 
@@ -14,7 +13,6 @@ class byterbot(discord.Client):
 
     async def on_ready(self):
         self.readyTime = time()
-        ka.status = "online"
         print("[Bot - Main]: Ready")
         print("[Bot - Info]: (i) logged in as %s" % self.user)
         print("[Bot - Info]: (l) loading reaction database")
@@ -221,7 +219,5 @@ class byterbot(discord.Client):
             await m.add_reaction("❤️")
 
 
-ka.ka()
-ka.status = "starting"
 bot = byterbot()
 bot.run(environ["TKN"])
