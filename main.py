@@ -1,6 +1,5 @@
 from secrets import choice
 from asyncio import sleep
-from os import environ
 from time import time
 import discord
 
@@ -220,4 +219,4 @@ class byterbot(discord.Client):
 
 
 bot = byterbot()
-bot.run(environ["TKN"])
+bot.run("NzQwMDA2NDU3ODA1NjM1Njc4.XyiuuA.O2PFUXd4r-GZVfw-g5CZVHMQacc")
