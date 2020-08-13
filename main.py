@@ -1,7 +1,8 @@
 from datetime import timedelta
-from random import choice
 from asyncio import sleep
+from random import choice
 from time import time
+from os import system
 import discord
 import json
 
@@ -184,6 +185,13 @@ class byterbot(discord.Client):
                     exec(m.content[7:])
                 else:
                     await m.channel.send("pyexec: access denied!")
+
+            elif cm == "log":
+                if m.author.id == 310449948011528192:
+                    if ctx[1] == "daemon":
+                        await m.channel.send(system('tail /var/log/daemon.log'))
+                else:
+                    await m.channel.send("log: access denied!")
 
             elif cm == "poll":    
                 embed = discord.Embed(color=0xb20ac5)
