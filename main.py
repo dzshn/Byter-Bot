@@ -180,7 +180,7 @@ class byterbot(discord.Client):
                 await m.channel.send('', embed=embed)
 
             elif cm == "pyexec" and m.content.startswith('%'):
-                if m.author.id == "310449948011528192":
+                if m.author.id == 310449948011528192:
                     exec(m.content[7:])
                 else:
                     await m.channel.send("pyexec: access denied!")
