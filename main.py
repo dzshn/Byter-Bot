@@ -179,7 +179,7 @@ class byterbot(discord.Client):
                 await m.channel.send('', embed=embed)
 
             elif cm == "embed":
-                await m.channel.send('', embed=discord.Embed.from_dict(m.content.replace('b!', '%')[6:]))
+                await m.channel.send('', embed=discord.Embed.from_dict(dict(m.content.replace('b!', '%')[6:])))
 
             elif cm == "poll":    
                 embed = discord.Embed(color=0xb20ac5)
