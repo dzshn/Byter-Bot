@@ -170,7 +170,7 @@ class byterbot(discord.Client):
                                         **load time**: I took %s seconds to load after connecting
                                       '''
                                       % (
-                                         timedelta(seconds=round(time()-initTime)),
+                                         timedelta(seconds=round(time()-initTime, 0)),
                                          round(time()-initTime, 2),
                                          round(self.readyTime-initTime, 2),
                                          round(self.loadTime-self.readyTime, 2)
