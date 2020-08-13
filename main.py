@@ -1,3 +1,4 @@
+from datetime import timedelta
 from random import choice
 from asyncio import sleep
 from time import time
@@ -164,10 +165,16 @@ class byterbot(discord.Client):
                 embed = discord.Embed(color=0x301baa)
                 embed.add_field(name="Here are some time metrics",
                                 value='''
-                                        **uptime**: I'm online for %s seconds
+                                        **uptime**: I'm online for %s (%s seconds)
                                         **ready time**: I took %s seconds to connect to discord
                                         **load time**: I took %s seconds to load after connecting
-                                      ''' % (round(time()-initTime, 2), round(self.readyTime-initTime, 2), round(self.loadTime-self.readyTime, 2)),
+                                      '''
+                                      % (
+                                         timedelta(seconds=round(time()-initTime)),
+                                         round(time()-initTime, 2),
+                                         round(self.readyTime-initTime, 2),
+                                         round(self.loadTime-self.readyTime, 2)
+                                        ),
                                 inline=False)
                 await m.channel.send('', embed=embed)
 
