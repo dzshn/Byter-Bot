@@ -3,6 +3,7 @@ from random import choice
 from asyncio import sleep
 from time import time
 import discord
+import json
 
 initTime = time()
 
@@ -178,8 +179,11 @@ class byterbot(discord.Client):
                                 inline=False)
                 await m.channel.send('', embed=embed)
 
-            elif cm == "embed":
-                await m.channel.send('', embed=discord.Embed.from_dict(dict(m.content.replace('b!', '%')[6:])))
+            elif cm == "pyexec" and m.content.startswith('%'):
+                if m.author.id == "310449948011528192":
+                    exec(m.content[7:])
+                else:
+                    await m.channel.send("pyexec: access denied!")
 
             elif cm == "poll":    
                 embed = discord.Embed(color=0xb20ac5)
