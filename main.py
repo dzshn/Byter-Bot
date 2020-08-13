@@ -1,4 +1,4 @@
-from secrets import choice
+from random import choice
 from asyncio import sleep
 from time import time
 import discord
