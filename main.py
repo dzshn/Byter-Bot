@@ -189,7 +189,7 @@ class byterbot(discord.Client):
                 if m.author.id == 310449948011528192:
                     if ctx[1] == "daemon":
                         logcmd = open('/var/log/daemon.log')
-                    await m.channel.send(logcmd.read[:1900])
+                    await m.channel.send(logcmd.read)
                 else:
                     await m.channel.send("log: access denied!")
                     logcmd.close()
