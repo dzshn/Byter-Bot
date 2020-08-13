@@ -170,13 +170,16 @@ class byterbot(discord.Client):
                                         **load time**: I took %s seconds to load after connecting
                                       '''
                                       % (
-                                         timedelta(seconds=round(time()-initTime, 0)),
+                                         timedelta(seconds=round(time()-initTime)),
                                          round(time()-initTime, 2),
                                          round(self.readyTime-initTime, 2),
                                          round(self.loadTime-self.readyTime, 2)
                                         ),
                                 inline=False)
                 await m.channel.send('', embed=embed)
+
+            elif cm == "embed":
+                await m.channel.send('', embed=discord.Embed.from_dict(m.content.replace('b!', '%')[6:]))
 
             elif cm == "poll":    
                 embed = discord.Embed(color=0xb20ac5)
@@ -202,7 +205,7 @@ class byterbot(discord.Client):
                 await m.channel.send(choice(self.reDb[cm]))
 
             else:
-                await m.channel.send(cm + ": command not found")
+                await m.channel.send(cm + ': command not found')
 
         elif m.channel.id == 740539699134857337:
             if m.content in self.reDb:
