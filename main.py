@@ -82,7 +82,7 @@ class byterbot(discord.Client):
                             "thumb": "https://cdn.discordapp.com/attachments/741457274530299954/741553915740422204/thonk.png",
                             "name": "%s: Not found\n" % ctx[2],
                             "desc": "???",
-                            "favs": "<:coffee:741469635492446268> ???\n\n<:ice_cream:741469513773613118> ???\n\n<:music:741469877143076946> ???",
+                            "favs": ["???","???","???"],
                             "img": "https://cdn.discordapp.com/attachments/741457274530299954/741553915740422204/thonk.png"
                         }
 
