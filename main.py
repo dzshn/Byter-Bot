@@ -39,12 +39,14 @@ class byterbot(discord.Client):
                                             **gifs** - lists all loaded categories of gifs/images
                                             **stats** - shows some useful stats
                                             **poll title, *options** - makes a poll, options may be none (yes/no) or phrases separated by a comma (up to 20), title may also be omitted if there arent other arguments
+                                            
+                                            Want me on your server? [click here!](https://discord.com/api/oauth2/authorize?client_id=740006457805635678&permissions=537259072&scope=bot)
+                                            
+                                            *Also, here is a copyright disclaimer!*
+                                            © 2020 PriVer. All rights reserved. All visual content on this bot (including characters, images and trademarks) are protected by Intellectual Property rights owned by Priscila Vertamatti.
                                           ''')
-                embed.add_field(name="Also, here is a copyright disclaimer!",
-                                value="© 2020 PriVer. All rights reserved. All visual content on this bot (including characters, images and trademarks) are protected by Intellectual Property rights owned by Priscila Vertamatti.",
-                                inline=False)
                 embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/741457274530299954/741457798705184830/BUTTON_byter.webp")
-                embed.set_footer(text="[creucat.com](https://creucat.com) © PriVer - bot developed by leninnog - [want me in your server? click here!](https://discord.com/api/oauth2/authorize?client_id=740006457805635678&permissions=537259072&scope=bot)",
+                embed.set_footer(text="creucat.com © PriVer - bot developed by leninnog",
                                  icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
                 await m.channel.send('', embed=embed)
 
@@ -54,10 +56,10 @@ class byterbot(discord.Client):
                                           title="**Info!**",
                                           value='''
                                                   Currently there's info only for characters!
-                                                  use `char` or `character` after this command
+                                                  use `char` or `character` after this command to see it!
                                                 ''')
                     embed.set_thumbnail(url=choice(["https://cdn.discordapp.com/attachments/741457274530299954/741615794340888586/selocreu2.gif", "https://cdn.discordapp.com/attachments/741457274530299954/741616136134852678/selocreu1.gif"]))
-                    embed.set_footer(text="[creucat.com](https://creucat.com) © PriVer - bot developed by leninnog",
+                    embed.set_footer(text="creucat.com © PriVer - bot developed by leninnog",
                                      icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
 
                 if ctx[1] in ["character", "char"]:
@@ -71,7 +73,7 @@ class byterbot(discord.Client):
                                               '''
                                             )
                         embed.set_thumbnail(url=choice(["https://cdn.discordapp.com/attachments/741457274530299954/741615794340888586/selocreu2.gif", "https://cdn.discordapp.com/attachments/741457274530299954/741616136134852678/selocreu1.gif"]))
-                        embed.set_footer(text="[creucat.com/characters](https://creucat.com/characters) © PriVer - bot developed by leninnog",
+                        embed.set_footer(text="creucat.com/characters © PriVer - bot developed by leninnog",
                                          icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
                         await m.channel.send('', embed=embed)
                         return 1
