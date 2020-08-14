@@ -36,10 +36,10 @@ class byterbot(discord.Client):
                 embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/741457274530299954/741457798705184830/BUTTON_byter.webp")
                 embed.add_field(name="Hello! here are the valid commands",
                                 value='''
-                                        **help** - show this info
-                                        **gifs** - lists all loaded categories of gifs/images
-                                        **stats** - shows some useful stats
-                                        **poll title, *options ** - makes a poll, options may be none (yes/no) or phrases separated by a comma (up to 20), title may also be omitted if there arent other arguments
+                                        help - show this info
+                                        gifs - lists all loaded categories of gifs/images
+                                        stats - shows some useful stats
+                                        poll title, *options - makes a poll, options may be none (yes/no) or phrases separated by a comma (up to 20), title may also be omitted if there arent other arguments
                                       ''',
                                 inline=False)
                 embed.add_field(name="And functions",
