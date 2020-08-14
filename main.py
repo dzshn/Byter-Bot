@@ -181,18 +181,9 @@ class byterbot(discord.Client):
 
             elif cm == "pyexec" and m.content.startswith('%'):
                 if m.author.id == 310449948011528192:
-                    exec(m.content[7:])
+                    exec(m.content[6:])
                 else:
                     await m.channel.send("pyexec: access denied!")
-
-            elif cm == "log":
-                if m.author.id == 310449948011528192:
-                    if ctx[1] == "daemon":
-                        logcmd = open('/var/log/daemon.log')
-                    await m.channel.send(logcmd.read()[2000:])
-                else:
-                    await m.channel.send("log: access denied!")
-                    logcmd.close()
 
             elif cm == "poll":    
                 embed = discord.Embed(color=0xb20ac5)
