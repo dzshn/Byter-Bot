@@ -2,10 +2,17 @@ from datetime import timedelta
 from asyncio import sleep
 from random import choice
 from time import time
+from sys import argv
 import discord
 import json
 
 initTime = time()
+
+if len(argv) == 1:
+    tkn = "NzQwMDA2NDU3ODA1NjM1Njc4.XyiuuA.O2PFUXd4r-GZVfw-g5CZVHMQacc"
+else:
+    if argv[1] == "dev":
+        tkn = "NzQzMzAyMTQ3OTI3NDQxNDU5.XzSsEQ.yWp07ZSoOIhoIFm7oTE9ROuUrs4"
 
 class byterbot(discord.Client):
     reDb = {}
@@ -96,7 +103,7 @@ class byterbot(discord.Client):
                     embed.add_field(name=charData['name'], value=charData['desc'], inline=False)
                     embed.add_field(name="Favorites", value="<:coffee:741469635492446268> %s\n\n<:ice_cream:741469513773613118> %s\n\n<:music:741469877143076946> %s" % tuple(charData['favs']), inline=False)
                     embed.set_image(url=charData['img'])
-                    embed.set_footer(text="[creucat.com/characters](https://creucat.com/characters) © PriVer - bot developed by leninnog",
+                    embed.set_footer(text="creucat.com/characters © PriVer - bot developed by leninnog",
                                         icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
 
                 await m.channel.send('', embed=embed)
@@ -177,4 +184,4 @@ class byterbot(discord.Client):
 
 
 bot = byterbot()
-bot.run("NzQwMDA2NDU3ODA1NjM1Njc4.XyiuuA.O2PFUXd4r-GZVfw-g5CZVHMQacc")
+bot.run(tkn)
