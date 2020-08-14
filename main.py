@@ -34,17 +34,17 @@ class byterbot(discord.Client):
                 embed=discord.Embed(color=0x301baa,
                                     title="**Hello! here are the valid commands**",
                                     description='''
-                                            **help** - show this info about commands
-                                            **info** - shows many infos about créu and his friends!
-                                            **gifs** - lists all loaded categories of gifs/images
-                                            **stats** - shows some useful stats
-                                            **poll title, *options** - makes a poll, options may be none (yes/no) or phrases separated by a comma (up to 20), title may also be omitted if there arent other arguments
-                                            
-                                            Want me on your server? [click here!](https://discord.com/api/oauth2/authorize?client_id=740006457805635678&permissions=537259072&scope=bot)
-                                            
-                                            *Also, here is a copyright disclaimer!*
-                                            © 2020 PriVer. All rights reserved. All visual content on this bot (including characters, images and trademarks) are protected by Intellectual Property rights owned by Priscila Vertamatti.
-                                          ''')
+                                                  **help** - show this info about commands
+                                                  **info** - shows many infos about créu and his friends!
+                                                  **gifs** - lists all loaded categories of gifs/images
+                                                  **stats** - shows some useful stats
+                                                  **poll title, *options** - makes a poll, options may be none (yes/no) or phrases separated by a comma (up to 20), title may also be omitted if there arent other arguments
+                                                
+                                                  Want me on your server? [click here!](https://discord.com/api/oauth2/authorize?client_id=740006457805635678&permissions=537259072&scope=bot)
+                                                  
+                                                  *Also, here is a copyright disclaimer!*
+                                                  © 2020 PriVer. All rights reserved. All visual content on this bot (including characters, images and trademarks) are protected by Intellectual Property rights owned by Priscila Vertamatti.
+                                                ''')
                 embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/741457274530299954/741457798705184830/BUTTON_byter.webp")
                 embed.set_footer(text="creucat.com © PriVer - bot developed by leninnog",
                                  icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
@@ -62,7 +62,7 @@ class byterbot(discord.Client):
                     embed.set_footer(text="creucat.com © PriVer - bot developed by leninnog",
                                      icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
 
-                if ctx[1] in ["character", "char"]:
+                elif ctx[1] in ["character", "char"]:
                     if len(ctx) == 2:
                         embed = discord.Embed(color=0x00002a,
                                               title="**Characters!**",
