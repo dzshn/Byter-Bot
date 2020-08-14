@@ -54,7 +54,7 @@ class byterbot(discord.Client):
                 if len(ctx) == 1:
                     embed = discord.Embed(color=0x301baa,
                                           title="**Info!**",
-                                          value='''
+                                          description='''
                                                   Currently there's info only for characters!
                                                   use `char` or `character` after this command to see it!
                                                 ''')
