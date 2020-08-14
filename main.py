@@ -89,7 +89,7 @@ class byterbot(discord.Client):
                     embed = discord.Embed(color=int(charData['color'], 16))
                     embed.set_thumbnail(url=charData['thumb'])
                     embed.add_field(name=charData['name'], value=charData['desc'], inline=False)
-                    embed.add_field(name="Favorites", value="<:coffee:741469635492446268> %s\n\n<:ice_cream:741469513773613118> %s\n\n<:music:741469877143076946> %s" % charData['favs'], inline=False)
+                    embed.add_field(name="Favorites", value="<:coffee:741469635492446268> %s\n\n<:ice_cream:741469513773613118> %s\n\n<:music:741469877143076946> %s" % (charData['favs']), inline=False)
                     embed.set_image(url=charData['img'])
                     embed.set_footer(text="creucat.com/characters © PriVer - bot developed by leninnog",
                                         icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
