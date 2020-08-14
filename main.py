@@ -47,6 +47,11 @@ class byterbot(discord.Client):
                                         **gifs / images !** - use the command %gifs to see what categories are avaiable and use % plus the name for me to pick a gif/image for you!
                                       ''',
                                 inline=False)
+                embed.add_field(name="Also, here is a copyright disclaimer!",
+                                value='''
+                                        © 2020 PriVer. All rights reserved. All visual content on this bot (including characters, images and trademarks) are protected by Intellectual Property rights owned by Priscila Vertamatti.
+                                      ''',
+                                inline=False)
                 embed.set_footer(text="creucat.com © PriVer - bot developed by leninnog",
                                  icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
                 await m.channel.send('', embed=embed)
