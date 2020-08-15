@@ -3,6 +3,7 @@ from asyncio import sleep
 from random import choice
 from time import time
 from sys import argv
+import requests
 import discord
 import json
 
@@ -155,6 +156,42 @@ class byterbot(discord.Client):
                 if len(poll) == 1:
                     await pollMsg.add_reaction('✅')
                     await pollMsg.add_reaction('❎')
+
+            elif cm == "time":
+                if len(ctx) == 1:
+                    embed = discord.Embed(title="Timezones!",
+                                          description='''
+                                          timezones can be weird some times, but hopefully there's an api I can push data from!
+
+                                          The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, CET, CST6CDT, EET, EET5EDT, Etc, Europe, HST, Indian, MET, MST, MST5MDT, PST8PDT, Pacific and WET
+                                          ''')
+
+                else:
+                    page = str(ctx[1:]).strip('[]').replace("'",'').replace(', ', '/')
+                    data = requests.get('http://worldtimeapi.org/api/'+page).json()
+                    data_out = ""
+                    title = "**"+page+"**"
+
+                    if "datetime" in data:
+                        data_out = "**Current time:** %s\n**UTC offset:** %s" % (
+                            data['datetime'].split('T')[1][:8], data['utc_offset']
+                        )
+                        title += "'s current time"
+
+                    elif "error" in data:
+                        data_out = data['error']
+                        title += ": error!"
+
+                    else:
+                        for i in data:
+                            i = i.lower().replace(ctx[1], '').lstrip('/')
+                            data_out += i+', '
+                        title += "'s avaiable timezones"
+
+                    embed = discord.Embed(title=title, description=data_out)
+
+                embed.set_footer(text="Powered by worldtimeapi.org - bot made by leninnog")
+                await m.channel.send('', embed=embed)
 
             elif cm in self.reDb:
                 await m.channel.send(choice(self.reDb[cm]))
