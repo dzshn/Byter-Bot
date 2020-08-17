@@ -11,18 +11,20 @@ initTime = time()
 
 if len(argv) == 1:
     tkn = "NzQwMDA2NDU3ODA1NjM1Njc4.XyiuuA.O2PFUXd4r-GZVfw-g5CZVHMQacc"
-else:
-    if argv[1] == "dev":
-        tkn = "NzQzMzAyMTQ3OTI3NDQxNDU5.XzSsEQ.yWp07ZSoOIhoIFm7oTE9ROuUrs4"
+elif argv[1] == "dev":
+    tkn = "NzQzMzAyMTQ3OTI3NDQxNDU5.XzSsEQ.yWp07ZSoOIhoIFm7oTE9ROuUrs4"
 
 class byterbot(discord.Client):
     reDb = {}
+
     readyTime = 0
     loadTime = 0
 
-    charFile = open('data/characters.json')
-    characters = json.load(charFile)
-    charFile.close()
+    characters = open('data/characters.json')
+    characters = json.load(characters)
+
+    helpdata = open('data/help.json')
+    helpdata = json.load(helpdata)
 
     async def on_ready(self):
         self.readyTime = time()         
@@ -39,23 +41,32 @@ class byterbot(discord.Client):
             cm = ctx[0]
 
             if cm == "help":
-                embed=discord.Embed(color=0x301baa,
-                                    title="**Hello! here are the valid commands**",
-                                    description='''
-                                                  **help** - show this info about commands
-                                                  **info** - shows many infos about créu and his friends!
-                                                  **gifs** - lists all loaded categories of gifs/images
-                                                  **stats** - shows some useful stats
-                                                  **poll title, *options** - makes a poll, options may be none (yes/no) or phrases separated by a comma (up to 20), title may also be omitted if there arent other arguments
-                                                
-                                                  Want me on your server? [click here!](https://discord.com/api/oauth2/authorize?client_id=740006457805635678&permissions=537259072&scope=bot)
-                                                  
-                                                  *Also, here is a copyright disclaimer!*
-                                                  © 2020 PriVer. All rights reserved. All visual content on this bot (including characters, images and trademarks) are protected by Intellectual Property rights owned by Priscila Vertamatti.
-                                                ''')
+                if len(ctx) == 1:
+                    data = self.helpdata['index']
+
+                else:
+                    if ctx[1] in self.helpdata:
+                        data = self.helpdata[ctx[1]]
+
+                    else:
+                        await m.channel.send('help: %s: page not found' % ctx[1])
+                        return 1
+
+                embed = discord.Embed(color=0x301baa, title=data['title'], description=''.join(data['description']))
                 embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/741457274530299954/741457798705184830/BUTTON_byter.webp")
-                embed.set_footer(text="creucat.com © PriVer - bot developed by leninnog",
+                embed.set_footer(text="creucat.com © PriVer - bot developed by leninnog#2580",
                                  icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
+                await m.channel.send('', embed=embed)
+
+            elif cm == "gifs":
+                embed = discord.Embed(color=0x301baa,
+                                      title="Hey, there are %s categories loaded" % len(self.reDb),
+                                      description='''
+**categories:** %s
+    
+you may use the categories as a command, and I'll pick an image/gif from there!
+                                      ''' % str(self.reDb.keys())[10:].strip("()[]").replace("'", '')
+                )
                 await m.channel.send('', embed=embed)
 
             elif cm == "info":
@@ -63,11 +74,11 @@ class byterbot(discord.Client):
                     embed = discord.Embed(color=0x301baa,
                                           title="**Info!**",
                                           description='''
-                                                  Currently there's info only for characters!
-                                                  use `char` or `character` after this command to see it!
+Currently there's info only for characters!
+use `char` or `character` after this command to see it!
                                                 ''')
                     embed.set_thumbnail(url=choice(["https://cdn.discordapp.com/attachments/741457274530299954/741615794340888586/selocreu2.gif", "https://cdn.discordapp.com/attachments/741457274530299954/741616136134852678/selocreu1.gif"]))
-                    embed.set_footer(text="creucat.com © PriVer - bot developed by leninnog",
+                    embed.set_footer(text="creucat.com © PriVer - bot developed by leninnog#2580",
                                      icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
 
                 elif ctx[1] in ["character", "char"]:
@@ -75,13 +86,13 @@ class byterbot(discord.Client):
                         embed = discord.Embed(color=0x00002a,
                                               title="**Characters!**",
                                               description='''
-                                                Want to know about the créu characters? this is the way to go!
+Want to know about the créu characters? this is the way to go!
 
-                                                Just put the name of the character you want to know in front of this command! they are Créu, Petita, Liu-Liu, Muji, Printy, Mek & Krek, Rona & mou and of course me!
+Just put the name of the character you want to know in front of this command! they are Créu, Petita, Liu-Liu, Muji, Printy, Mek & Krek, Rona & mou and of course me!
                                               '''
                                             )
                         embed.set_thumbnail(url=choice(["https://cdn.discordapp.com/attachments/741457274530299954/741615794340888586/selocreu2.gif", "https://cdn.discordapp.com/attachments/741457274530299954/741616136134852678/selocreu1.gif"]))
-                        embed.set_footer(text="creucat.com/characters © PriVer - bot developed by leninnog",
+                        embed.set_footer(text="creucat.com/characters © PriVer - bot developed by leninnog#2580",
                                          icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
                         await m.channel.send('', embed=embed)
                         return 1
@@ -104,40 +115,17 @@ class byterbot(discord.Client):
                     embed.add_field(name=charData['name'], value=charData['desc'], inline=False)
                     embed.add_field(name="Favorites", value="<:coffee:741469635492446268> %s\n\n<:ice_cream:741469513773613118> %s\n\n<:music:741469877143076946> %s" % tuple(charData['favs']), inline=False)
                     embed.set_image(url=charData['img'])
-                    embed.set_footer(text="creucat.com/characters © PriVer - bot developed by leninnog",
+                    embed.set_footer(text="creucat.com/characters © PriVer - bot developed by leninnog#2580",
                                         icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
 
                 await m.channel.send('', embed=embed)
 
             elif cm == "t":
-                await m.channel.send('Bot online')
-                print(m.content)
-
-            elif cm == "gifs":
-                embed = discord.Embed(color=0x301baa)
-                embed.add_field(name="Hey, there are %s categories loaded" % len(self.reDb),
-                                value="**categories:** %s\n\nyou may use the categories as a command, and I'll pick an image/gif from there!" % str(self.reDb.keys())[10:].strip("()[]").replace("'", ''),
-                                inline=False)
-                await m.channel.send('', embed=embed)
-
-            elif cm == "stats":
-                embed = discord.Embed(color=0x301baa)
-                embed.add_field(name="Here are some numbers I found",
-                                value='''
-                                        **uptime**: I'm online for %s (%s seconds)
-                                        **ready time**: I took %s seconds to connect to discord
-                                        **loading time**: I took %s seconds to load after connecting
-                                      '''
-                                      % (
-                                         timedelta(seconds=round(time()-initTime)),
-                                         round(time()-initTime, 2),
-                                         round(self.readyTime-initTime, 2),
-                                         round(self.loadTime-self.readyTime, 2)
-                                        ),
-                                inline=False)
-                await m.channel.send('', embed=embed)
+                await m.channel.send('Bot online', delete_after=5)
+                await m.delete()
 
             elif cm == "poll":
+                await m.delete()
                 embed = discord.Embed(color=0xb20ac5)
                 options = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮', '🇯', '🇰', '🇱', '🇲', '🇳', '🇴', '🇵', '🇶', '🇷' ,'🇸', '🇹']
                 poll = m.content.replace('b!', '%')[5:].split(',')
@@ -157,13 +145,30 @@ class byterbot(discord.Client):
                     await pollMsg.add_reaction('✅')
                     await pollMsg.add_reaction('❎')
 
+            elif cm == "stats":
+                embed = discord.Embed(color=0x301baa)
+                embed.add_field(name="Here are some numbers I found",
+                                value='''
+**uptime**: I'm online for %s (%s seconds)
+**ready time**: I took %s seconds to connect to discord
+**loading time**: I took %s seconds to load after connecting
+                                      '''
+                                      % (
+                                         timedelta(seconds=round(time()-initTime)),
+                                         round(time()-initTime, 2),
+                                         round(self.readyTime-initTime, 2),
+                                         round(self.loadTime-self.readyTime, 2)
+                                        ),
+                                inline=False)
+                await m.channel.send('', embed=embed)
+
             elif cm == "time":
                 if len(ctx) == 1:
                     embed = discord.Embed(title="Timezones!",
                                           description='''
-                                          timezones can be weird some times, but hopefully there's an api I can push data from!
+timezones can be weird some times, but hopefully there's an api I can push data from!
 
-                                          The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, CET, CST6CDT, EET, EET5EDT, Etc, Europe, HST, Indian, MET, MST, MST5MDT, PST8PDT, Pacific and WET
+The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, CET, CST6CDT, EET, EET5EDT, Etc, Europe, HST, Indian, MET, MST, MST5MDT, PST8PDT, Pacific and WET
                                           ''')
 
                 else:
@@ -190,7 +195,7 @@ class byterbot(discord.Client):
 
                     embed = discord.Embed(title=title, description=data_out)
 
-                embed.set_footer(text="Powered by worldtimeapi.org - bot made by leninnog")
+                embed.set_footer(text="Powered by worldtimeapi.org - bot made by leninnog#2580")
                 await m.channel.send('', embed=embed)
 
             elif cm in self.reDb:
@@ -212,9 +217,6 @@ class byterbot(discord.Client):
             async with m.channel.typing():
                 await sleep (3)
             await m.channel.send("I'm sorry "+m.author.name)
-
-        elif "virus" in m.content.lower():
-            await m.add_reaction(self.get_emoji(726611950200553502))
 
         elif "good night" in m.content.lower() or "goodnight" in m.content.lower():
             await m.add_reaction("❤️")
