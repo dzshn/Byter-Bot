@@ -9,10 +9,11 @@ import json
 
 initTime = time()
 
-if len(argv) == 1:
-    tkn = "NzQwMDA2NDU3ODA1NjM1Njc4.XyiuuA.O2PFUXd4r-GZVfw-g5CZVHMQacc"
-elif argv[1] == "dev":
+devmode = len(argv) != 1 and argv[1] == "dev"
+if devmode:
     tkn = "NzQzMzAyMTQ3OTI3NDQxNDU5.XzSsEQ.yWp07ZSoOIhoIFm7oTE9ROuUrs4"
+else:
+    tkn = "NzQwMDA2NDU3ODA1NjM1Njc4.XyiuuA.O2PFUXd4r-GZVfw-g5CZVHMQacc"
 
 class byterbot(discord.Client):
     reDb = {}
@@ -20,11 +21,12 @@ class byterbot(discord.Client):
     readyTime = 0
     loadTime = 0
 
-    characters = open('data/characters.json')
-    characters = json.load(characters)
+    dataindex = open('data/index.json')
+    dataindex = json.load(dataindex)
+    jsonfiles = {}
 
-    helpdata = open('data/help.json')
-    helpdata = json.load(helpdata)
+    for i in dataindex:
+        jsonfiles.update({i:json.load(open(dataindex[i]))})
 
     async def on_ready(self):
         self.readyTime = time()         
@@ -40,24 +42,9 @@ class byterbot(discord.Client):
             ctx = m.content[1:].split(' ') if m.content.startswith('%') else m.content[2:].split(' ')
             cm = ctx[0]
 
-            if cm == "help":
-                if len(ctx) == 1:
-                    data = self.helpdata['index']
-
-                else:
-                    if ctx[1] in self.helpdata:
-                        data = self.helpdata[ctx[1]]
-
-                    else:
-                        await m.channel.send('help: %s: page not found' % ctx[1])
-                        return 1
-
-                embed = discord.Embed(color=0x301baa, title=data['title'], description=''.join(data['description']))
-                embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/741457274530299954/741457798705184830/BUTTON_byter.webp")
-                embed.set_footer(text="creucat.com © PriVer - bot developed by leninnog#2580",
-                                 icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
-                await m.channel.send('', embed=embed)
-
+            if cm == "embed":
+                await m.channel.send('', embed=discord.Embed.from_dict(json.loads(m.content.split('embed')[1])))
+            
             elif cm == "gifs":
                 embed = discord.Embed(color=0x301baa,
                                       title="Hey, there are %s categories loaded" % len(self.reDb),
@@ -67,6 +54,24 @@ class byterbot(discord.Client):
 you may use the categories as a command, and I'll pick an image/gif from there!
                                       ''' % str(self.reDb.keys())[10:].strip("()[]").replace("'", '')
                 )
+                await m.channel.send('', embed=embed)
+
+            elif cm == "help":
+                if len(ctx) == 1:
+                    data = self.jsonfiles['help']['index']
+
+                else:
+                    if ctx[1] in self.jsonfiles['help']:
+                        data = self.jsonfiles['help'][ctx[1]]
+
+                    else:
+                        await m.channel.send('help: %s: page not found' % ctx[1])
+                        return 1
+
+                embed = discord.Embed(color=0x301baa, title=data['title'], description=''.join(data['description']))
+                embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/741457274530299954/741457798705184830/BUTTON_byter.webp")
+                embed.set_footer(text="creucat.com © PriVer - bot developed by leninnog#2580",
+                                 icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
                 await m.channel.send('', embed=embed)
 
             elif cm == "info":
@@ -97,8 +102,8 @@ Just put the name of the character you want to know in front of this command! th
                         await m.channel.send('', embed=embed)
                         return 1
 
-                    if ctx[2].lower().replace('&','').replace('é','e') in self.characters:
-                        charData = self.characters[ctx[2].lower().replace('&','').replace('é','e')]
+                    if ctx[2].lower().replace('&','').replace('é','e') in self.jsonfiles['char']:
+                        charData = self.jsonfiles['char'][ctx[2].lower().replace('&','').replace('é','e')]
 
                     else:
                         charData = {
@@ -121,8 +126,14 @@ Just put the name of the character you want to know in front of this command! th
                 await m.channel.send('', embed=embed)
 
             elif cm == "t":
-                await m.channel.send('Bot online', delete_after=5)
-                await m.delete()
+                if devmode:
+                    await m.channel.send("```"+m.content+"```")
+                    print(m.content)
+
+                else:
+                    await m.channel.send('Bot online', delete_after=5)
+                    await m.delete()
+
 
             elif cm == "poll":
                 await m.delete()
@@ -198,6 +209,13 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
                 embed.set_footer(text="Powered by worldtimeapi.org - bot made by leninnog#2580")
                 await m.channel.send('', embed=embed)
 
+            elif cm == "tos":
+                if m.author.id == 310449948011528192:
+                    await m.channel.send('', embed=discord.Embed.from_dict(self.jsonfiles['tos']))
+
+                else:
+                    await m.channel.send('tos: acess denied!')
+
             elif cm in self.reDb:
                 await m.channel.send(choice(self.reDb[cm]))
 
@@ -218,9 +236,19 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
                 await sleep (3)
             await m.channel.send("I'm sorry "+m.author.name)
 
-        elif "good night" in m.content.lower() or "goodnight" in m.content.lower():
+        elif ("good night" in m.content.lower() or "goodnight" in m.content.lower()) and m.guild.id == 725421276562325514:
             await m.add_reaction("❤️")
 
+    async def on_error(self, error, *args, **kwargs):
+        await self.get_guild(740069078735257672).get_channel(741024906774577201).send(
+            self.get_user(310449948011528192).mention, embed=discord.Embed.from_dict(
+                {
+                    "color": 0xfa0505,
+                    "title": "**Error!**",
+                    "description": "**at function:** %s\n\n**with args:** %s\n\n**with kwargs:**%s" % (error, args, kwargs)
+                }
+            )
+        )
 
 bot = byterbot()
 bot.run(tkn)
