@@ -215,6 +215,7 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
                 if m.author.id == 310449948011528192:
                     for i in self.jsonfiles['tos']:
                         await m.channel.send('', embed=discord.Embed.from_dict(self.jsonfiles['tos'][i]))
+                    await m.delete()
 
                 else:
                     await m.channel.send('tos: acess denied!')
