@@ -1,6 +1,7 @@
 from datetime import timedelta
 from asyncio import sleep
 from random import choice
+from sys import exc_info
 from time import time
 from sys import argv
 import requests
@@ -212,7 +213,8 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
 
             elif cm == "tos":
                 if m.author.id == 310449948011528192:
-                    await m.channel.send('', embed=discord.Embed.from_dict(self.jsonfiles['tos']))
+                    for i in self.jsonfiles['tos']:
+                        await m.channel.send('', embed=discord.Embed.from_dict(self.jsonfiles['tos'][i]))
 
                 else:
                     await m.channel.send('tos: acess denied!')
@@ -246,7 +248,7 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
                 {
                     "color": 0xfa0505,
                     "title": "**Error!**",
-                    "description": "**at function:** %s\n\n**with args:** %s\n\n**with kwargs:**%s" % (error, args, kwargs)
+                    "description": "**at function:** %s\n\n**with args:** %s\n\n**with kwargs:** %s\n\n**traceback:** %s" % (error, args, kwargs, exc_info())
                 }
             )
         )
