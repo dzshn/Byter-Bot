@@ -29,7 +29,7 @@ class byterbot(discord.Client):
         jsonfiles.update({i:json.load(open(dataindex[i]))})
 
     async def on_ready(self):
-        self.readyTime = time()         
+        self.readyTime = time()
         async for i in self.get_channel(740539699134857337).history():
             if i.content in self.reDb:
                 self.reDb[i.content].append(i.attachments[0].url)
@@ -44,13 +44,14 @@ class byterbot(discord.Client):
 
             if cm == "embed":
                 await m.channel.send('', embed=discord.Embed.from_dict(json.loads(m.content.split('embed')[1])))
-            
+                await m.delete()
+
             elif cm == "gifs":
                 embed = discord.Embed(color=0x301baa,
                                       title="Hey, there are %s categories loaded" % len(self.reDb),
                                       description='''
 **categories:** %s
-    
+
 you may use the categories as a command, and I'll pick an image/gif from there!
                                       ''' % str(self.reDb.keys())[10:].strip("()[]").replace("'", '')
                 )
