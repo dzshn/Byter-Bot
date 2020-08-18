@@ -1,9 +1,11 @@
+from urllib.parse import quote_plus
 from datetime import timedelta
 from asyncio import sleep
 from random import choice
 from sys import exc_info
 from time import time
 from sys import argv
+from re import sub
 import requests
 import discord
 import json
@@ -218,7 +220,6 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
                     await m.channel.send('', embed=discord.Embed.from_dict(self.jsonfiles['tos']['section2']))
                     await m.channel.send('', embed=discord.Embed.from_dict(self.jsonfiles['tos']['section3']))
 
-
                     await m.delete()
 
                 else:
@@ -235,6 +236,23 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
                 self.reDb[m.content].append(m.attachments[0].url)
             else:
                 self.reDb[m.content] = [m.attachments[0].url]
+
+        elif m.channel.category != None and m.channel.category.id == 741765710971142175 and m.channel.id != 745400744303394917:
+            data = requests.get('https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q='+quote_plus(sub(r'\W', ' ', m.clean_content))).content
+            await self.get_channel(745400744303394917).send(
+                '', embed=discord.Embed.from_dict(
+                    {
+                        "color": 3152810,
+                        "title": "from channel "+m.channel.name,
+                        "description": "**message content:** %s\n**from:** %s\n**translation:** %s" % (
+                            sub(r"\W", ' ', m.clean_content), m.author.name, json.loads(data)[0][0][0]
+                        ),
+                        "footer": {
+                            "text": "powered by google translator"
+                        }
+                    }
+                )
+            )
 
         elif m.content.startswith("wait, it's all ") and m.content.endswith('?'):
             async with m.channel.typing():
