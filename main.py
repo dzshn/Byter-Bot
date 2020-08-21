@@ -113,9 +113,9 @@ Just put the name of the character you want to know in front of this command! th
                         embed.set_footer(text="creucat.com/characters © PriVer - bot developed by leninnog",
                                          icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
                         await m.channel.send('', embed=embed)
+                    if ctx[2].lower().replace('&','').replace('é','e') in self.jsonfiles['char']:
                         return 1
 
-                    if ctx[2].lower().replace('&','').replace('é','e') in self.jsonfiles['char']:
                         charData = self.jsonfiles['char'][ctx[2].lower().replace('&','').replace('é','e')]
 
                     else:
@@ -184,6 +184,7 @@ Just put the name of the character you want to know in front of this command! th
                                          round(self.loadTime-self.readyTime, 2)
                                         ),
                                 inline=False)
+                embed.set_footer(text="version %s - bot made by leninnog")
                 await m.channel.send('', embed=embed)
 
             elif cm == "time":
