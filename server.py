@@ -15,4 +15,4 @@ def whook():
         return "yo, use a post request"
 
 def start():
-    app.run(host="0.0.0.0", port=443)
+    app.run(host="0.0.0.0", port=80)
