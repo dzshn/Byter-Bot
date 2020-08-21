@@ -20,6 +20,7 @@ else:
 
 class byterbot(discord.Client):
     reDb = {}
+    ball8 = {}
 
     readyTime = 0
     loadTime = 0
@@ -36,8 +37,13 @@ class byterbot(discord.Client):
         async for i in self.get_channel(740539699134857337).history():
             if i.content in self.reDb:
                 self.reDb[i.content].append(i.attachments[0].url)
+
             else:
                 self.reDb[i.content] = [i.attachments[0].url]
+
+        async for i in self.get_channel(742479941504860341).history():
+            self.ball8[i.content] = i.attachments[0].url
+
         self.loadTime = time()
 
     async def on_message(self, m):
@@ -74,7 +80,7 @@ you may use the categories as a command, and I'll pick an image/gif from there!
 
                 embed = discord.Embed(color=0x301baa, title=data['title'], description=''.join(data['description']))
                 embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/741457274530299954/741457798705184830/BUTTON_byter.webp")
-                embed.set_footer(text="creucat.com © PriVer - bot developed by leninnog#2580",
+                embed.set_footer(text="creucat.com © PriVer - bot developed by leninnog",
                                  icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
                 await m.channel.send('', embed=embed)
 
@@ -87,7 +93,7 @@ Currently there's info only for characters!
 use `char` or `character` after this command to see it!
                                                 ''')
                     embed.set_thumbnail(url=choice(["https://cdn.discordapp.com/attachments/741457274530299954/741615794340888586/selocreu2.gif", "https://cdn.discordapp.com/attachments/741457274530299954/741616136134852678/selocreu1.gif"]))
-                    embed.set_footer(text="creucat.com © PriVer - bot developed by leninnog#2580",
+                    embed.set_footer(text="creucat.com © PriVer - bot developed by leninnog",
                                      icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
 
                 elif ctx[1] in ["character", "char"]:
@@ -101,7 +107,7 @@ Just put the name of the character you want to know in front of this command! th
                                               '''
                                             )
                         embed.set_thumbnail(url=choice(["https://cdn.discordapp.com/attachments/741457274530299954/741615794340888586/selocreu2.gif", "https://cdn.discordapp.com/attachments/741457274530299954/741616136134852678/selocreu1.gif"]))
-                        embed.set_footer(text="creucat.com/characters © PriVer - bot developed by leninnog#2580",
+                        embed.set_footer(text="creucat.com/characters © PriVer - bot developed by leninnog",
                                          icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
                         await m.channel.send('', embed=embed)
                         return 1
@@ -124,7 +130,7 @@ Just put the name of the character you want to know in front of this command! th
                     embed.add_field(name=charData['name'], value=charData['desc'], inline=False)
                     embed.add_field(name="Favorites", value="<:coffee:741469635492446268> %s\n\n<:ice_cream:741469513773613118> %s\n\n<:music:741469877143076946> %s" % tuple(charData['favs']), inline=False)
                     embed.set_image(url=charData['img'])
-                    embed.set_footer(text="creucat.com/characters © PriVer - bot developed by leninnog#2580",
+                    embed.set_footer(text="creucat.com/characters © PriVer - bot developed by leninnog",
                                         icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
 
                 await m.channel.send('', embed=embed)
@@ -141,7 +147,7 @@ Just put the name of the character you want to know in front of this command! th
 
             elif cm == "poll":
                 await m.delete()
-                embed = discord.Embed(color=0xb20ac5)
+                embed = discord.Embed(color=0x301baa)
                 options = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮', '🇯', '🇰', '🇱', '🇲', '🇳', '🇴', '🇵', '🇶', '🇷' ,'🇸', '🇹']
                 poll = m.content.replace('b!', '%')[5:].split(',')
                 if len(ctx) == 1:
@@ -210,7 +216,7 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
 
                     embed = discord.Embed(title=title, description=data_out)
 
-                embed.set_footer(text="Powered by worldtimeapi.org - bot made by leninnog#2580")
+                embed.set_footer(text="Powered by worldtimeapi.org - bot made by leninnog")
                 await m.channel.send('', embed=embed)
 
             elif cm == "tos":
@@ -224,6 +230,24 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
 
                 else:
                     await m.channel.send('tos: acess denied!')
+
+            elif cm == "8ball":
+                sball8 = choice(list(self.ball8))
+                if len(cm) == 1:
+                    title = "**"+sball8+"**"
+                    desc=""
+
+                else:
+                    title = m.content.replace('b!', '%')[6:]
+                    desc = sball8
+
+                embed = discord.Embed(color=0x2031ba,
+                                      title=title,
+                                      description=desc
+                                     )
+                embed.set_image(url=self.ball8[sball8])
+                embed.set_footer(text="8ball by zuli - bot by leninnog")
+                await m.channel.send('', embed=embed)
 
             elif cm in self.reDb:
                 await m.channel.send(choice(self.reDb[cm]))
@@ -239,22 +263,15 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
 
         elif m.channel.category != None and m.channel.category.id == 741765710971142175 and m.channel.id != 745400744303394917:
             data = requests.get('https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q='+quote_plus(sub(r'[\!?/&]', ' ', m.clean_content))).content.decode()
-            await self.get_channel(745400744303394917).send(
-                '', embed=discord.Embed.from_dict(
-                    {
-                        "color": 3152810,
-                        "title": "from channel "+m.channel.name,
-                        "description": "**message content:** %s\n**from:** %s\n**translation:** %s" % (
-                            m.clean_content, m.author.name, json.loads(data)[0][0][0]
-                        ),
-                        "footer": {
-                            "text": "powered by google translator"
-                        }
-                    }
-                )
+            embed = discord.Embed(color=0x301baa,
+                                  title="from channel"+m.channel.name,
+                                  description="**message content:** %s\n**from:** %s\n**translation:** %s" % (
+                                    m.clean_content, m.author.name, json.loads(data)[0][0][0]
+                                  )
             )
+            embed.set_footer(text="Powered by Google Translator")            
 
-        elif m.content.startswith("wait, it's all ") and m.content.endswith('?'):
+        elif m.content.lower().replace(',', '').startswith("wait, it's all ") and m.content.endswith('?'):
             async with m.channel.typing():
                 await sleep(2)
             await m.channel.send('always has been')
