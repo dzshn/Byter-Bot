@@ -282,6 +282,9 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
         elif ("good night" in m.content.lower() or "goodnight" in m.content.lower()) and m.guild.id == 725421276562325514:
             await m.add_reaction("❤️")
 
+        elif "dreamworks" in m.content.lower():
+            await m.add_reaction(self.get_emoji(726611950200553502))
+
     async def on_error(self, error, *args, **kwargs):
         await self.get_guild(740069078735257672).get_channel(741024906774577201).send(
             self.get_user(310449948011528192).mention, embed=discord.Embed.from_dict(
