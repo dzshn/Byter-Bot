@@ -1,4 +1,5 @@
 from flask import Flask, request
+from os import system
 
 app = Flask("")
 
@@ -9,8 +10,11 @@ def index():
 @app.route('/webhook', methods=["POST", "GET"])
 def whook():
     if request.method == "POST":
-        print(request.json)
+        if "commits" in request.json:
+            system("git pull")
+            
         return '', 200
+
     else:
         return "yo, use a post request"
 
