@@ -2,10 +2,8 @@
 
 from urllib.parse import quote_plus
 from datetime import timedelta
-from threading import Thread
 from asyncio import sleep
 from random import choice
-from server import start
 from sys import exc_info
 from time import time
 from sys import argv
@@ -314,9 +312,6 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
                 }
             )
         )
-
-server = Thread(target=start, daemon=True)
-server.start()
 
 bot = byterbot()
 bot.run(tkn)
