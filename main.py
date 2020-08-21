@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from urllib.parse import quote_plus
 from datetime import timedelta
 from asyncio import sleep
@@ -5,6 +7,7 @@ from random import choice
 from sys import exc_info
 from time import time
 from sys import argv
+from os import execl
 from re import sub
 import requests
 import discord
@@ -231,6 +234,19 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
                 else:
                     await m.channel.send('tos: acess denied!')
 
+            elif cm == "reload":
+                if m.author.id == 310449948011528192:
+                    await m.channel.send("Rebooting...")
+                    await self.close()
+                    args = ""
+                    if devmode:
+                        args = "dev"
+
+                    execl("./main.py", args)
+
+                else:
+                    await m.channel.send('reload: acess denied!')
+
             elif cm == "8ball":
                 sball8 = choice(list(self.ball8))
                 if len(cm) == 1:
@@ -282,7 +298,7 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
         elif ("good night" in m.content.lower() or "goodnight" in m.content.lower()) and m.guild.id == 725421276562325514:
             await m.add_reaction("❤️")
 
-        elif "dreamworks" in m.content.lower():
+        elif "dreamworks" in m.content.lower() and m.guild.id == 725421276562325514:
             await m.add_reaction(self.get_emoji(726611950200553502))
 
     async def on_error(self, error, *args, **kwargs):
