@@ -7,11 +7,11 @@ from random import choice
 from sys import exc_info
 from time import time
 from sys import argv
-from os import execl
 from re import sub
 import requests
 import discord
 import json
+import os
 
 initTime = time()
 
@@ -31,6 +31,8 @@ class byterbot(discord.Client):
     dataindex = open('data/index.json')
     dataindex = json.load(dataindex)
     jsonfiles = {}
+
+    version = open('VERSION').read()
 
     for i in dataindex:
         jsonfiles.update({i:json.load(open(dataindex[i]))})
@@ -235,19 +237,6 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
                 else:
                     await m.channel.send('tos: acess denied!')
 
-            elif cm == "reload":
-                if m.author.id == 310449948011528192:
-                    await m.channel.send("Rebooting...")
-                    await self.close()
-                    args = ""
-                    if devmode:
-                        args = "dev"
-
-                    execl("./main.py", args)
-
-                else:
-                    await m.channel.send('reload: acess denied!')
-
             elif cm == "8ball":
                 sball8 = choice(list(self.ball8))
                 if len(cm) == 1:
@@ -271,6 +260,17 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
 
             else:
                 await m.channel.send(cm + ': command not found')
+
+        elif m.webhook_id == 740524198165872711:
+            await self.close()
+            if devmode:
+                args = "dev"
+            
+            else:
+                args = ""
+
+            os.system("git pull")
+            os.execl("./main.py", args)
 
         elif m.channel.id == 740539699134857337:
             if m.content in self.reDb:
