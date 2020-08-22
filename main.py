@@ -186,7 +186,7 @@ Just put the name of the character you want to know in front of this command! th
                                          round(self.loadTime-self.readyTime, 2)
                                         ),
                                 inline=False)
-                embed.set_footer(text="version %s - bot made by leninnog")
+                embed.set_footer(text="version %s - bot made by leninnog" % self.version)
                 await m.channel.send('', embed=embed)
 
             elif cm == "time":
