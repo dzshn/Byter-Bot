@@ -69,7 +69,7 @@ class byterbot(discord.Client):
 you may use the categories as a command, and I'll pick an image/gif from there!
                                       ''' % str(self.reDb.keys())[10:].strip("()[]").replace("'", '')
                 )
-                await m.channel.send('', embed=embed)
+                await m.channel.send(embed=embed)
 
             elif cm == "help":
                 if len(ctx) == 1:
@@ -87,7 +87,7 @@ you may use the categories as a command, and I'll pick an image/gif from there!
                 embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/741457274530299954/741457798705184830/BUTTON_byter.webp")
                 embed.set_footer(text="creucat.com © PriVer - bot developed by leninnog",
                                  icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
-                await m.channel.send('', embed=embed)
+                await m.channel.send(embed=embed)
 
             elif cm == "info":
                 if len(ctx) == 1:
@@ -114,7 +114,7 @@ Just put the name of the character you want to know in front of this command! th
                         embed.set_thumbnail(url=choice(["https://cdn.discordapp.com/attachments/741457274530299954/741615794340888586/selocreu2.gif", "https://cdn.discordapp.com/attachments/741457274530299954/741616136134852678/selocreu1.gif"]))
                         embed.set_footer(text="creucat.com/characters © PriVer - bot developed by leninnog",
                                          icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
-                        await m.channel.send('', embed=embed)
+                        await m.channel.send(embed=embed)
                         return 1
 
                     elif ctx[2].lower().replace('&','').replace('é','e') in self.jsonfiles['char']:
@@ -164,7 +164,7 @@ Just put the name of the character you want to know in front of this command! th
                     pollText = '✅ / ❎'
                 embed.add_field(name=poll[0].strip().title(),
                                 value=pollText)
-                pollMsg = await m.channel.send('', embed=embed)
+                pollMsg = await m.channel.send(embed=embed)
                 for i in range(len(poll[1:])):
                     await pollMsg.add_reaction(options[i])
                 if len(poll) == 1:
@@ -187,7 +187,7 @@ Just put the name of the character you want to know in front of this command! th
                                         ),
                                 inline=False)
                 embed.set_footer(text="version %s - bot made by leninnog" % self.version)
-                await m.channel.send('', embed=embed)
+                await m.channel.send(embed=embed)
 
             elif cm == "time":
                 if len(ctx) == 1:
@@ -223,7 +223,7 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
                     embed = discord.Embed(title=title, description=data_out)
 
                 embed.set_footer(text="Powered by worldtimeapi.org - bot made by leninnog")
-                await m.channel.send('', embed=embed)
+                await m.channel.send(embed=embed)
 
             elif cm == "tos":
                 if m.author.id == 310449948011528192:
@@ -253,7 +253,7 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
                                      )
                 embed.set_image(url=self.ball8[sball8])
                 embed.set_footer(text="8ball by zuli - bot by leninnog")
-                await m.channel.send('', embed=embed)
+                await m.channel.send(embed=embed)
 
             elif cm in self.reDb:
                 await m.channel.send(choice(self.reDb[cm]))
@@ -278,7 +278,7 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
             else:
                 self.reDb[m.content] = [m.attachments[0].url]
 
-        elif m.channel.category != None and m.channel.category.id == 741765710971142175 and m.channel.id != 745400744303394917:
+        elif m.channel.type == discord.ChannelType.text and m.channel.category != None and m.channel.category.id == 741765710971142175 and m.channel.id != 745400744303394917:
             data = requests.get('https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q='+quote_plus(sub(r'[\!?/&]', ' ', m.clean_content))).content.decode()
             embed = discord.Embed(color=0x301baa,
                                   title="from channel"+m.channel.name,
@@ -286,7 +286,9 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
                                     m.clean_content, m.author.name, json.loads(data)[0][0][0]
                                   )
             )
-            embed.set_footer(text="Powered by Google Translator")            
+            embed.set_footer(text="Powered by Google Translator")
+
+            await self.get_channel(745400744303394917).send(embed)
 
         elif m.content.lower().replace(',', '').startswith("wait, it's all ") and m.content.endswith('?'):
             async with m.channel.typing():
