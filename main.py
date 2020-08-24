@@ -115,9 +115,9 @@ Just put the name of the character you want to know in front of this command! th
                         embed.set_footer(text="creucat.com/characters © PriVer - bot developed by leninnog",
                                          icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
                         await m.channel.send('', embed=embed)
-                    if ctx[2].lower().replace('&','').replace('é','e') in self.jsonfiles['char']:
                         return 1
 
+                    elif ctx[2].lower().replace('&','').replace('é','e') in self.jsonfiles['char']:
                         charData = self.jsonfiles['char'][ctx[2].lower().replace('&','').replace('é','e')]
 
                     else:
@@ -136,9 +136,9 @@ Just put the name of the character you want to know in front of this command! th
                     embed.add_field(name="Favorites", value="<:coffee:741469635492446268> %s\n\n<:ice_cream:741469513773613118> %s\n\n<:music:741469877143076946> %s" % tuple(charData['favs']), inline=False)
                     embed.set_image(url=charData['img'])
                     embed.set_footer(text="creucat.com/characters © PriVer - bot developed by leninnog",
-                                        icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
+                                     icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
 
-                await m.channel.send('', embed=embed)
+                await m.channel.send(embed=embed)
 
             elif cm == "t":
                 if devmode:
