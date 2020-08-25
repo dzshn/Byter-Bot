@@ -52,7 +52,10 @@ class byterbot(discord.Client):
         self.loadTime = time()
 
     async def on_message(self, m):
-        if m.content.startswith(('%', 'b!')):
+        if m.channel.id == 740078363191935079 and not devmode:
+            return 1
+
+        elif m.content.startswith(('%', 'b!')):
             ctx = m.content[1:].split(' ') if m.content.startswith('%') else m.content[2:].split(' ')
             cm = ctx[0]
 
@@ -262,15 +265,10 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
                 await m.channel.send(cm + ': command not found')
 
         elif m.webhook_id == 740524198165872711:
-            await self.close()
-            if devmode:
-                args = "dev"
-            
-            else:
-                args = ""
-
-            os.system("git pull")
-            os.execl("./main.py", args)
+            if not devmode:
+                await self.close()
+                os.system("git pull")
+                os.execl("./main.py", "")
 
         elif m.channel.id == 740539699134857337:
             if m.content in self.reDb:
