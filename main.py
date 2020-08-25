@@ -288,7 +288,7 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
             )
             embed.set_footer(text="Powered by Google Translator")
 
-            await self.get_channel(745400744303394917).send(embed)
+            await self.get_channel(745400744303394917).send(embed=embed)
 
         elif m.content.lower().replace(',', '').startswith("wait, it's all ") and m.content.endswith('?'):
             async with m.channel.typing():
