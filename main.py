@@ -62,19 +62,31 @@ class byterbot(discord.Client):
             cm = ctx[0]
 
             if cm == "embed":
-                await m.channel.send('', embed=discord.Embed.from_dict(json.loads(m.content.split('embed')[1])))
-                await m.delete()
+                if len(ctx) == 1:
+                    await m.channel.send(
+                        embed=discord.Embed(
+                            color=0x301baa,
+                            title="Embeds!",
+#                            description="A simple command for making embeds. you may use %embed start and I'll help you out, or you can go crazy and write down json with %embed json {}"
+                            description="A simple command for making embeds. for now, you may only use the json format with %embed json"
+                        )
+                    )
+                elif ctx[1] == "json":
+                    await m.channel.send(embed=discord.Embed.from_dict(json.loads(m.content.replace('b!', '%', 1)[11:])))
+
+#                elif ctx[1] == "start":
 
             elif cm == "gifs":
-                embed = discord.Embed(color=0x301baa,
-                                      title="Hey, there are %s categories loaded" % len(self.reDb),
-                                      description='''
+                await m.channel.send(
+                    embed=discord.Embed(color=0x301baa,
+                                        title="Hey, there are %s categories loaded" % len(self.reDb),
+                                        description='''
 **categories:** %s
 
 you may use the categories as a command, and I'll pick an image/gif from there!
-                                      ''' % str(self.reDb.keys())[10:].strip("()[]").replace("'", '')
+                                        ''' % str(self.reDb.keys())[10:].strip("()[]").replace("'", '')
+                    )
                 )
-                await m.channel.send(embed=embed)
 
             elif cm == "help":
                 if len(ctx) == 1:
@@ -157,21 +169,24 @@ Just put the name of the character you want to know in front of this command! th
 
             elif cm == "poll":
                 await m.delete()
-                embed = discord.Embed(color=0x301baa)
                 options = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮', '🇯', '🇰', '🇱', '🇲', '🇳', '🇴', '🇵', '🇶', '🇷' ,'🇸', '🇹']
                 poll = m.content.replace('b!', '%')[5:].split(',')
-                if len(ctx) == 1:
-                    poll[0] = 'poll'
                 pollText = ''
                 for i in poll[1:]:
                     pollText += options[poll[1:].index(i)]+' '+i+'\n'
+
                 if len(poll) == 1:
                     pollText = '✅ / ❎'
-                embed.add_field(name=poll[0].strip().title(),
-                                value=pollText)
-                pollMsg = await m.channel.send(embed=embed)
+
+                pollMsg = await m.channel.send(
+                    embed=discord.Embed(color=0x301baa,
+                                        title=poll[0].strip(),
+                                        description=pollText
+                    )
+                )
                 for i in range(len(poll[1:])):
                     await pollMsg.add_reaction(options[i])
+
                 if len(poll) == 1:
                     await pollMsg.add_reaction('✅')
                     await pollMsg.add_reaction('❎')
