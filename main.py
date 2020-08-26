@@ -8,6 +8,7 @@ from sys import exc_info
 from time import time
 from sys import argv
 from re import sub
+import traceback
 import requests
 import discord
 import json
@@ -18,6 +19,7 @@ initTime = time()
 devmode = len(argv) != 1 and argv[1] == "dev"
 if devmode:
     tkn = "NzQzMzAyMTQ3OTI3NDQxNDU5.XzSsEQ.yWp07ZSoOIhoIFm7oTE9ROuUrs4"
+
 else:
     tkn = "NzQwMDA2NDU3ODA1NjM1Njc4.XyiuuA.O2PFUXd4r-GZVfw-g5CZVHMQacc"
 
@@ -279,7 +281,7 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
         elif m.channel.type == discord.ChannelType.text and m.channel.category != None and m.channel.category.id == 741765710971142175 and m.channel.id != 745400744303394917:
             data = requests.get('https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q='+quote_plus(sub(r'[\!?/&]', ' ', m.clean_content))).content.decode()
             embed = discord.Embed(color=0x301baa,
-                                  title="from channel"+m.channel.name,
+                                  title="from channel "+m.channel.name,
                                   description="**message content:** %s\n**from:** %s\n**translation:** %s" % (
                                     m.clean_content, m.author.name, json.loads(data)[0][0][0]
                                   )
@@ -303,15 +305,30 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
             await m.add_reaction(self.get_emoji(726611950200553502))
 
     async def on_error(self, error, *args, **kwargs):
-        await self.get_guild(740069078735257672).get_channel(741024906774577201).send(
-            self.get_user(310449948011528192).mention, embed=discord.Embed.from_dict(
-                {
-                    "color": 0xfa0505,
-                    "title": "**Error!**",
-                    "description": "**at function:** %s\n\n**with args:** %s\n\n**with kwargs:** %s\n\n**traceback:** %s" % (error, args, kwargs, exc_info())
-                }
-            )
-        )
+        embed = discord.Embed(color=0xfa0505,
+                              title="**Error**"
+                             )
+
+        embed.description = '''
+**Exception info:**
+**Type :** %s
+
+**Value :** %s
+
+**At line :** %s
+
+**Traceback :**
+```py
+%s
+```
+            ''' % (exc_info()[0], exc_info()[1], exc_info()[2].tb_lineno, traceback.format_exc())
+        if error == "on_message":
+            embed.description = "**Message content :** %s\n%s" % (args[0].content,embed.description)
+
+        else:
+            embed.description = "**Function :** %s\n\n**Args :** %s\n\n**Kwargs :** %s\n" % (error, args, kwargs, embed.description)
+
+        await self.get_guild(740069078735257672).get_channel(741024906774577201).send(self.get_user(310449948011528192).mention, embed=embed)
 
 bot = byterbot()
 bot.run(tkn)
