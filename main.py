@@ -62,29 +62,41 @@ class byterbot(discord.Client):
             cm = ctx[0]
 
             if cm == "embed":
+                if m.channel.type == discord.ChannelType.text and not m.author.permissions_in(m.channel).manage_messages:
+                    await m.channel.send('Missing permissions! you need manage_messages to do that')
+                    return 1
+
                 if len(ctx) == 1:
                     await m.channel.send(
                         embed=discord.Embed(
                             color=0x301baa,
                             title="Embeds!",
-#                            description="A simple command for making embeds. you may use %embed start and I'll help you out, or you can go crazy and write down json with %embed json {}"
-                            description="A simple command for making embeds. for now, you may only use the json format with %embed json"
+                            description='''
+You can use this command using the standard json format, without the outer brackets, example:
+
+%embed "title": "Title here", "description": "Description here"
+
+for reference, the valid keywords can be seen [here](https://discord.com/developers/docs/resources/channel#embed-object-embed-structure) and you can check it on [this visualizer](https://leovoel.github.io/embed-visualizer/)
+                            '''
                         )
                     )
-                elif ctx[1] == "json":
-                    await m.channel.send(embed=discord.Embed.from_dict(json.loads(m.content.replace('b!', '%', 1)[11:])))
-
-#                elif ctx[1] == "start":
+                else:
+                    await m.delete()
+                    try:
+                        await m.channel.send(embed=discord.Embed.from_dict(json.loads("{%s}" % m.content[6:])))
+                    except json.JSONDecodeError:
+                        await m.channel.send('There was an error parsing your data', delete_after=5)
 
             elif cm == "gifs":
                 await m.channel.send(
-                    embed=discord.Embed(color=0x301baa,
-                                        title="Hey, there are %s categories loaded" % len(self.reDb),
-                                        description='''
+                    embed=discord.Embed(
+                        color=0x301baa,
+                        title="Hey, there are %s categories loaded" % len(self.reDb),
+                        description='''
 **categories:** %s
 
 you may use the categories as a command, and I'll pick an image/gif from there!
-                                        ''' % str(self.reDb.keys())[10:].strip("()[]").replace("'", '')
+                        ''' % str(self.reDb.keys())[10:].strip("()[]").replace("'", '')
                     )
                 )
 
