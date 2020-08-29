@@ -260,10 +260,10 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
 
             elif cm == "tos":
                 if m.author.id == 310449948011528192:
-                    await self.get_channel(743298471414595595).fetch_message(745217630364762164).edit('', embed=discord.Embed.from_dict(self.jsonfiles['tos']['welcome']))
-                    await self.get_channel(743298471414595595).fetch_message(745217631514001459).edit('', embed=discord.Embed.from_dict(self.jsonfiles['tos']['section1']))
-                    await self.get_channel(743298471414595595).fetch_message(745217632315244554).edit('', embed=discord.Embed.from_dict(self.jsonfiles['tos']['section2']))
-                    await self.get_channel(743298471414595595).fetch_message(745217632663502869).edit('', embed=discord.Embed.from_dict(self.jsonfiles['tos']['section3']))
+                    await m.channel.send('', embed=discord.Embed.from_dict(self.jsonfiles['tos']['welcome']))
+                    await m.channel.send('', embed=discord.Embed.from_dict(self.jsonfiles['tos']['section1']))
+                    await m.channel.send('', embed=discord.Embed.from_dict(self.jsonfiles['tos']['section2']))
+                    await m.channel.send('', embed=discord.Embed.from_dict(self.jsonfiles['tos']['section3']))
 
                     await m.delete()
 
