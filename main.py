@@ -260,10 +260,10 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
 
             elif cm == "tos":
                 if m.author.id == 310449948011528192:
-                    await m.channel.send('', embed=discord.Embed.from_dict(self.jsonfiles['tos']['welcome']))
-                    await m.channel.send('', embed=discord.Embed.from_dict(self.jsonfiles['tos']['section1']))
-                    await m.channel.send('', embed=discord.Embed.from_dict(self.jsonfiles['tos']['section2']))
-                    await m.channel.send('', embed=discord.Embed.from_dict(self.jsonfiles['tos']['section3']))
+                    await self.get_channel(743298471414595595).fetch_message(745217630364762164).edit('', embed=discord.Embed.from_dict(self.jsonfiles['tos']['welcome']))
+                    await self.get_channel(743298471414595595).fetch_message(745217631514001459).edit('', embed=discord.Embed.from_dict(self.jsonfiles['tos']['section1']))
+                    await self.get_channel(743298471414595595).fetch_message(745217632315244554).edit('', embed=discord.Embed.from_dict(self.jsonfiles['tos']['section2']))
+                    await self.get_channel(743298471414595595).fetch_message(745217632663502869).edit('', embed=discord.Embed.from_dict(self.jsonfiles['tos']['section3']))
 
                     await m.delete()
 
@@ -271,19 +271,16 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
                     await m.channel.send('tos: acess denied!')
 
             elif cm == "8ball":
+                embed = discord.Embed(color=0x2031ba)
                 sball8 = choice(list(self.ball8))
                 if len(cm) == 1:
                     title = "**"+sball8+"**"
-                    desc=""
+                    embed.description = ""
 
                 else:
                     title = m.content.replace('b!', '%')[6:]
-                    desc = sball8
+                    embed.description = sball8
 
-                embed = discord.Embed(color=0x2031ba,
-                                      title=title,
-                                      description=desc
-                                     )
                 embed.set_image(url=self.ball8[sball8])
                 embed.set_footer(text="8ball by zuli - bot by leninnog")
                 await m.channel.send(embed=embed)
@@ -307,7 +304,7 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
                 self.reDb[m.content] = [m.attachments[0].url]
 
         elif m.channel in self.get_channel(741765710971142175).channels and m.channel.id != 745400744303394917:
-            data = requests.get('https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q='+quote_plus(sub(r'[\!?/&]', ' ', m.clean_content))).content.decode()
+            data = requests.get('https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q='+quote_plus(m.clean_content)).content.decode()
             embed = discord.Embed(color=0x301baa,
                                   title="from channel "+m.channel.name,
                                   description="**message content:** %s\n**from:** %s\n**translation:** %s" % (
@@ -337,10 +334,8 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
 
     async def on_error(self, error, *args, **kwargs):
         embed = discord.Embed(color=0xfa0505,
-                              title="**Error**"
-                             )
-
-        embed.description = '''
+                              title="**Error!**",
+                              description='''
 **Exception info:**
 **Type :** %s
 
@@ -353,13 +348,14 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
 %s
 ```
             ''' % (exc_info()[0], exc_info()[1], exc_info()[2].tb_lineno, traceback.format_exc())
+        )
         if error == "on_message":
             embed.description = "**Message content :** %s\n%s" % (args[0].content,embed.description)
 
         else:
             embed.description = "**Function :** %s\n\n**Args :** %s\n\n**Kwargs :** %s\n" % (error, args, kwargs, embed.description)
 
-        await self.get_guild(740069078735257672).get_channel(741024906774577201).send(self.get_user(310449948011528192).mention, embed=embed)
+        await self.get_channel(741024906774577201).send(self.get_user(310449948011528192).mention, embed=embed)
 
 bot = byterbot()
 bot.run(tkn)

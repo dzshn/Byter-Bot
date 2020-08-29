@@ -8,7 +8,7 @@
         "color": 4692696,
         "title": ":blue_book: T.O.S/Privacy. <:creustickerthoughtful:742246023266697248>",
         "fields": [
-            { 
+            {
                 "name": "1: General ToS",
                 "value": "We need to comply with [Discord ToS](https://discord.com/new/terms) and so do you. Please also refer to the [Créu Official Website](https://creucat.com/terms-of-service) if you plan to use it! If you ever feel unjust on the Website or here, and are unable to contact any of the moderative staff on Discord, please reach out the [contact page](https://creucat.com/contact-us). We're always happy to help!"
             },
@@ -50,7 +50,7 @@
     },
     "section3": {
         "color": 14495300,
-        "title": ":closed_book: General Etiquette. :Gentleman:",
+        "title": ":closed_book: General Etiquette. <:Gentleman:727752171562598420>",
         "fields": [
             {
                 "name": "1: Language",
@@ -69,5 +69,5 @@
                 "value": "Breaching the terms on the Créu Official Website may also get you a ban here, without any prior notice nor liability, for any reason. This server is not exempt from the rules of the Website. <:creubyter:726613065868509204>"
             }
         ]
-    } 
+    }
 }

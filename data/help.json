@@ -2,11 +2,11 @@
     "index": {
         "title": "Hello! here are the valid commands",
         "description": [
-            "**embed *data** - generates an embed, you need the manage messages permission to do so",
+            "**embed *data** - generates an embed, you need the manage messages permission to do so\n",
             "**gifs** - lists all loaded categories of gifs/images\n",
             "**help *command** - show info about all commands or the specified command\n",
             "**info *page** - shows info about créu and his friends!\n",
-            "**poll *title, *options** - makes a poll, options may be none (yes/no) or phrases separated by a comma (up to 20), title may also be omitted if there arent other arguments",
+            "**poll *title, *options** - makes a poll, with title and options (up to 20), separate by commas, both can be ommited",
             "**stats** - shows some useful stats\n",
             "**time *area** - use this command to see what time is it in another place\n",
             "**8ball *question** - make a question, and I'll roll a magic 8 ball for you\n\n",
@@ -15,6 +15,13 @@
             "**Credits:** the bot's icon and the 8ball were made by zulimations, other images included here made by PriVer, code by leninnog\n\n",
             "_**Also, here is a copyright disclaimer!**_\n",
             "© 2020 PriVer. All rights reserved. All visual content on this bot (including characters, images and trademarks) are protected by Intellectual Property rights owned by Priscila Vertamatti."
+        ]
+    },
+    "embed": {
+        "title": "Embeds!",
+        "description": [
+            "A quick way to make embeds!",
+            "you may use it with the standard json format for embeds, without the outer brackets"
         ]
     },
     "gifs": {
