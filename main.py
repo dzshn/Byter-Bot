@@ -10,6 +10,7 @@ from sys import argv
 from re import sub
 import traceback
 import requests
+import aiohttp
 import discord
 import json
 import os
@@ -305,7 +306,7 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
             else:
                 self.reDb[m.content] = [m.attachments[0].url]
 
-        elif m.channel.type == discord.ChannelType.text and m.channel.category != None and m.channel.category.id == 741765710971142175 and m.channel.id != 745400744303394917:
+        elif m.channel in self.get_channel(741765710971142175).channels and m.channel.id != 745400744303394917:
             data = requests.get('https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q='+quote_plus(sub(r'[\!?/&]', ' ', m.clean_content))).content.decode()
             embed = discord.Embed(color=0x301baa,
                                   title="from channel "+m.channel.name,
@@ -324,6 +325,9 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
             async with m.channel.typing():
                 await sleep (3)
             await m.channel.send("I'm sorry "+m.author.name)
+
+        elif self.get_user(310449948011528192) in m.mentions:
+            await m.add_reaction(self.get_emoji(748824813501546559))
 
         elif ("good night" in m.content.lower() or "goodnight" in m.content.lower()) and m.guild.id == 725421276562325514:
             await m.add_reaction("❤️")
