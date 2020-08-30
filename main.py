@@ -2,7 +2,6 @@
 
 from urllib.parse import quote_plus
 from datetime import timedelta
-from asyncio import sleep
 from random import choice
 from sys import exc_info
 from time import time
@@ -10,6 +9,7 @@ from sys import argv
 from re import sub
 import traceback
 import requests
+import asyncio
 import aiohttp
 import discord
 import json
@@ -297,7 +297,7 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
                     try:
                         r, u = await self.wait_for('reaction_add', check=chk, timeout=120)
 
-                    except TimeoutError:
+                    except asyncio.TimeoutError:
                         return 1
 
                     await r.remove(u)
@@ -334,10 +334,10 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
 
         elif m.content.lower().replace(',', '').startswith("wait, it's all ") and m.content.endswith('?'):
             async with m.channel.typing():
-                await sleep(2)
+                await asyncio.sleep(2)
             await m.channel.send('always has been')
             async with m.channel.typing():
-                await sleep (3)
+                await asyncio.sleep(3)
             await m.channel.send("I'm sorry "+m.author.name)
 
         elif self.get_user(310449948011528192) in m.mentions and m.author != self.user:
