@@ -81,12 +81,14 @@ for reference, the valid keywords can be seen [here](https://discord.com/develop
                             '''
                         )
                     )
+
                 else:
-                    await m.delete()
                     try:
                         await m.channel.send(embed=discord.Embed.from_dict(json.loads("{%s}" % m.content[6:])))
                     except json.JSONDecodeError:
                         await m.channel.send('There was an error parsing your data', delete_after=5)
+
+                    await m.delete()
 
             elif cm == "gifs":
                 await m.channel.send(
@@ -180,7 +182,6 @@ Just put the name of the character you want to know in front of this command! th
                     await m.delete()
 
             elif cm == "poll":
-                await m.delete()
                 options = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮', '🇯', '🇰', '🇱', '🇲', '🇳', '🇴', '🇵', '🇶', '🇷' ,'🇸', '🇹']
                 poll = m.content.replace('b!', '%')[5:].split(',')
                 pollText = ''
@@ -202,6 +203,8 @@ Just put the name of the character you want to know in front of this command! th
                 if len(poll) == 1:
                     await pollMsg.add_reaction('✅')
                     await pollMsg.add_reaction('❎')
+
+                await m.delete()
 
             elif cm == "stats":
                 embed = discord.Embed(color=0x301baa)
@@ -290,6 +293,9 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
                     else:
                         await ball8msg.edit(embed=embed)
 
+                    if not m.guild.me.permissions_in(m.channel).manage_messages:
+                        return 1
+
                     await ball8msg.add_reaction("🔄")
                     def chk(r, u):
                         return str(r.emoji) == "🔄" and r.message.id == ball8msg.id and u != self.user
@@ -349,7 +355,10 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
         elif "dreamworks" in m.content.lower() and m.guild.id == 725421276562325514:
             await m.add_reaction(self.get_emoji(726611950200553502))
 
-    async def on_error(self, error, *args, **kwargs):
+    async def on_error(self, func, *args, **kwargs):
+        if exc_info()[1] == discord.Forbidden:
+            return 1
+
         embed = discord.Embed(color=0xfa0505,
                               title="**Error!**",
                               description='''
@@ -366,11 +375,11 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
 ```
             ''' % (exc_info()[0], exc_info()[1], exc_info()[2].tb_lineno, traceback.format_exc())
         )
-        if error == "on_message":
+        if func == "on_message":
             embed.description = "**Message content :** %s\n%s" % (args[0].content,embed.description)
 
         else:
-            embed.description = "**Function :** %s\n\n**Args :** %s\n\n**Kwargs :** %s\n" % (error, args, kwargs, embed.description)
+            embed.description = "**Function :** %s\n\n**Args :** %s\n\n**Kwargs :** %s\n" % (func, args, kwargs, embed.description)
 
         await self.get_channel(741024906774577201).send(self.get_user(310449948011528192).mention, embed=embed)
 
