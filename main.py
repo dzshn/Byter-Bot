@@ -179,7 +179,6 @@ Just put the name of the character you want to know in front of this command! th
                     await m.channel.send('Bot online', delete_after=5)
                     await m.delete()
 
-
             elif cm == "poll":
                 await m.delete()
                 options = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮', '🇯', '🇰', '🇱', '🇲', '🇳', '🇴', '🇵', '🇶', '🇷' ,'🇸', '🇹']
@@ -271,19 +270,37 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
                     await m.channel.send('tos: acess denied!')
 
             elif cm == "8ball":
-                embed = discord.Embed(color=0x2031ba)
-                sball8 = choice(list(self.ball8))
-                if len(cm) == 1:
-                    title = "**"+sball8+"**"
-                    embed.description = ""
+                ball8msg = None
+                while True:
+                    embed = discord.Embed(color=0x2031ba)
+                    sball8 = choice(list(self.ball8))
+                    if len(cm) == 1:
+                        title = "**"+sball8+"**"
+                        embed.description = ""
 
-                else:
-                    title = m.content.replace('b!', '%')[6:]
-                    embed.description = sball8
+                    else:
+                        title = m.content.replace('b!', '%')[6:]
+                        embed.description = sball8
 
-                embed.set_image(url=self.ball8[sball8])
-                embed.set_footer(text="8ball by zuli - bot by leninnog")
-                await m.channel.send(embed=embed)
+                    embed.set_image(url=self.ball8[sball8])
+                    embed.set_footer(text="8ball by zuli - bot by leninnog")
+                    if ball8msg == None:
+                        ball8msg = await m.channel.send(embed=embed)
+
+                    else:
+                        await ball8msg.edit(embed=embed)
+
+                    await ball8msg.add_reaction("🔄")
+                    def chk(r, u):
+                        return str(r.emoji) == "🔄" and r.message.id == ball8msg.id and u != self.user
+
+                    try:
+                        r, u = await self.wait_for('reaction_add', check=chk, timeout=120)
+
+                    except TimeoutError:
+                        return 1
+
+                    await r.remove(u)
 
             elif cm in self.reDb:
                 await m.channel.send(choice(self.reDb[cm]))
@@ -303,7 +320,7 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
             else:
                 self.reDb[m.content] = [m.attachments[0].url]
 
-        elif m.channel in self.get_channel(741765710971142175).channels and m.channel.id != 745400744303394917:
+        elif not devmode and m.channel in self.get_channel(741765710971142175).channels and m.channel.id != 745400744303394917:
             data = requests.get('https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q='+quote_plus(m.clean_content)).content.decode()
             embed = discord.Embed(color=0x301baa,
                                   title="from channel "+m.channel.name,
@@ -323,7 +340,7 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
                 await sleep (3)
             await m.channel.send("I'm sorry "+m.author.name)
 
-        elif self.get_user(310449948011528192) in m.mentions:
+        elif self.get_user(310449948011528192) in m.mentions and m.author != self.user:
             await m.add_reaction(self.get_emoji(748824813501546559))
 
         elif ("good night" in m.content.lower() or "goodnight" in m.content.lower()) and m.guild.id == 725421276562325514:
