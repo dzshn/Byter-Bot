@@ -297,7 +297,7 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
 
                     await ball8msg.add_reaction("🔄")
                     def chk(r, u):
-                        return str(r.emoji) == "🔄" and r.message.id == ball8msg.id and u != self.user and u.id != 536370467045507103
+                        return str(r.emoji) == "🔄" and r.message.id == ball8msg.id and u == m.author
 
                     try:
                         r, u = await self.wait_for('reaction_add', check=chk, timeout=120)
