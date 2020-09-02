@@ -273,17 +273,16 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
                     await m.channel.send('tos: acess denied!')
 
             elif cm == "8ball":
+                if m.author.id == 536370467045507103:
+                    return 1
+
                 ball8msg = None
                 while True:
-                    embed = discord.Embed(color=0x2031ba)
                     sball8 = choice(list(self.ball8))
-                    if len(cm) == 1:
-                        title = "**"+sball8+"**"
-                        embed.description = ""
-
-                    else:
-                        title = m.content.replace('b!', '%')[6:]
-                        embed.description = sball8
+                    embed = discord.Embed(
+                        color=0x2031ba,
+                        title="**"+sball8+"**"
+                    )
 
                     embed.set_image(url=self.ball8[sball8])
                     embed.set_footer(text="8ball by zuli - bot by leninnog")
@@ -298,7 +297,7 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
 
                     await ball8msg.add_reaction("🔄")
                     def chk(r, u):
-                        return str(r.emoji) == "🔄" and r.message.id == ball8msg.id and u != self.user
+                        return str(r.emoji) == "🔄" and r.message.id == ball8msg.id and u != self.user and u.id != 536370467045507103
 
                     try:
                         r, u = await self.wait_for('reaction_add', check=chk, timeout=120)
@@ -346,7 +345,7 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
                 await asyncio.sleep(3)
             await m.channel.send("I'm sorry "+m.author.name)
 
-        elif self.get_user(310449948011528192) in m.mentions and m.author != self.user:
+        elif self.get_user(310449948011528192) in m.mentions and not m.author.bot:
             await m.add_reaction(self.get_emoji(748824813501546559))
 
         elif ("good night" in m.content.lower() or "goodnight" in m.content.lower()) and m.guild.id == 725421276562325514:
