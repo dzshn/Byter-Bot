@@ -273,9 +273,6 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
                     await m.channel.send('tos: acess denied!')
 
             elif cm == "8ball":
-                if m.author.id == 536370467045507103:
-                    return 1
-
                 ball8msg = None
                 while True:
                     sball8 = choice(list(self.ball8))
