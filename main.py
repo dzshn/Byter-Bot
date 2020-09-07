@@ -236,7 +236,7 @@ Just put the name of the character you want to know in front of this command! th
                     name="**Usage data:**",
                     value='''
 **Server Count :** %s
-**Ram usage :** %s/%s (%s%) [ avaiable]
+**Ram usage :** %s/%s (%s%) [%s avaiable]
 **Swap memory:** %s/%s (%s%)
                     ''' % (
                         len(self.guilds),
