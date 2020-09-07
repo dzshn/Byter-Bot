@@ -56,7 +56,7 @@ class byterbot(discord.Client):
         self.loadTime = time()
 
     async def on_message(self, m):
-        if m.author.bot:
+        if m.author.bot and m.webhook_id != 740524198165872711:
             return 1
 
         if m.channel.id == 740078363191935079 and not devmode:
