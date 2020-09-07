@@ -5,7 +5,6 @@ from datetime import timedelta
 from random import choice
 from sys import exc_info
 from time import time
-from sys import argv
 from re import sub
 import traceback
 import requests
@@ -18,12 +17,7 @@ import os
 
 initTime = time()
 
-devmode = len(argv) != 1 and argv[1] == "dev"
-if devmode:
-    tkn = "NzQzMzAyMTQ3OTI3NDQxNDU5.XzSsEQ.yWp07ZSoOIhoIFm7oTE9ROuUrs4"
-
-else:
-    tkn = "NzQwMDA2NDU3ODA1NjM1Njc4.XyiuuA.O2PFUXd4r-GZVfw-g5CZVHMQacc"
+tkn = open("TOKEN").read()
 
 class byterbot(discord.Client):
     reDb = {}
@@ -59,7 +53,7 @@ class byterbot(discord.Client):
         if m.author.bot and m.webhook_id != 740524198165872711:
             return 1
 
-        if m.channel.id == 740078363191935079 and not devmode:
+        if m.channel.id == 740078363191935079 and self.user == await self.get_user(740006457805635678):
             return 1
 
         elif m.content.startswith(('%', 'b!')):
@@ -180,13 +174,8 @@ Just put the name of the character you want to know in front of this command! th
                 await m.channel.send(embed=embed)
 
             elif cm == "t":
-                if devmode:
-                    await m.channel.send("```"+m.content+"```")
-                    print(m.content)
-
-                else:
-                    await m.channel.send('Bot online', delete_after=5)
-                    await m.delete()
+                await m.channel.send('Bot online', delete_after=5)
+                await m.delete()
 
             elif cm == "poll":
                 options = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮', '🇯', '🇰', '🇱', '🇲', '🇳', '🇴', '🇵', '🇶', '🇷' ,'🇸', '🇹']
@@ -332,7 +321,7 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
                 await m.channel.send(cm + ': command not found')
 
         elif m.webhook_id == 740524198165872711:
-            if not devmode:
+            if self.user.id == 740006457805635678:
                 await self.close()
                 os.system("git pull")
                 os.execl("./main.py", "")
@@ -343,7 +332,7 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
             else:
                 self.reDb[m.content] = [m.attachments[0].url]
 
-        elif not devmode and m.channel in self.get_channel(741765710971142175).channels and m.channel.id != 745400744303394917:
+        elif m.channel in self.get_channel(741765710971142175).channels and m.channel.id != 745400744303394917:
             data = requests.get('https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q='+quote_plus(m.clean_content)).content.decode()
             embed = discord.Embed(
                 color=0x301baa,
