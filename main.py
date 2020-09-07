@@ -127,26 +127,29 @@ you may use the categories as a command, and I'll pick an image/gif from there!
 
             elif cm == "info":
                 if len(ctx) == 1:
-                    embed = discord.Embed(color=0x301baa,
-                                          title="**Info!**",
-                                          description='''
-Currently there's info only for characters!
-use `char` or `character` after this command to see it!
-                                                ''')
+                    embed = discord.Embed(
+                        color=0x301baa,
+                        title="**Info!**",
+                        description='''Currently there's info only for characters!
+use `char` or `character` after this command to see it!'''
+                    )
+
                     embed.set_thumbnail(url=choice(["https://cdn.discordapp.com/attachments/741457274530299954/741615794340888586/selocreu2.gif", "https://cdn.discordapp.com/attachments/741457274530299954/741616136134852678/selocreu1.gif"]))
                     embed.set_footer(text="creucat.com © PriVer - bot developed by leninnog",
                                      icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
 
                 elif ctx[1] in ["character", "char"]:
                     if len(ctx) == 2:
-                        embed = discord.Embed(color=0x00002a,
-                                              title="**Characters!**",
-                                              description='''
+                        embed = discord.Embed(
+                            color=0x00002a,
+                            title="**Characters!**",
+                            description='''
 Want to know about the créu characters? this is the way to go!
 
-Just put the name of the character you want to know in front of this command! they are Créu, Petita, Liu-Liu, Muji, Printy, Mek & Krek, Rona & mou and of course me!
-                                              '''
-                                            )
+Just put the name of the character you want to know in front of this command! they are Créu, Petita, Liu-Liu, Muji, Printy, Mek & Krek, Rona & mou and of course, me!
+                            '''
+                        )
+
                         embed.set_thumbnail(url=choice(["https://cdn.discordapp.com/attachments/741457274530299954/741615794340888586/selocreu2.gif", "https://cdn.discordapp.com/attachments/741457274530299954/741616136134852678/selocreu1.gif"]))
                         embed.set_footer(text="creucat.com/characters © PriVer - bot developed by leninnog",
                                          icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
@@ -196,9 +199,10 @@ Just put the name of the character you want to know in front of this command! th
                     pollText = '✅ / ❎'
 
                 pollMsg = await m.channel.send(
-                    embed=discord.Embed(color=0x301baa,
-                                        title=poll[0].strip(),
-                                        description=pollText
+                    embed=discord.Embed(
+                        color=0x301baa,
+                        title=poll[0].strip(),
+                        description=pollText
                     )
                 )
                 for i in range(len(poll[1:])):
@@ -215,6 +219,7 @@ Just put the name of the character you want to know in front of this command! th
                     color=0x301baa,
                     title="**Here are some numbers I found**"
                 )
+
                 embed.add_field(
                     name="**Time Metrics:**",
                     value='''
@@ -252,12 +257,14 @@ Just put the name of the character you want to know in front of this command! th
 
             elif cm == "time":
                 if len(ctx) == 1:
-                    embed = discord.Embed(title="Timezones!",
-                                          description='''
-timezones can be weird some times, but hopefully there's an api I can push data from!
+                    embed = discord.Embed(
+                        title="Timezones!",
+                        description='''
+Timezones can be weird some times, but hopefully there's an api I can push data from!
 
 The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, CET, CST6CDT, EET, EET5EDT, Etc, Europe, HST, Indian, MET, MST, MST5MDT, PST8PDT, Pacific and WET
-                                          ''')
+                        '''
+                    )
 
                 else:
                     page = str(ctx[1:]).strip('[]').replace("'",'').replace(', ', '/')
@@ -285,18 +292,6 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
 
                 embed.set_footer(text="Powered by worldtimeapi.org - bot made by leninnog")
                 await m.channel.send(embed=embed)
-
-            elif cm == "tos":
-                if m.author.id == 310449948011528192:
-                    await m.channel.send('', embed=discord.Embed.from_dict(self.jsonfiles['tos']['welcome']))
-                    await m.channel.send('', embed=discord.Embed.from_dict(self.jsonfiles['tos']['section1']))
-                    await m.channel.send('', embed=discord.Embed.from_dict(self.jsonfiles['tos']['section2']))
-                    await m.channel.send('', embed=discord.Embed.from_dict(self.jsonfiles['tos']['section3']))
-
-                    await m.delete()
-
-                else:
-                    await m.channel.send('tos: acess denied!')
 
             elif cm == "8ball":
                 ball8msg = None
@@ -350,23 +345,21 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
 
         elif not devmode and m.channel in self.get_channel(741765710971142175).channels and m.channel.id != 745400744303394917:
             data = requests.get('https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q='+quote_plus(m.clean_content)).content.decode()
-            embed = discord.Embed(color=0x301baa,
-                                  title="from channel "+m.channel.name,
-                                  description="**message content:** %s\n**from:** %s\n**translation:** %s" % (
-                                    m.clean_content, m.author.name, json.loads(data)[0][0][0]
-                                  )
+            embed = discord.Embed(
+                color=0x301baa,
+                title="from channel "+m.channel.name,
+                description='''
+**message content:** %s
+**from:** %s
+**translation:** %s"
+                ''' % (
+                    m.clean_content, m.author.name, json.loads(data)[0][0][0]
+                )
             )
+
             embed.set_footer(text="Powered by Google Translator")
 
             await self.get_channel(745400744303394917).send(embed=embed)
-
-        elif m.content.lower().replace(',', '').startswith("wait, it's all ") and m.content.endswith('?'):
-            async with m.channel.typing():
-                await asyncio.sleep(2)
-            await m.channel.send('always has been')
-            async with m.channel.typing():
-                await asyncio.sleep(3)
-            await m.channel.send("I'm sorry "+m.author.name)
 
         elif self.get_user(310449948011528192) in m.mentions and not m.author.bot:
             await m.add_reaction(self.get_emoji(748824813501546559))
@@ -381,9 +374,10 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
         if exc_info()[1] == discord.Forbidden:
             return 1
 
-        embed = discord.Embed(color=0xfa0505,
-                              title="**Error!**",
-                              description='''
+        embed = discord.Embed(
+            color=0xfa0505,
+            title="**Error!**",
+            description='''
 **Exception info:**
 **Type :** %s
 
@@ -397,6 +391,7 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
 ```
             ''' % (exc_info()[0], exc_info()[1], exc_info()[2].tb_lineno, traceback.format_exc())
         )
+
         if func == "on_message":
             embed.description = "**Message content :** %s\n%s" % (args[0].content,embed.description)
 
