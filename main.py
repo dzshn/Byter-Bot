@@ -12,6 +12,7 @@ import requests
 import asyncio
 import aiohttp
 import discord
+import psutil
 import json
 import os
 
@@ -55,6 +56,9 @@ class byterbot(discord.Client):
         self.loadTime = time()
 
     async def on_message(self, m):
+        if m.author.bot:
+            return 1
+
         if m.channel.id == 740078363191935079 and not devmode:
             return 1
 
@@ -64,7 +68,7 @@ class byterbot(discord.Client):
 
             if cm == "embed":
                 if m.channel.type == discord.ChannelType.text and not m.author.permissions_in(m.channel).manage_messages:
-                    await m.channel.send('Missing permissions! you need manage_messages to do that')
+                    await m.channel.send('Missing permissions! you need manage messages to do that')
                     return 1
 
                 if len(ctx) == 1:
@@ -207,20 +211,45 @@ Just put the name of the character you want to know in front of this command! th
                 await m.delete()
 
             elif cm == "stats":
-                embed = discord.Embed(color=0x301baa)
-                embed.add_field(name="Here are some numbers I found",
-                                value='''
-**uptime**: I'm online for %s (%s seconds)
-**ready time**: I took %s seconds to connect to discord
-**loading time**: I took %s seconds to load after connecting
-                                      '''
-                                      % (
-                                         timedelta(seconds=round(time()-initTime)),
-                                         round(time()-initTime, 2),
-                                         round(self.readyTime-initTime, 2),
-                                         round(self.loadTime-self.readyTime, 2)
-                                        ),
-                                inline=False)
+                embed = discord.Embed(
+                    color=0x301baa,
+                    title="**Here are some numbers I found**"
+                )
+                embed.add_field(
+                    name="**Time Metrics:**",
+                    value='''
+**Uptime :** %s (%s seconds)
+**Time since last disconnect: ** %s (%s seconds)
+**Connection load time :** %s
+**Load time after connection :** %s
+                    ''' % (
+                        timedelta(seconds=round(time()-initTime)),
+                        round(time()-initTime, 2),
+                        timedelta(seconds=round(time()-self.readyTime)),
+                        round(time()-self.readyTime, 2),
+                        round(self.readyTime-initTime, 2),
+                        round(self.loadTime-self.readyTime, 2)
+                    )
+                )
+
+                embed.add_field(
+                    name="**Usage data:**",
+                    value='''
+**Server Count :** %s
+**Ram usage :** %s/%s (%s%)
+**Swap memory:** %s/%s (%s%)
+                    ''' % (
+                        len(self.guilds),
+                        psutil.cpu_percent(),
+                        psutil.virtual_memory().used,
+                        psutil.virtual_memory().avaiable,
+                        psutil.virtual_memory().percentage,
+                        psutil.swap_memory().used,
+                        psutil.swap_memory().avaiable,
+                        psutil.swap_memory().percentage
+                    )
+                )
+
                 embed.set_footer(text="version %s - bot made by leninnog" % self.version)
                 await m.channel.send(embed=embed)
 
@@ -277,7 +306,7 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
                 while True:
                     sball8 = choice(list(self.ball8))
                     embed = discord.Embed(
-                        color=0x2031ba,
+                        color=0x301baa,
                         title="**"+sball8+"**"
                     )
 
