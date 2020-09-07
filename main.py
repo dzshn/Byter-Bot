@@ -243,10 +243,10 @@ Just put the name of the character you want to know in front of this command! th
                         psutil.cpu_percent(),
                         psutil.virtual_memory().used,
                         psutil.virtual_memory().available,
-                        psutil.virtual_memory().percentage,
+                        psutil.virtual_memory().percent,
                         psutil.swap_memory().used,
                         psutil.swap_memory().available,
-                        psutil.swap_memory().percentage
+                        psutil.swap_memory().percent
                     )
                 )
 
