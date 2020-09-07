@@ -236,17 +236,13 @@ Just put the name of the character you want to know in front of this command! th
                     name="**Usage data:**",
                     value='''
 **Server Count :** %s
-**Ram usage :** %s/%s (%s%) [%s avaiable]
-**Swap memory:** %s/%s (%s%)
+**CPU :** %s
+**RAM :** %s
+**Swap :** %s
                     ''' % (
                         len(self.guilds),
                         psutil.cpu_percent(),
-                        psutil.virtual_memory().used,
-                        psutil.virtual_memory().total,
                         psutil.virtual_memory().percent,
-                        psutil.virtual_memory().available,
-                        psutil.swap_memory().used,
-                        psutil.swap_memory().total,
                         psutil.swap_memory().percent
                     )
                 )
