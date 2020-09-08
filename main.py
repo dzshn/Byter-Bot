@@ -26,14 +26,19 @@ class byterbot(discord.Client):
     readyTime = 0
     loadTime = 0
 
-    dataindex = open('data/index.json')
-    dataindex = json.load(dataindex)
-    jsonfiles = {}
+    jsonfiles = {
+        i : json.load(
+            open(
+                json.load(
+                    open('data/index.json')
+                )[i]
+            )
+        )
+
+        for i in json.load(open('data/index.json'))
+    }
 
     version = open('VERSION').read()
-
-    for i in dataindex:
-        jsonfiles.update({i:json.load(open(dataindex[i]))})
 
     async def on_ready(self):
         self.readyTime = time()
@@ -53,7 +58,7 @@ class byterbot(discord.Client):
         if m.author.bot and m.webhook_id != 740524198165872711:
             return 1
 
-        if m.channel.id == 740078363191935079 and self.user == await self.get_user(740006457805635678):
+        if m.channel.id == 740078363191935079 and self.user == self.get_user(740006457805635678):
             return 1
 
         elif m.content.startswith(('%', 'b!')):
@@ -73,7 +78,7 @@ class byterbot(discord.Client):
                             description='''
 You can use this command using the standard json format, without the outer brackets, example:
 
-%embed "title": "Title here", "description": "Description here"
+%embed "title": "Example Title", "description": "Example desc"
 
 for reference, the valid keywords can be seen [here](https://discord.com/developers/docs/resources/channel#embed-object-embed-structure) and you can check it on [this visualizer](https://leovoel.github.io/embed-visualizer/)
                             '''
