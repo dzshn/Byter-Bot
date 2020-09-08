@@ -340,7 +340,7 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
                 description='''
 **message content:** %s
 **from:** %s
-**translation:** %s"
+**translation:** %s
                 ''' % (
                     m.clean_content, m.author.name, json.loads(data)[0][0][0]
                 )
