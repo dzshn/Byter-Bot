@@ -173,10 +173,6 @@ Just put the name of the character you want to know in front of this command! th
 
                 await m.channel.send(embed=embed)
 
-            elif cm == "t":
-                await m.channel.send('Bot online', delete_after=5)
-                await m.delete()
-
             elif cm == "poll":
                 options = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮', '🇯', '🇰', '🇱', '🇲', '🇳', '🇴', '🇵', '🇶', '🇷' ,'🇸', '🇹']
                 poll = m.content.replace('b!', '%')[5:].split(',')
