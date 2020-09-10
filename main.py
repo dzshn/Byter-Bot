@@ -58,14 +58,150 @@ class byterbot(discord.Client):
         if m.author.bot and m.webhook_id != 740524198165872711:
             return 1
 
-        if m.channel.id == 740078363191935079 and self.user == self.get_user(740006457805635678):
+        if m.channel.id == 740078363191935079 and self.user.id == 740006457805635678:
             return 1
 
         elif m.content.startswith(('%', 'b!')):
             ctx = m.content[1:].split(' ') if m.content.startswith('%') else m.content[2:].split(' ')
             cm = ctx[0]
 
-            if cm == "embed":
+            if cm == "api":
+                if len(ctx) == 1:
+                    await m.channel.send(
+                        embed=discord.Embed(
+                            title="Apis!",
+                            description='''
+Apis, short for Application Programming Interface, is a way of code to interact to a service, like I do for %time or the auto-translator
+here in this command will be a bunch of apis that I don't think need to have a command, the list is as it follows:
+
+**cat** - shows a cat image
+**joke** - tells a joke
+**name** *name - shows possible age, gender and nationality of a name ─ don't take it too seriously
+**nasa** - shows the image of the day from NASA
+**qr** *text - generates a qr code from text
+**unsplash** *search - returns a image from unsplash
+**wikipedia** *search - search wikipedia
+**xkcd** <current/id/None> - shows either a random or current xkcd comic, or one from the id
+                            '''
+                        )
+                    )
+
+                else:
+                    if ctx[1] == "cat":
+                        embed = discord.Embed()
+                        embed.set_image(url=requests.get("https://api.thecatapi.com/v1/images/search").json()[0]['url'])
+                        embed.set_footer(text="Powered by TheCatAPI")
+                        await m.channel.send(embed=embed)
+
+                    elif ctx[1] == "joke":
+                        data = requests.get("https://sv443.net/jokeapi/v2/joke/Programming,Miscellaneous,Pun?blacklistFlags=nsfw,religious,political,racist,sexist").json()
+                        if data['type'] == 'single':
+                            embed = discord.Embed(
+                                description=data['joke']
+                            )
+
+                        else:
+                            embed = discord.Embed(
+                                title=data['setup'],
+                                description=data['delivery']
+                            )
+
+                        embed.set_footer(text="Powered by sv443.net's joke API")
+                        await m.channel.send(embed=embed)
+
+                    elif ctx[1] == "name":
+                        data = [
+                            requests.get("https://api.agify.io/?name="+''.join(ctx[2:])).json(),
+                            requests.get("https://api.genderize.io/?name="+''.join(ctx[2:])).json(),
+                            requests.get("https://api.nationalize.io/?name="+''.join(ctx[2:])).json()
+                        ]
+                        embed = discord.Embed(
+                            description="**Age:** %s\n**Gender:** %s (prob. %s)\n**Nationalities:** %s" % (
+                                data[0]['age'], data[1]['gender'].title(), data[1]['probability'],
+                                ', '.join(['%s (prob %s)' % (i['country_id'], round(i['probability'], 3)) for i in data[2]['country']])
+                            )
+                        )
+                        embed.set_footer(texr="Powered by agify, genderize and nationalize apis")
+                        await m.channel.send(embed=embed)
+
+                    elif ctx[1] == "nasa":
+                        data = requests.get("https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY").json()
+                        embed = discord.Embed(
+                            title=data['title'],
+                            description="%s\nDate: %s | Copyright: %s" % (data['explanation'], data['date'], data['copyright'])
+                        )
+                        embed.set_image(url=data['url'])
+                        embed.set_footer(text="Powered by nasa.gov's api")
+                        await m.channel.send(embed=embed)
+
+                    elif ctx[1] == "qr":
+                        if len(ctx) == 2:
+                            await m.channel.send(embed=discord.Embed(title='QR codes', description="a simple way to generate qr codes, just use your text after this command"))
+
+                        else:
+                            embed = discord.Embed()
+                            embed.set_image(url="https://api.qrserver.com/v1/create-qr-code/?data="+quote_plus(''.join(ctx[2:])))
+                            embed.set_footer(text="Powered by goqr.me api")
+                            await m.channel.send(embed=embed)
+
+                    elif ctx[1] == "unsplash":
+                        if len(ctx) == 2:
+                            await m.channel.send(embed=discord.Embed(title="Unsplash Images", description="unsplash is the most powerful photo engine, just type in the search term after the command and you'll get a featured image"))
+                            return 1
+
+                        embed = discord.Embed()
+                        embed.set_image(url="https://source.unsplash.com/featured/?"+quote_plus(''.join(ctx[2:])))
+                        embed.set_footer(text="Powered by source.unsplash.com")
+                        await m.channel.send(embed=embed)
+
+                    elif ctx[1] == "wikipedia":
+                        if len(ctx) == 2:
+                            await m.channel.send(embed=discord.Embed(title='Wikipedia', description="Wikipedia search, simple, right?"))
+                            return 1
+
+                        data = requests.get(
+                            "https://en.wikipedia.org/w/api.php?action=query&list=search&utf8=1&srsearch=%s&srlimit=5&srprop=wordcount|snippet&format=json"
+                            % quote_plus(''.join(ctx[2:]))
+                        ).json()
+                        if data['query']['search'] == []:
+                            await m.channel.send("No results for %s" % ''.join(ctx[2:]))
+                            return 1
+
+                        embed = discord.Embed(title="Search results for "+''.join(ctx[2:]))
+                        embed.set_footer(text='Powered by Wikipedia api')
+                        for i in data['query']['search']:
+                            embed.add_field(
+                                name="**%s**" % i['title'],
+                                value="%s\n[**link**](https://en.wikipedia.org/wiki/%s) **words:** %s" % (
+                                    sub('<.*?>', '', i['snippet']),
+                                    i['wordcount'],
+                                    quote_plus(i['title']).replace('+', '_')
+                                )
+                            )
+
+                        await m.channel.send(embed=embed)
+
+                    elif ctx[1] == "xkcd":
+                        if len(ctx) == 3:
+                            if ctx[2] == "current":
+                                data = requests.get("https://xkcd.com/info.0.json").json()
+                            elif ctx[2].isdecimal():
+                                try:
+                                    data = requests.get("https://xkcd.com/%s/info.0.json" % ctx[2]).json()
+
+                                except json.JSONDecodeError:
+                                    await m.channel.send("An error occurred, it's possible that the given id was invalid")
+                                    return 1
+
+                        else:
+                            data = requests.get(requests.get("https://c.xkcd.com/random/comic").url+"info.0.json").json()
+
+                        embed = discord.Embed(title=data['safe_title'], description=data['alt'])
+                        embed.set_image(url=data['img'])
+                        embed.set_footer(text="Powered by xkcd.com")
+                        await m.channel.send(embed=embed)
+
+            elif cm == "embed":
                 if m.channel.type == discord.ChannelType.text and not m.author.permissions_in(m.channel).manage_messages:
                     await m.channel.send('Missing permissions! you need manage messages to do that')
                     return 1
@@ -333,7 +469,7 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
             else:
                 self.reDb[m.content] = [m.attachments[0].url]
 
-        elif m.channel in self.get_channel(741765710971142175).channels and m.channel.id != 745400744303394917:
+        elif self.user.id == 740006457805635678 and m.channel in self.get_channel(741765710971142175).channels and m.channel.id != 745400744303394917:
             data = requests.get('https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q='+quote_plus(m.clean_content)).content.decode()
             embed = discord.Embed(
                 color=0x301baa,

@@ -2,6 +2,7 @@
     "index": {
         "title": "Hello! here are the valid commands",
         "description": [
+            "**api *name *args** - a bunch of APIs that I found\n",
             "**embed *data** - generates an embed, you need the manage messages permission to do so\n",
             "**gifs** - lists all loaded categories of gifs/images\n",
             "**help *command** - show info about all commands or the specified command\n",
@@ -15,6 +16,12 @@
             "**Credits:** the bot's icon and the 8ball were made by zulimations, other images included here made by PriVer, code by leninnog\n\n",
             "_**Also, here is a copyright disclaimer!**_\n",
             "© 2020 PriVer. All rights reserved. All visual content on this bot (including characters, images and trademarks) are protected by Intellectual Property rights owned by Priscila Vertamatti."
+        ]
+    },
+    "api": {
+        "title": "APIs!",
+        "description": [
+            "A bunch of APIs I found on the internet, you may use this command to list the ones available"
         ]
     },
     "embed": {
