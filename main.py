@@ -80,6 +80,7 @@ here in this command will be a bunch of apis that I don't think need to have a c
 **name *name** - shows possible age, gender and nationality of a name ─ don't take it too seriously
 **nasa** - shows the image of the day from NASA
 **qr *text** - generates a qr code from text
+**tpde** - shows a person that does not exist
 **unsplash *search** - returns a image from unsplash
 **wikipedia *search** - search wikipedia
 **xkcd <current/id/None>** - shows either a random or current xkcd comic, or one from the id
@@ -155,6 +156,12 @@ here in this command will be a bunch of apis that I don't think need to have a c
                             embed.set_image(url="https://api.qrserver.com/v1/create-qr-code/?data="+quote_plus(''.join(ctx[2:])))
                             embed.set_footer(text="Powered by goqr.me api")
                             await m.channel.send(embed=embed)
+
+                    elif ctx[1] == "tpde":
+                        embed = discord.Embed(title="This person does not exist")
+                        embed.set_image(url="https://thispersondoesnotexist.com/image")
+                        embed.set_footer(text="Powered by thispersondoesnotexist.com")
+                        await m.channel.send(embed=embed)
 
                     elif ctx[1] == "unsplash":
                         if len(ctx) == 2:
