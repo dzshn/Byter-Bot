@@ -100,10 +100,22 @@ here in this command will be a bunch of apis that I don't think need to have a c
                         embed.set_footer(text="Powered by avatars.adorable.io")
                         await m.channel.send(embed=embed)
 
-                    if ctx[1] == "cat":
+                    elif ctx[1] == "cat":
                         embed = discord.Embed()
                         embed.set_image(url=requests.get("https://api.thecatapi.com/v1/images/search").json()[0]['url'])
                         embed.set_footer(text="Powered by TheCatAPI")
+                        await m.channel.send(embed=embed)
+
+                    elif ctx[1] == "dog":
+                        embed = discord.Embed()
+                        embed.set_image(url=requests.get("https://random.dog/woof.json").json()['url'])
+                        embed.set_footer(text="Powered by RandomDog")
+                        await m.channel.send(embed=embed)
+
+                    elif ctx[1] == "fox":
+                        embed = discord.Embed()
+                        embed.set_image(url=requests.get("https://randomfox.ca/floof/").json()['image'])
+                        embed.set_footer(text="Powered by RandomFox")
                         await m.channel.send(embed=embed)
 
                     elif ctx[1] == "joke":
@@ -156,12 +168,6 @@ here in this command will be a bunch of apis that I don't think need to have a c
                             embed.set_image(url="https://api.qrserver.com/v1/create-qr-code/?data="+quote_plus(''.join(ctx[2:])))
                             embed.set_footer(text="Powered by goqr.me api")
                             await m.channel.send(embed=embed)
-
-                    elif ctx[1] == "tpde":
-                        embed = discord.Embed(title="This person does not exist")
-                        embed.set_image(url="https://thispersondoesnotexist.com/image")
-                        embed.set_footer(text="Powered by thispersondoesnotexist.com")
-                        await m.channel.send(embed=embed)
 
                     elif ctx[1] == "unsplash":
                         if len(ctx) == 2:
