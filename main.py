@@ -74,19 +74,31 @@ class byterbot(discord.Client):
 Apis, short for Application Programming Interface, is a way of code to interact to a service, like I do for %time or the auto-translator
 here in this command will be a bunch of apis that I don't think need to have a command, the list is as it follows:
 
+**avatar - <*text/None>** - generates a consistent avatar from your name or the specified text
 **cat** - shows a cat image
 **joke** - tells a joke
-**name** *name - shows possible age, gender and nationality of a name ─ don't take it too seriously
+**name *name** - shows possible age, gender and nationality of a name ─ don't take it too seriously
 **nasa** - shows the image of the day from NASA
-**qr** *text - generates a qr code from text
-**unsplash** *search - returns a image from unsplash
-**wikipedia** *search - search wikipedia
-**xkcd** <current/id/None> - shows either a random or current xkcd comic, or one from the id
+**qr *text** - generates a qr code from text
+**unsplash *search** - returns a image from unsplash
+**wikipedia *search** - search wikipedia
+**xkcd <current/id/None>** - shows either a random or current xkcd comic, or one from the id
                             '''
                         )
                     )
 
                 else:
+                    if ctx[1] == "avatar":
+                        embed = discord.Embed()
+                        if len(ctx) == 2:
+                            embed.set_image(url="https://api.adorable.io/avatars/285/%s.png" % m.author.name)
+
+                        else:
+                            embed.set_image(url="https://api.adorable.io/avatars/285/%s.png" % quote_plus(''.join(ctx[2:])))
+
+                        embed.set_footer(text="Powered by avatars.adorable.io")
+                        await m.channel.send(embed=embed)
+
                     if ctx[1] == "cat":
                         embed = discord.Embed()
                         embed.set_image(url=requests.get("https://api.thecatapi.com/v1/images/search").json()[0]['url'])
