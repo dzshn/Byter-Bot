@@ -70,23 +70,13 @@ class byterbot(discord.Client):
                     await m.channel.send(
                         embed=discord.Embed(
                             title="Apis!",
-                            description='''
-Apis, short for Application Programming Interface, is a way of code to interact to a service, like I do for %time or the auto-translator
-here in this command will be a bunch of apis that I don't think need to have a command, the list is as it follows:
-
-**avatar - <*text/None>** - generates a consistent avatar from your name or the specified text
-**cat** - shows a cat image
-**dog** - shows a dog image
-**fox** - shows a fox image
-**joke** - tells a joke
-**name *name** - shows possible age, gender and nationality of a name ─ don't take it too seriously
-**nasa** - shows the image of the day from NASA
-**qr *text** - generates a qr code from text
-**tpde** - shows a person that does not exist
-**unsplash *search** - returns a image from unsplash
-**wikipedia *search** - search wikipedia
-**xkcd <current/id/None>** - shows either a random or current xkcd comic, or one from the id
-                            '''
+                            description=
+"Apis, short for Application Programming Interface, is a way of code to interact to a service, like I do for %time or the auto-translator"
+"here in this command will be a bunch of apis that I don't think need to have a command, the list is as it follows:"
+""
+"avatar, cat, dog, fox, joke, name, nasa, qr, unsplash, wikipedia, xkcd"
+""
+"you can use `%help api <apiName>` to see how one in specific works"
                         )
                     )
 
@@ -144,7 +134,7 @@ here in this command will be a bunch of apis that I don't think need to have a c
                         ]
                         embed = discord.Embed(
                             description="**Age:** %s\n**Gender:** %s (prob. %s)\n**Nationalities:** %s" % (
-                                data[0]['age'], data[1]['gender'].title(), data[1]['probability'],
+                                data[0]['age'], data[1]['gender'], data[1]['probability'],
                                 ', '.join(['%s (prob %s)' % (i['country_id'], round(i['probability'], 3)) for i in data[2]['country']])
                             )
                         )
