@@ -76,6 +76,8 @@ here in this command will be a bunch of apis that I don't think need to have a c
 
 **avatar - <*text/None>** - generates a consistent avatar from your name or the specified text
 **cat** - shows a cat image
+**dog** - shows a dog image
+**fox** - shows a fox image
 **joke** - tells a joke
 **name *name** - shows possible age, gender and nationality of a name ─ don't take it too seriously
 **nasa** - shows the image of the day from NASA
@@ -146,7 +148,7 @@ here in this command will be a bunch of apis that I don't think need to have a c
                                 ', '.join(['%s (prob %s)' % (i['country_id'], round(i['probability'], 3)) for i in data[2]['country']])
                             )
                         )
-                        embed.set_footer(texr="Powered by agify, genderize and nationalize apis")
+                        embed.set_footer(text="Powered by agify, genderize and nationalize apis")
                         await m.channel.send(embed=embed)
 
                     elif ctx[1] == "nasa":
