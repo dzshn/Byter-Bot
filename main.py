@@ -27,14 +27,7 @@ class byterbot(discord.Client):
     loadTime = 0
 
     jsonfiles = {
-        i : json.load(
-            open(
-                json.load(
-                    open('data/index.json')
-                )[i]
-            )
-        )
-
+        i:json.load(open(json.load(open('data/index.json'))[i]))
         for i in json.load(open('data/index.json'))
     }
 
@@ -70,13 +63,14 @@ class byterbot(discord.Client):
                     await m.channel.send(
                         embed=discord.Embed(
                             title="Apis!",
-                            description=
-"Apis, short for Application Programming Interface, is a way of code to interact to a service, like I do for %time or the auto-translator"
-"here in this command will be a bunch of apis that I don't think need to have a command, the list is as it follows:"
-""
-"avatar, cat, dog, fox, joke, name, nasa, qr, unsplash, wikipedia, xkcd"
-""
-"you can use `%help api <apiName>` to see how one in specific works"
+                            description='''
+Apis, short for Application Programming Interface, is a way of code to interact to a service, like I do for %time or the auto-translator
+here in this command will be a bunch of apis that I don't think need to have a command, the list is as it follows:
+
+avatar, cat, dog, fox, joke, name, nasa, qr, unsplash, wikipedia, xkcd
+
+you can use `%help api <apiName>` to see how one in specific works
+                            '''
                         )
                     )
 
@@ -113,15 +107,10 @@ class byterbot(discord.Client):
                     elif ctx[1] == "joke":
                         data = requests.get("https://sv443.net/jokeapi/v2/joke/Programming,Miscellaneous,Pun?blacklistFlags=nsfw,religious,political,racist,sexist").json()
                         if data['type'] == 'single':
-                            embed = discord.Embed(
-                                description=data['joke']
-                            )
+                            embed = discord.Embed(description=data['joke'])
 
                         else:
-                            embed = discord.Embed(
-                                title=data['setup'],
-                                description=data['delivery']
-                            )
+                            embed = discord.Embed(title=data['setup'], description=data['delivery'])
 
                         embed.set_footer(text="Powered by sv443.net's joke API")
                         await m.channel.send(embed=embed)
@@ -160,6 +149,38 @@ class byterbot(discord.Client):
                             embed.set_image(url="https://api.qrserver.com/v1/create-qr-code/?data="+quote_plus(''.join(ctx[2:])))
                             embed.set_footer(text="Powered by goqr.me api")
                             await m.channel.send(embed=embed)
+
+                    elif ctx[1] == "time":
+                        if len(ctx) == 2:
+                            embed = discord.Embed(
+                                title="Timezones!",
+                                description='''
+Shows current time in a given area
+
+The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, CET, CST6CDT, EET, EET5EDT, Etc, Europe, HST, Indian, MET, MST, MST5MDT, PST8PDT, Pacific and WET
+                                '''
+                            )
+
+                        else:
+                            page = '/'.join(ctx[2:])
+                            data = requests.get('http://worldtimeapi.org/api/'+page).json()
+                            embed = discord.Embed(title=page)
+                            if "datetime" in data:
+                                embed.description = "**Current time:** %s\n**UTC offset:** %s" % (
+                                    data['datetime'].split('T')[1][:8], data['utc_offset']
+                                )
+                                embed.title += "'s current time"
+
+                            elif "error" in data:
+                                embed.description = data['error']
+                                embed.title += ": error!"
+
+                            else:
+                                embed.description = ', '.join([i.lower().replace(ctx[2], '').lstrip('/') for i in data])
+                                embed.title += "'s avaiable timezones"
+
+                        embed.set_footer(text="Powered by worldtimeapi.org - bot made by leninnog")
+                        await m.channel.send(embed=embed)
 
                     elif ctx[1] == "unsplash":
                         if len(ctx) == 2:
@@ -241,6 +262,7 @@ for reference, the valid keywords can be seen [here](https://discord.com/develop
                 else:
                     try:
                         await m.channel.send(embed=discord.Embed.from_dict(json.loads("{%s}" % m.content[6:])))
+
                     except json.JSONDecodeError:
                         await m.channel.send('There was an error parsing your data', delete_after=5)
 
@@ -265,27 +287,28 @@ you may use the categories as a command, and I'll pick an image/gif from there!
 
                 else:
                     if ctx[1] in self.jsonfiles['help']:
-                        data = self.jsonfiles['help'][ctx[1]]
+                        if len(ctx) == 3 and ctx[1] == "api":
+                            if ctx[2] in self.jsonfiles['apih']:
+                                data = self.jsonfiles['apih'][ctx[2]]
+
+                            else:
+                                await m.channel.send('help> api: %s: api not found' % ctx[2])
+                        else:
+                            data = self.jsonfiles['help'][ctx[1]]
 
                     else:
                         await m.channel.send('help: %s: page not found' % ctx[1])
                         return 1
 
                 embed = discord.Embed(color=0x301baa, title=data['title'], description=''.join(data['description']))
-                embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/741457274530299954/741457798705184830/BUTTON_byter.webp")
-                embed.set_footer(text="creucat.com © PriVer - bot developed by leninnog",
-                                 icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
                 await m.channel.send(embed=embed)
 
             elif cm == "info":
                 if len(ctx) == 1:
                     embed = discord.Embed(
-                        color=0x301baa,
-                        title="**Info!**",
-                        description='''Currently there's info only for characters!
-use `char` or `character` after this command to see it!'''
+                        color=0x301baa, title="Info!",
+                        description="Currently there's info only for characters!\n\nuse `char` or `character` after this command to see it!"
                     )
-
                     embed.set_thumbnail(url=choice(["https://cdn.discordapp.com/attachments/741457274530299954/741615794340888586/selocreu2.gif", "https://cdn.discordapp.com/attachments/741457274530299954/741616136134852678/selocreu1.gif"]))
                     embed.set_footer(text="creucat.com © PriVer - bot developed by leninnog",
                                      icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
@@ -293,18 +316,12 @@ use `char` or `character` after this command to see it!'''
                 elif ctx[1] in ["character", "char"]:
                     if len(ctx) == 2:
                         embed = discord.Embed(
-                            color=0x00002a,
-                            title="**Characters!**",
-                            description='''
-Want to know about the créu characters? this is the way to go!
-
-Just put the name of the character you want to know in front of this command! they are Créu, Petita, Liu-Liu, Muji, Printy, Mek & Krek, Rona & mou and of course, me!
-                            '''
+                            color=0x00002a, title="Characters!",
+                            description="Want to know about the créu characters? this is the way to go!\n\nJust put the name of the character you want to know in front of this command! they are Créu, Petita, Liu-Liu, Muji, Printy, Mek & Krek, Rona & mou and of course, me!"
                         )
-
                         embed.set_thumbnail(url=choice(["https://cdn.discordapp.com/attachments/741457274530299954/741615794340888586/selocreu2.gif", "https://cdn.discordapp.com/attachments/741457274530299954/741616136134852678/selocreu1.gif"]))
                         embed.set_footer(text="creucat.com/characters © PriVer - bot developed by leninnog",
-                                         icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
+                            icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
                         await m.channel.send(embed=embed)
                         return 1
 
@@ -327,7 +344,7 @@ Just put the name of the character you want to know in front of this command! th
                     embed.add_field(name="Favorites", value="<:coffee:741469635492446268> %s\n\n<:ice_cream:741469513773613118> %s\n\n<:music:741469877143076946> %s" % tuple(charData['favs']), inline=False)
                     embed.set_image(url=charData['img'])
                     embed.set_footer(text="creucat.com/characters © PriVer - bot developed by leninnog",
-                                     icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
+                        icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
 
                 await m.channel.send(embed=embed)
 
@@ -342,11 +359,7 @@ Just put the name of the character you want to know in front of this command! th
                     pollText = '✅ / ❎'
 
                 pollMsg = await m.channel.send(
-                    embed=discord.Embed(
-                        color=0x301baa,
-                        title=poll[0].strip(),
-                        description=pollText
-                    )
+                    embed=discord.Embed(color=0x301baa, title=poll[0].strip(), description=pollText)
                 )
                 for i in range(len(poll[1:])):
                     await pollMsg.add_reaction(options[i])
@@ -358,10 +371,7 @@ Just put the name of the character you want to know in front of this command! th
                 await m.delete()
 
             elif cm == "stats":
-                embed = discord.Embed(
-                    color=0x301baa,
-                    title="**Here are some numbers I found**"
-                )
+                embed = discord.Embed(color=0x301baa, title="**Here are some numbers I found**")
 
                 embed.add_field(
                     name="**Time Metrics:**",
@@ -388,63 +398,18 @@ Just put the name of the character you want to know in front of this command! th
 **RAM :** %s
 **Swap :** %s
                     ''' % (
-                        len(self.guilds),
-                        psutil.cpu_percent(),
-                        psutil.virtual_memory().percent,
-                        psutil.swap_memory().percent
+                        len(self.guilds), psutil.cpu_percent(), psutil.virtual_memory().percent, psutil.swap_memory().percent
                     )
                 )
 
                 embed.set_footer(text="version %s - bot made by leninnog" % self.version)
                 await m.channel.send(embed=embed)
 
-            elif cm == "time":
-                if len(ctx) == 1:
-                    embed = discord.Embed(
-                        title="Timezones!",
-                        description='''
-Timezones can be weird some times, but hopefully there's an api I can push data from!
-
-The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, CET, CST6CDT, EET, EET5EDT, Etc, Europe, HST, Indian, MET, MST, MST5MDT, PST8PDT, Pacific and WET
-                        '''
-                    )
-
-                else:
-                    page = str(ctx[1:]).strip('[]').replace("'",'').replace(', ', '/')
-                    data = requests.get('http://worldtimeapi.org/api/'+page).json()
-                    data_out = ""
-                    title = "**"+page+"**"
-
-                    if "datetime" in data:
-                        data_out = "**Current time:** %s\n**UTC offset:** %s" % (
-                            data['datetime'].split('T')[1][:8], data['utc_offset']
-                        )
-                        title += "'s current time"
-
-                    elif "error" in data:
-                        data_out = data['error']
-                        title += ": error!"
-
-                    else:
-                        for i in data:
-                            i = i.lower().replace(ctx[1], '').lstrip('/')
-                            data_out += i+', '
-                        title += "'s avaiable timezones"
-
-                    embed = discord.Embed(title=title, description=data_out)
-
-                embed.set_footer(text="Powered by worldtimeapi.org - bot made by leninnog")
-                await m.channel.send(embed=embed)
-
             elif cm == "8ball":
                 ball8msg = None
                 while True:
                     sball8 = choice(list(self.ball8))
-                    embed = discord.Embed(
-                        color=0x301baa,
-                        title="**"+sball8+"**"
-                    )
-
+                    embed = discord.Embed(color=0x301baa, title=sball8)
                     embed.set_image(url=self.ball8[sball8])
                     embed.set_footer(text="8ball by zuli - bot by leninnog")
                     if ball8msg == None:
@@ -457,6 +422,7 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
                         return 1
 
                     await ball8msg.add_reaction("🔄")
+
                     def chk(r, u):
                         return str(r.emoji) == "🔄" and r.message.id == ball8msg.id and u == m.author
 

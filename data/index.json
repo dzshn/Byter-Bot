@@ -1,4 +1,5 @@
 {
-    "help" : "data/help.json",
-    "char": "data/characters.json"
+    "help": "data/help.json",
+    "char": "data/characters.json",
+    "apih": "data/apihelp.json"
 }

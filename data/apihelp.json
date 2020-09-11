@@ -1,0 +1,38 @@
+{
+    "avatar": {
+        "title": "Avatars",
+        "description": [
+            "Generates an image from either your name or a specific text, they're consistent, meaning that they won't change\n"
+        ]
+    },
+    "cat": {
+        "title": "Cats!",
+        "description": [
+            "Cat images! simple as that"
+        ]
+    },
+    "dog": {
+        "title": "Dogs!",
+        "description": [
+            "Dog images! simple as that"
+        ]
+    },
+    "fox": {
+        "title": "Foxes!",
+        "description": [
+            "Fox images! simple as that"
+        ]
+    },
+    "joke": {
+        "title": "Jokes",
+        "description": [
+            "Bad jokes, may include programming jokes ─ and those are worse"
+        ]
+    },
+    "name": {
+        "title": "Name",
+        "description": [
+            "Returns most probable gender, nation and age of a given name ─ don't take it too seriously tough, even tough it is real data, it can get it wrong"
+        ]
+    }
+}
