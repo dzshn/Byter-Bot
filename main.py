@@ -6,6 +6,7 @@ from random import choice
 from sys import exc_info
 from time import time
 from re import sub
+import numpy as np
 import traceback
 import requests
 import asyncio
@@ -13,6 +14,7 @@ import aiohttp
 import discord
 import psutil
 import json
+import math
 import os
 
 initTime = time()
@@ -347,6 +349,79 @@ you may use the categories as a command, and I'll pick an image/gif from there!
                         icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
 
                 await m.channel.send(embed=embed)
+
+            elif cm == "minigame":
+                if len(ctx) == 1:
+                    await m.channel.send(
+                        embed=discord.Embed(
+                            title="Minigames!",
+                            description='''
+Bored? try some minigames! currently there's only 2048 _but_ there will be more in the future! just run `minigame 2048` to start!
+                            '''
+                        )
+                    )
+                    return 1
+
+                elif ctx[1] == "2048":
+                    gameDat = np.array([[0 for i in range(4)] for ii in range(4)])
+                    gameScr = 0
+                    gameDat.flat[choice([i for i, j in enumerate(gameDat.flatten()) if j == 0])] = choice([1, 1, 1, 1, 1, 1, 1, 1, 1, 2])
+                    gameDsp = lambda : '\n'.join([
+                        ''.join([
+                            self.jsonfiles['ming']['2048']['tiles'][n] for n in gameDat[i]
+                        ]) for i in range(4)
+                    ])
+                    gameEmb = discord.Embed()
+                    gameEmb.add_field(name="2048!", value=gameDsp())
+                    gameEmb.add_field(name="Score", value=gameScr)
+                    gEmbUpd = lambda : (
+                        gameEmb.set_field_at(0, name="2048!", value=gameDsp()),
+                        gameEmb.set_field_at(1, name="Score", value=gameScr)
+                    )
+                    gameMsg = await m.channel.send(embed=gameEmb)
+                    [await gameMsg.add_reaction(i) for i in ['⬆️', '⬇️', '⬅️', '➡️']]
+                    while 0 in gameDat:
+                        try:
+                            r, u = await self.wait_for(
+                                "reaction_add",
+                                check=lambda r, u: str(r.emoji) in ['⬆️', '⬇️', '⬅️', '➡️'] and r.message.id == gameMsg.id and u == m.author,
+                                timeout=120
+                            )
+
+                        except asyncio.TimeoutError:
+                            await gameMsg.edit(embed=discord.Embed(title="Timed out × -×", description="Played by: %s\n%s\n**Score:** %s" % (m.author.name, gameDsp(), gameScr)))
+                            return 1
+
+                        await r.remove(u)
+
+                        def move(gdat, gscr, ay, ax, r1=0, r2=4, r3=0, r4=4):
+                            for i in range(4):
+                                for iy in range(r1, r2):
+                                    for ix in range(r3, r4):
+                                        if gdat[iy][ix] != 0:
+                                            if gdat[iy+ay][ix+ax] == 0:
+                                                gdat[iy+ay][ix+ax] = gdat[iy][ix]
+                                                gdat[iy][ix] = 0
+
+                                            elif gdat[iy+ay][ix+ax] == gdat[iy][ix]:
+                                                gdat[iy+ay][ix+ax] += 1
+                                                gdat[iy][ix] = 0
+                                                gscr += 2**gdat[iy+ay][ix+ax]
+
+                            return gdat, gscr
+
+                        if str(r.emoji) == '⬆️':   gameDat, gameScr = move(gameDat, gameScr, -1, 0, r1=1)
+                        elif str(r.emoji) == '⬇️': gameDat, gameScr = move(gameDat, gameScr, 1,  0, r2=3)
+                        elif str(r.emoji) == '⬅️': gameDat, gameScr = move(gameDat, gameScr, 0, -1, r3=1)
+                        elif str(r.emoji) == '➡️': gameDat, gameScr = move(gameDat, gameScr, 0,  1, r4=3)
+
+                        await gameMsg.edit(embed=gameEmb)
+                        await asyncio.sleep(.05)
+                        gameDat.flat[choice([i for i, j in enumerate(gameDat.flatten()) if j == 0])] = 1
+                        gEmbUpd()
+                        await gameMsg.edit(embed=gameEmb)
+
+                await gameMsg.edit(embed=discord.Embed(title="Game over , -,", description="Played by: %s\n%s\n**Score:** %s" % (m.author.name, gameDsp(), gameScr)))
 
             elif cm == "poll":
                 options = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮', '🇯', '🇰', '🇱', '🇲', '🇳', '🇴', '🇵', '🇶', '🇷' ,'🇸', '🇹']
