@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from urllib.parse import quote_plus
 from datetime import timedelta
-from random import choice
+from secrets import choice
 from sys import exc_info
 from time import time
 from re import sub
@@ -365,7 +365,7 @@ you may use the categories as a command, and I'll pick an image/gif from there!
                         embed=discord.Embed(
                             title="Minigames!",
                             description='''
-Bored? try some minigames! currently there's only 2048 _but_ there will be more in the future! just run `minigame 2048` to start!
+Bored? try some minigames! currently there's only 2048 and tictactoe _but_ there will be more in the future!
                             '''
                         )
                     )
@@ -485,11 +485,16 @@ Bored? try some minigames! currently there's only 2048 _but_ there will be more 
                             gameDat.flat[int(mm.content)-1] = crrntPl
                             crrntPl = 1 if crrntPl == 2 else 2
                             await mm.delete()
-                            if (p1win := any([all([gameDat.flat[j] == 1 for j in i]) for i in winCmbs])) or (
-                                any([all([gameDat.flat[j] == 2 for j in i]) for i in winCmbs])):
+                            if any([all([gameDat.flat[j] == 1 for j in i]) for i in winCmbs]):
                                 crrntPl = 0
                                 gameEmb.set_field_at(0, name="Game over", value=gameDsp())
-                                gameEmb.add_field(name="%s wins!" % (players[0].name if p1win else players[1].name),
+                                gameEmb.add_field(name="%s wins!" % players[0].name,
+                                    value='played by %s and %s' % (players[0].name, players[1].name))
+
+                            elif any([all([gameDat.flat[j] == 2 for j in i]) for i in winCmbs]):
+                                crrntPl = 0
+                                gameEmb.set_field_at(0, name="Game over", value=gameDsp())
+                                gameEmb.add_field(name="%s wins!" % players[1].name,
                                     value='played by %s and %s' % (players[0].name, players[1].name))
 
                             else:
