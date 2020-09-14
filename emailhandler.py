@@ -22,10 +22,11 @@ async def start(emailchannel):
                 title=findall(r'From: .*', msg)[0],
                 description=findall(r'Subject: .*', msg)[0]
             )
-            if (embval := sub(
+            content = sub(
                 r'--[\w]*\nContent-Type: text\/html[\S\s]*', '',
-                findall(r'(?<=Content-Type: text\/plain; charset="UTF-8"\n)[\S\s]*(?=--000000000000)', msg)[0])) != '':
-                embed.add_field(name="Content:", value=embval)
+                findall(r'(?<=Content-Type: text\/plain; charset="UTF-8"\n)[\S\s]*(?=--000000000000)', msg)[0])
+            if content != '':
+                embed.add_field(name="Content:", value=content)
 
             await emailchannel.send(embed=embed)
             init_messages = messages
