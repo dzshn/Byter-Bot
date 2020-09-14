@@ -505,6 +505,53 @@ Bored? try some minigames! currently there's only 2048 and tictactoe _but_ there
                     gameEmb.add_field(name="Tie!", value="played by %s and %s" % (players[0].name, players[1].name))
                     await gameMsg.edit(embed=gameEmb)
 
+                elif ctx[1] == "simon":
+                    sequence = [choice([0, 1, 2, 3])]
+                    gameDat = [0 for i in range(4)]
+                    gameDsp = lambda : '%s%s\n%s%s' % (
+                        ':green_square:'  if gameDat[0] == 0 else ':white_large_square:',
+                        ':red_square:'    if gameDat[1] == 0 else ':white_large_square:',
+                        ':yellow_square:' if gameDat[2] == 0 else ':white_large_square:',
+                        ':blue_square:'   if gameDat[3] == 0 else ':white_large_square:'
+                    )
+                    gameMsg = await m.channel.send(embed=discord.Embed(title="Simon!", description=gameDsp()))
+                    [await gameMsg.add_reaction(i) for i in ['🟩', '🟥', '🟨', '🟦']]
+                    await asyncio.sleep(0.1)
+                    while True:
+                        for i in sequence:
+                            gameDat[i] = 1
+                            await gameMsg.edit(embed=discord.Embed(title="Simon!", description=gameDsp()))
+                            await asyncio.sleep(0.1)
+                            gameDat[i] = 0
+                            await gameMsg.edit(embed=discord.Embed(title="Simon!", description=gameDsp()))
+                            await asyncio.sleep(0.1)
+
+                        await gameMsg.edit(embed=discord.Embed(title="Simon!", description=gameDsp()+'\nYour turn'))
+
+                        for i in sequence:
+                            try:
+                                r, u = await self.wait_for('reaction_add',
+                                    check=lambda r, u: u == m.author and str(r.emoji) in ['🟩', '🟥', '🟨', '🟦'],
+                                    timeout=240
+                                )
+
+                            except asyncio.TimeoutError:
+                                await gameMsg.edit(embed=discord.Embed(title="Timed out × -×",
+                                    description=''.join([
+                                        [':green_square:', ':red_square:', ':yellow_square:', ':blue_square:'][i] for i in sequence
+                                ])))
+
+                            await r.remove(u)
+                            if str(r.emoji) != ['🟩', '🟥', '🟨', '🟦'][i]:
+                                await gameMsg.edit(embed=discord.Embed(title="Game over , -,",
+                                    description=''.join([
+                                        [':green_square:', ':red_square:', ':yellow_square:', ':blue_square:'][ii] for ii in sequence
+                                ])))
+                                return 1
+
+                        sequence.append(choice([0, 1, 2, 3]))
+                        await asyncio.sleep(0.5)
+
                 else:
                     await m.channel.send('minigame: minigame %s not found' % ctx[1])
 
