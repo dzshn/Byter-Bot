@@ -1,0 +1,21 @@
+{
+    "index": {
+        "title": "Minigames!",
+        "description": [
+            "That's right, minigames! written in your favorite game engine, discord! okay, maybe not, but they're still cool\n",
+            "Currenttly, available minigames are 2048 and tictactoe, but more will come out soon! you can check more info about one with `%help minigame <name>`"
+        ]
+    },
+    "2048": {
+        "title": "2048!",
+        "description": [
+            "2+2 = 4, 4+4 = 8 and so on, merge the tiles and try to reach 2048 (or more!), pretty simple"
+        ]
+    },
+    "tictactoe": {
+        "title": "Tic-Tac-Toe!",
+        "description": [
+            "Yep, tictactoe, with multiplayer, just ping someone within your message and play! you choose the tiles by typing in their number, top to down, left to right"
+        ]
+    }
+}

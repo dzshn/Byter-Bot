@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
-
 from urllib.parse import quote_plus
 from datetime import timedelta
 from random import choice
 from sys import exc_info
 from time import time
 from re import sub
+import emailhandler
 import numpy as np
 import traceback
+import threading
 import requests
 import asyncio
 import aiohttp
@@ -46,6 +47,9 @@ class byterbot(discord.Client):
 
         async for i in self.get_channel(742479941504860341).history():
             self.ball8[i.content] = i.attachments[0].url
+
+        emailthread = threading.Thread(target=await emailhandler.start(self.get_channel(754876413043146823)))
+        emailthread.run()
 
         self.loadTime = time()
 
@@ -289,12 +293,17 @@ you may use the categories as a command, and I'll pick an image/gif from there!
 
                 else:
                     if ctx[1] in self.jsonfiles['help']:
-                        if len(ctx) == 3 and ctx[1] == "api":
-                            if ctx[2] in self.jsonfiles['apih']:
-                                data = self.jsonfiles['apih'][ctx[2]]
+                        if "file" in self.jsonfiles['help'][ctx[1]]:
+                            file = self.jsonfiles[self.jsonfiles['help'][ctx[1]]['file']]
+                            if len(ctx) == 2:
+                                data = file['index']
+
+                            elif ctx[2] in file:
+                                data = file[ctx[2]]
 
                             else:
-                                await m.channel.send('help> api: %s: api not found' % ctx[2])
+                                await m.channel.send('help: %s: %s: page not found' % (ctx[1], ctx[2]))
+
                         else:
                             data = self.jsonfiles['help'][ctx[1]]
 
@@ -389,7 +398,7 @@ Bored? try some minigames! currently there's only 2048 _but_ there will be more 
                             )
 
                         except asyncio.TimeoutError:
-                            await gameMsg.edit(embed=discord.Embed(title="Timed out × -×", description="Played by: %s\n%s\n**Score:** %s" % (m.author.name, gameDsp(), gameScr)))
+                            await m.channel.send('× -× timed out')
                             return 1
 
                         await r.remove(u)
@@ -421,7 +430,78 @@ Bored? try some minigames! currently there's only 2048 _but_ there will be more 
                         gEmbUpd()
                         await gameMsg.edit(embed=gameEmb)
 
-                await gameMsg.edit(embed=discord.Embed(title="Game over , -,", description="Played by: %s\n%s\n**Score:** %s" % (m.author.name, gameDsp(), gameScr)))
+                    await gameMsg.edit(embed=discord.Embed(title="Game over , -,", description="Played by: %s\n%s\n**Score:** %s" % (m.author.name, gameDsp(), gameScr)))
+
+                elif ctx[1] == "tictactoe":
+                    if len(m.mentions) == 0:
+                        await m.channel.send('Please ping someone within the message to play')
+                        return 1
+
+                    elif len(m.mentions) > 1:
+                        await m.channel.send('Please ping only one person')
+                        return 1
+
+                    elif m.mentions[0] == m.author:
+                        await m.channel.send('https://media.discordapp.net/attachments/639603988295188519/754816409820856351/Screenshot_20200913_181339.png')
+                        return 1
+
+                    gameMsg = await m.channel.send(embed=discord.Embed(
+                        description='Waiting for acception, %s, please react with ✅ to accept' % m.mentions[0].name
+                    ))
+                    await gameMsg.add_reaction('✅')
+                    try:
+                        await self.wait_for('reaction_add', check=lambda r, u : str(r.emoji) == '✅' and u == m.mentions[0], timeout=60)
+
+                    except asyncio.TimeoutError:
+                        await gameMsg.edit(embed=discord.Embed(description='Acception timed out'))
+                        return 1
+
+                    crrntPl = choice([1, 2])
+                    players = [m.author, m.mentions[0]]
+                    gameDat = np.zeros((3, 3), dtype=int)
+                    gameDsp = lambda : '\n'.join([
+                        ''.join([
+                            [':white_large_square:', ':x:', ':o:'][n] for n in gameDat[i]
+                        ]) for i in range(3)
+                    ]) + ("\n%s's turn" % players[crrntPl-1] if crrntPl != 0 else '')
+                    gameEmb = discord.Embed()
+                    gameEmb.add_field(name='Tic-Tac-Toe!', value=gameDsp())
+                    winCmbs = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]
+                    await gameMsg.edit(embed=gameEmb)
+                    while 0 in gameDat:
+                        try:
+                            mm = await self.wait_for('message',
+                                check=lambda mm: mm.author == players[crrntPl-1] and mm.content in [str(i) for i in range(1, 10)],
+                                timeout=240)
+
+                        except asyncio.TimeoutError:
+                            await m.channel.send("× -× timed out")
+                            return 1
+
+                        if gameDat.flat[int(mm.content)-1] != 0:
+                            await m.channel.send("invalid move!")
+
+                        else:
+                            gameDat.flat[int(mm.content)-1] = crrntPl
+                            crrntPl = 1 if crrntPl == 2 else 2
+                            await mm.delete()
+                            if (p1win := any([all([gameDat.flat[j] == 1 for j in i]) for i in winCmbs])) or (
+                                any([all([gameDat.flat[j] == 2 for j in i]) for i in winCmbs])):
+                                crrntPl = 0
+                                gameEmb.set_field_at(0, name="Game over", value=gameDsp())
+                                gameEmb.add_field(name="%s wins!" % (players[0].name if p1win else players[1].name),
+                                    value='played by %s and %s' % (players[0].name, players[1].name))
+
+                            else:
+                                gameEmb.set_field_at(0, name="Tic-Tac-Toe!", value=gameDsp())
+                                await gameMsg.edit(embed=gameEmb)
+
+                    gameEmb.set_field_at(0, name="Game over", value=gameDsp())
+                    gameEmb.add_field(name="Tie!", value="played by %s and %s" % (players[0].name, players[1].name))
+                    await gameMsg.edit(embed=gameEmb)
+
+                else:
+                    await m.channel.send('minigame: minigame %s not found' % ctx[1])
 
             elif cm == "poll":
                 options = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮', '🇯', '🇰', '🇱', '🇲', '🇳', '🇴', '🇵', '🇶', '🇷' ,'🇸', '🇹']
@@ -577,10 +657,10 @@ Bored? try some minigames! currently there's only 2048 _but_ there will be more 
         )
 
         if func == "on_message":
-            embed.description = "**Message content :** %s\n%s" % (args[0].content,embed.description)
+            embed.description = "**Message content :** %s\n%s" % (args[0].content, embed.description)
 
         else:
-            embed.description = "**Function :** %s\n\n**Args :** %s\n\n**Kwargs :** %s\n" % (func, args, kwargs, embed.description)
+            embed.description = "**Function :** %s\n\n**Args :** %s\n\n**Kwargs :** %s\n%s" % (func, args, kwargs, embed.description)
 
         await self.get_channel(741024906774577201).send(self.get_user(310449948011528192).mention, embed=embed)
 

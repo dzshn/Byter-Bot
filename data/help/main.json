@@ -1,0 +1,61 @@
+{
+    "index": {
+        "title": "Hello! here are some info",
+        "description": [
+            "**Commands!** the following are all valid commands, you can see what one does by using `%help <name>`:",
+            "api, gifs, help, minigame, info, poll, stats, 8ball",
+            "Questions, suggestions, bugs or anything else? DM leninnog#2580\n",
+            "Want me on your server? [click here!](https://discord.com/api/oauth2/authorize?client_id=740006457805635678&permissions=537259072&scope=bot)\n",
+            "_**Also, here is a copyright disclaimer!**_",
+            "© 2020 PriVer. All rights reserved. All visual content on this bot related to the Créu cats (including characters, images and trademarks) are protected by Intellectual Property rights owned by Priscila Vertamatti."
+        ]
+    },
+    "api": {
+        "file": "apih"
+    },
+    "embed": {
+        "title": "Embeds!",
+        "description": [
+            "A quick way to make embeds!",
+            "you may use it with the standard json format for embeds, without the outer brackets"
+        ]
+    },
+    "gifs": {
+        "title": "Gifs/Images!",
+        "description": [
+            "This command lists all loaded categories of gifs/images\n\n",
+            "You may use them as a normal command, for example, %slap"
+        ]
+    },
+    "info": {
+        "title": "Info!",
+        "description": [
+            "Shows info about créu and his friends!\n\n",
+            "Use this command to see avaiable pages"
+        ]
+    },
+    "minigame": {
+        "file": "mngh"
+    },
+    "poll": {
+        "title": "Reaction polls!",
+        "description": [
+            "Makes a poll with reactions\n\n",
+            "You may use this command with a title and up to 20 options, separated by commas, but you can also use without options, or even without a title"
+        ]
+    },
+    "stats": {
+        "title": "Statistics!",
+        "description": [
+            "Shows some possibly useful numbers"
+
+        ]
+    },
+    "time": {
+        "title": "Timezones!",
+        "description": [
+            "Timezones are weird, but my developer found an [api](http://worldtimeapi.org) I can push data all day!\n\n",
+            "You can use this command to see avaiable zones"
+        ]
+    }
+}
