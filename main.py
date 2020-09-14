@@ -311,7 +311,7 @@ you may use the categories as a command, and I'll pick an image/gif from there!
                         await m.channel.send('help: %s: page not found' % ctx[1])
                         return 1
 
-                embed = discord.Embed(color=0x301baa, title=data['title'], description=''.join(data['description']))
+                embed = discord.Embed(color=0x301baa, title=data['title'], description='\n'.join(data['description']))
                 await m.channel.send(embed=embed)
 
             elif cm == "info":
