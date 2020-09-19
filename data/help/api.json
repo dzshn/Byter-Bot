@@ -40,5 +40,29 @@
         "description": [
             "Returns most probable gender, nation and age of a given name ─ don't take it too seriously tough, even tough it is real data, it can get it wrong"
         ]
+    },
+    "nasa": {
+        "title": "NASA's APOD",
+        "description": [
+            "Shows NASA's current Astronomy Picture Of the Day, along with credits, description and date"
+        ]
+    },
+    "qr": {
+        "title": "QR Codes",
+        "description": [
+            "Generates a QR code from a given message"
+        ]
+    },
+    "wikipedia": {
+        "title": "Wikipedia search",
+        "description": [
+            "Searches wikipedia for a given text"
+        ]
+    },
+    "xkcd": {
+        "title": "xkcd comics",
+        "description": [
+            "Shows a random xkcd, from an id or 'current'"
+        ]
     }
 }

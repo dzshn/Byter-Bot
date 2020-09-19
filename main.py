@@ -11,7 +11,6 @@ import traceback
 import threading
 import requests
 import asyncio
-import aiohttp
 import discord
 import psutil
 import json
@@ -73,7 +72,7 @@ class byterbot(discord.Client):
 Apis, short for Application Programming Interface, is a way of code to interact to a service, like I do for %time or the auto-translator
 here in this command will be a bunch of apis that I don't think need to have a command, the list is as it follows:
 
-avatar, cat, dog, fox, joke, name, nasa, qr, unsplash, wikipedia, xkcd
+avatar, cat, dog, fox, joke, name, nasa, qr, wikipedia, xkcd
 
 you can use `%help api <apiName>` to see how one in specific works
                             '''
@@ -188,16 +187,6 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
                         embed.set_footer(text="Powered by worldtimeapi.org - bot made by leninnog")
                         await m.channel.send(embed=embed)
 
-                    elif ctx[1] == "unsplash":
-                        if len(ctx) == 2:
-                            await m.channel.send(embed=discord.Embed(title="Unsplash Images", description="unsplash is the most powerful photo engine, just type in the search term after the command and you'll get a featured image"))
-                            return 1
-
-                        embed = discord.Embed()
-                        embed.set_image(url="https://source.unsplash.com/featured/?"+quote_plus(''.join(ctx[2:])))
-                        embed.set_footer(text="Powered by source.unsplash.com")
-                        await m.channel.send(embed=embed)
-
                     elif ctx[1] == "wikipedia":
                         if len(ctx) == 2:
                             await m.channel.send(embed=discord.Embed(title='Wikipedia', description="Wikipedia search, simple, right?"))
@@ -303,6 +292,7 @@ you may use the categories as a command, and I'll pick an image/gif from there!
 
                             else:
                                 await m.channel.send('help: %s: %s: page not found' % (ctx[1], ctx[2]))
+                                return 1
 
                         else:
                             data = self.jsonfiles['help'][ctx[1]]
@@ -630,11 +620,11 @@ Bored? try some minigames! currently there's only 2048 and tictactoe _but_ there
 
                     await ball8msg.add_reaction("🔄")
 
-                    def chk(r, u):
-                        return str(r.emoji) == "🔄" and r.message.id == ball8msg.id and u == m.author
-
                     try:
-                        r, u = await self.wait_for('reaction_add', check=chk, timeout=120)
+                        r, u = await self.wait_for(
+                            'reaction_add', 
+                            check=lambda r, u:  str(r.emoji) == "🔄" and r.message.id == ball8msg.id and u == m.author, 
+                            timeout=240)
 
                     except asyncio.TimeoutError:
                         return 1
