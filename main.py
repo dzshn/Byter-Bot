@@ -642,8 +642,8 @@ Bored? try some minigames! currently there's only 2048 and tictactoe _but_ there
         elif m.webhook_id == 740524198165872711:
             if self.user.id == 740006457805635678:
                 await self.close()
-                await os.system("git pull")
-                os.execl("./main.py", "")
+                os.system("git pull")
+                os.execl("./main.py", "main")
 
         elif m.channel.id == 740539699134857337:
             if m.content in self.reDb:
