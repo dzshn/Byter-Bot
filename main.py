@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 from urllib.parse import quote_plus
 from datetime import timedelta
 from secrets import choice
