@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 from urllib.parse import quote_plus
 from datetime import timedelta
 from secrets import choice
@@ -641,7 +640,7 @@ Bored? try some minigames! currently there's only 2048 and tictactoe _but_ there
         elif m.webhook_id == 740524198165872711:
             if self.user.id == 740006457805635678:
                 await self.close()
-                os.system("git pull")
+                await os.system("git pull")
                 os.execl("./main.py", "")
 
         elif m.channel.id == 740539699134857337:
