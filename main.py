@@ -553,7 +553,7 @@ Bored? try some minigames! currently there's only 2048 and tictactoe _but_ there
                     pollText += options[poll[1:].index(i)]+' '+i+'\n'
 
                 if len(poll) == 1:
-                    pollText = '✅ / ❎'
+                    pollText = '<:hand_thumbsup:757023230073634922> / <:hand_thumbsdown:757019524058054686>'
 
                 pollMsg = await m.channel.send(
                     embed=discord.Embed(color=0x301baa, title=poll[0].strip(), description=pollText)
@@ -562,8 +562,8 @@ Bored? try some minigames! currently there's only 2048 and tictactoe _but_ there
                     await pollMsg.add_reaction(options[i])
 
                 if len(poll) == 1:
-                    await pollMsg.add_reaction('✅')
-                    await pollMsg.add_reaction('❎')
+                    await pollMsg.add_reaction(self.get_emoji(757023230073634922))
+                    await pollMsg.add_reaction(self.get_emoji(757019524058054686))
 
                 await m.delete()
 
