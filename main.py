@@ -18,21 +18,14 @@ import math
 import os
 
 initTime = time()
-
 tkn = open("TOKEN").read()
 
 class byterbot(discord.Client):
     reDb = {}
     ball8 = {}
-
     readyTime = 0
     loadTime = 0
-
-    jsonfiles = {
-        i:json.load(open(json.load(open('data/index.json'))[i]))
-        for i in json.load(open('data/index.json'))
-    }
-
+    jsonfiles = {i:json.load(open(json.load(open('data/index.json'))[i])) for i in json.load(open('data/index.json'))}
     version = open('VERSION').read()
 
     async def on_ready(self):
@@ -65,19 +58,8 @@ class byterbot(discord.Client):
 
             if cm == "api":
                 if len(ctx) == 1:
-                    await m.channel.send(
-                        embed=discord.Embed(
-                            title="Apis!",
-                            description='''
-Apis, short for Application Programming Interface, is a way of code to interact to a service, like I do for %time or the auto-translator
-here in this command will be a bunch of apis that I don't think need to have a command, the list is as it follows:
-
-avatar, cat, dog, fox, joke, name, nasa, qr, wikipedia, xkcd
-
-you can use `%help api <apiName>` to see how one in specific works
-                            '''
-                        )
-                    )
+                    await m.channel.send(embed=discord.Embed(title="Apis!",
+                            description="Apis, short for Application Programming Interface, is a way of code to interact to a service, like I do for the auto-translator\nhere in this command will be a bunch of apis that I don't think need to have a command, the list is as it follows:\n\navatar, cat, dog, fox, joke, name, nasa, qr, wikipedia, xkcd\n\nyou can use `%help api <apiName>` to see how one in specific works"))
 
                 else:
                     if ctx[1] == "avatar":
@@ -121,26 +103,16 @@ you can use `%help api <apiName>` to see how one in specific works
                         await m.channel.send(embed=embed)
 
                     elif ctx[1] == "name":
-                        data = [
-                            requests.get("https://api.agify.io/?name="+''.join(ctx[2:])).json(),
-                            requests.get("https://api.genderize.io/?name="+''.join(ctx[2:])).json(),
-                            requests.get("https://api.nationalize.io/?name="+''.join(ctx[2:])).json()
-                        ]
-                        embed = discord.Embed(
-                            description="**Age:** %s\n**Gender:** %s (prob. %s)\n**Nationalities:** %s" % (
-                                data[0]['age'], data[1]['gender'], data[1]['probability'],
-                                ', '.join(['%s (prob %s)' % (i['country_id'], round(i['probability'], 3)) for i in data[2]['country']])
-                            )
-                        )
+                        data = [requests.get("https://api.agify.io/?name="+''.join(ctx[2:])).json(), requests.get("https://api.genderize.io/?name="+''.join(ctx[2:])).json(), 
+                            requests.get("https://api.nationalize.io/?name="+''.join(ctx[2:])).json()]
+                        embed = discord.Embed(description="**Age:** %s\n**Gender:** %s (prob. %s)\n**Nationalities:** %s" % (data[0]['age'], data[1]['gender'], data[1]['probability'],
+                                ', '.join(['%s (prob %s)' % (i['country_id'], round(i['probability'], 3)) for i in data[2]['country']])))
                         embed.set_footer(text="Powered by agify, genderize and nationalize apis")
                         await m.channel.send(embed=embed)
 
                     elif ctx[1] == "nasa":
                         data = requests.get("https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY").json()
-                        embed = discord.Embed(
-                            title=data['title'],
-                            description="%s\nDate: %s | Copyright: %s" % (data['explanation'], data['date'], data['copyright'])
-                        )
+                        embed = discord.Embed(title=data['title'], description="%s\nDate: %s | Copyright: %s" % (data['explanation'], data['date'], data['copyright']))
                         embed.set_image(url=data['url'])
                         embed.set_footer(text="Powered by nasa.gov's api")
                         await m.channel.send(embed=embed)
@@ -157,23 +129,15 @@ you can use `%help api <apiName>` to see how one in specific works
 
                     elif ctx[1] == "time":
                         if len(ctx) == 2:
-                            embed = discord.Embed(
-                                title="Timezones!",
-                                description='''
-Shows current time in a given area
-
-The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, CET, CST6CDT, EET, EET5EDT, Etc, Europe, HST, Indian, MET, MST, MST5MDT, PST8PDT, Pacific and WET
-                                '''
-                            )
+                            embed = discord.Embed(title="Timezones!",
+                                description="Shows current time in a given area\n\nThe avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, CET, CST6CDT, EET, EET5EDT, Etc, Europe, HST, Indian, MET, MST, MST5MDT, PST8PDT, Pacific and WET")
 
                         else:
                             page = '/'.join(ctx[2:])
                             data = requests.get('http://worldtimeapi.org/api/'+page).json()
                             embed = discord.Embed(title=page)
                             if "datetime" in data:
-                                embed.description = "**Current time:** %s\n**UTC offset:** %s" % (
-                                    data['datetime'].split('T')[1][:8], data['utc_offset']
-                                )
+                                embed.description = "**Current time:** %s\n**UTC offset:** %s" % (data['datetime'].split('T')[1][:8], data['utc_offset'])
                                 embed.title += "'s current time"
 
                             elif "error" in data:
@@ -192,10 +156,8 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
                             await m.channel.send(embed=discord.Embed(title='Wikipedia', description="Wikipedia search, simple, right?"))
                             return 1
 
-                        data = requests.get(
-                            "https://en.wikipedia.org/w/api.php?action=query&list=search&utf8=1&srsearch=%s&srlimit=5&srprop=wordcount|snippet&format=json"
-                            % quote_plus(''.join(ctx[2:]))
-                        ).json()
+                        data = requests.get("https://en.wikipedia.org/w/api.php?action=query&list=search&utf8=1&srsearch=%s&srlimit=5&srprop=wordcount|snippet&format=json" 
+                            % quote_plus(''.join(ctx[2:]))).json()
                         if data['query']['search'] == []:
                             await m.channel.send("No results for %s" % ''.join(ctx[2:]))
                             return 1
@@ -203,14 +165,8 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
                         embed = discord.Embed(title="Search results for "+''.join(ctx[2:]))
                         embed.set_footer(text='Powered by Wikipedia api')
                         for i in data['query']['search']:
-                            embed.add_field(
-                                name="**%s**" % i['title'],
-                                value="%s\n[**link**](https://en.wikipedia.org/wiki/%s) **words:** %s" % (
-                                    sub('<.*?>', '', i['snippet']),
-                                    i['wordcount'],
-                                    quote_plus(i['title']).replace('+', '_')
-                                )
-                            )
+                            embed.add_field(name="**%s**" % i['title'], value="%s\n[**link**](https://en.wikipedia.org/wiki/%s) **words:** %s" % (
+                                    sub('<.*?>', '', i['snippet']), i['wordcount'], quote_plus(i['title']).replace('+', '_')))
 
                         await m.channel.send(embed=embed)
 
@@ -240,19 +196,8 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
                     return 1
 
                 if len(ctx) == 1:
-                    await m.channel.send(
-                        embed=discord.Embed(
-                            color=0x301baa,
-                            title="Embeds!",
-                            description='''
-You can use this command using the standard json format, without the outer brackets, example:
-
-`%embed "title": "Example Title", "description": "Example desc"`
-
-for reference, the valid keywords can be seen [here](https://discord.com/developers/docs/resources/channel#embed-object-embed-structure) and you can check it on [this visualizer](https://leovoel.github.io/embed-visualizer/)
-                            '''
-                        )
-                    )
+                    await m.channel.send(embed=discord.Embed(color=0x301baa, title="Embeds!", 
+                        description="You can use this command using the standard json format, without the outer brackets, example:\n\n`%embed \"title\": \"Example Title\", \"description\": \"Example desc\"`\n\nfor reference, the valid keywords can be seen [here](https://discord.com/developers/docs/resources/channel#embed-object-embed-structure) and you can check it on [this visualizer](https://leovoel.github.io/embed-visualizer/)"))
 
                 else:
                     try:
@@ -264,14 +209,7 @@ for reference, the valid keywords can be seen [here](https://discord.com/develop
                     await m.delete()
 
             elif cm == "gifs":
-                await m.channel.send(
-                    embed=discord.Embed(
-                        color=0x301baa,
-                        description="**Available categories (%s):** `%s`" % (
-                            len(self.reDb), '`, `'.join(self.reDb.keys())
-                        )
-                    )
-                )
+                await m.channel.send(embed=discord.Embed(color=0x301baa, description="**Available categories (%s):** `%s`" % (len(self.reDb), '`, `'.join(self.reDb.keys()))))
 
             elif cm == "help":
                 if len(ctx) == 1:
@@ -303,23 +241,15 @@ for reference, the valid keywords can be seen [here](https://discord.com/develop
 
             elif cm == "info":
                 if len(ctx) == 1:
-                    embed = discord.Embed(
-                        color=0x301baa, title="Info!",
-                        description="Currently there's info only for characters!\n\nuse `char` or `character` after this command to see it!"
-                    )
+                    embed = discord.Embed(color=0x301baa, title="Info!", description="Currently there's info only for characters!\n\nuse `char` or `character` after this command to see it!")
                     embed.set_thumbnail(url=choice(["https://cdn.discordapp.com/attachments/741457274530299954/741615794340888586/selocreu2.gif", "https://cdn.discordapp.com/attachments/741457274530299954/741616136134852678/selocreu1.gif"]))
-                    embed.set_footer(text="creucat.com © PriVer - bot developed by leninnog",
-                                     icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
+                    embed.set_footer(text="creucat.com © PriVer - bot developed by leninnog", icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
 
                 elif ctx[1] in ["character", "char"]:
                     if len(ctx) == 2:
-                        embed = discord.Embed(
-                            color=0x00002a, title="Characters!",
-                            description="Want to know about the créu characters? this is the way to go!\n\nJust put the name of the character you want to know in front of this command! they are Créu, Petita, Liu-Liu, Muji, Printy, Mek & Krek, Rona & mou and of course, me!"
-                        )
+                        embed = discord.Embed(color=0x00002a, title="Characters!", description="Want to know about the créu characters? this is the way to go!\n\nJust put the name of the character you want to know in front of this command! they are Créu, Petita, Liu-Liu, Muji, Printy, Mek & Krek, Rona & mou and of course, me!")
                         embed.set_thumbnail(url=choice(["https://cdn.discordapp.com/attachments/741457274530299954/741615794340888586/selocreu2.gif", "https://cdn.discordapp.com/attachments/741457274530299954/741616136134852678/selocreu1.gif"]))
-                        embed.set_footer(text="creucat.com/characters © PriVer - bot developed by leninnog",
-                            icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
+                        embed.set_footer(text="creucat.com/characters © PriVer - bot developed by leninnog", icon_url="https://cdn.discordapp.com/attachments/741457274530299954/741457487277850724/creucat.ico.gif")
                         await m.channel.send(embed=embed)
                         return 1
 
@@ -327,14 +257,9 @@ for reference, the valid keywords can be seen [here](https://discord.com/develop
                         charData = self.jsonfiles['char'][ctx[2].lower().replace('&','').replace('é','e')]
 
                     else:
-                        charData = {
-                            "color": "0xD3D152",
-                            "thumb": "https://cdn.discordapp.com/attachments/741457274530299954/741553915740422204/thonk.png",
-                            "name": "%s: Not found\n" % ctx[2],
-                            "desc": "???",
-                            "favs": ["???","???","???"],
-                            "img": "https://cdn.discordapp.com/attachments/741457274530299954/741553915740422204/thonk.png"
-                        }
+                        charData = {"color": "0xD3D152", "thumb": "https://cdn.discordapp.com/attachments/741457274530299954/741553915740422204/thonk.png", "name": "%s: Not found\n" % ctx[2],
+                            "desc": "???", "favs": ["???","???","???"],
+                            "img": "https://cdn.discordapp.com/attachments/741457274530299954/741553915740422204/thonk.png"}
 
                     embed = discord.Embed(color=int(charData['color'], 16))
                     embed.set_thumbnail(url=charData['thumb'])
@@ -348,41 +273,23 @@ for reference, the valid keywords can be seen [here](https://discord.com/develop
 
             elif cm == "minigame":
                 if len(ctx) == 1:
-                    await m.channel.send(
-                        embed=discord.Embed(
-                            title="Minigames!",
-                            description='''
-Bored? try some minigames! currently there's only 2048 and tictactoe _but_ there will be more in the future!
-                            '''
-                        )
-                    )
+                    await m.channel.send(embed=discord.Embed(title="Minigames!", description=""))
                     return 1
 
                 elif ctx[1] == "2048":
                     gameDat = np.array([[0 for i in range(4)] for ii in range(4)])
                     gameScr = 0
                     gameDat.flat[choice([i for i, j in enumerate(gameDat.flatten()) if j == 0])] = choice([1, 1, 1, 1, 1, 1, 1, 1, 1, 2])
-                    gameDsp = lambda : '\n'.join([
-                        ''.join([
-                            self.jsonfiles['ming']['2048']['tiles'][n] for n in gameDat[i]
-                        ]) for i in range(4)
-                    ])
+                    gameDsp = lambda : '\n'.join([''.join([self.jsonfiles['ming']['2048']['tiles'][n] for n in gameDat[i]]) for i in range(4)])
                     gameEmb = discord.Embed()
                     gameEmb.add_field(name="2048!", value=gameDsp())
                     gameEmb.add_field(name="Score", value=gameScr)
-                    gEmbUpd = lambda : (
-                        gameEmb.set_field_at(0, name="2048!", value=gameDsp()),
-                        gameEmb.set_field_at(1, name="Score", value=gameScr)
-                    )
+                    gEmbUpd = lambda : (gameEmb.set_field_at(0, name="2048!", value=gameDsp()), gameEmb.set_field_at(1, name="Score", value=gameScr))
                     gameMsg = await m.channel.send(embed=gameEmb)
                     [await gameMsg.add_reaction(i) for i in ['⬆️', '⬇️', '⬅️', '➡️']]
                     while 0 in gameDat:
                         try:
-                            r, u = await self.wait_for(
-                                "reaction_add",
-                                check=lambda r, u: str(r.emoji) in ['⬆️', '⬇️', '⬅️', '➡️'] and r.message.id == gameMsg.id and u == m.author,
-                                timeout=120
-                            )
+                            r, u = await self.wait_for("reaction_add", check=lambda r, u: str(r.emoji) in ['⬆️', '⬇️', '⬅️', '➡️'] and r.message.id == gameMsg.id and u == m.author, timeout=120)
 
                         except asyncio.TimeoutError:
                             await m.channel.send('× -× timed out')
@@ -432,9 +339,7 @@ Bored? try some minigames! currently there's only 2048 and tictactoe _but_ there
                         await m.channel.send('https://media.discordapp.net/attachments/639603988295188519/754816409820856351/Screenshot_20200913_181339.png')
                         return 1
 
-                    gameMsg = await m.channel.send(embed=discord.Embed(
-                        description='Waiting for acception, %s, please react with ✅ to accept' % m.mentions[0].name
-                    ))
+                    gameMsg = await m.channel.send(embed=discord.Embed(description='Waiting for acception, %s, please react with ✅ to accept' % m.mentions[0].name))
                     await gameMsg.add_reaction('✅')
                     try:
                         await self.wait_for('reaction_add', check=lambda r, u : str(r.emoji) == '✅' and u == m.mentions[0], timeout=60)
@@ -446,11 +351,8 @@ Bored? try some minigames! currently there's only 2048 and tictactoe _but_ there
                     crrntPl = choice([1, 2])
                     players = [m.author, m.mentions[0]]
                     gameDat = np.zeros((3, 3), dtype=int)
-                    gameDsp = lambda : '\n'.join([
-                        ''.join([
-                            [':white_large_square:', ':x:', ':o:'][n] for n in gameDat[i]
-                        ]) for i in range(3)
-                    ]) + ("\n%s's turn" % players[crrntPl-1] if crrntPl != 0 else '')
+                    gameDsp = lambda : '\n'.join([''.join(
+                        [[':white_large_square:', ':x:', ':o:'][n] for n in gameDat[i]]) for i in range(3)]) + ("\n%s's turn" % players[crrntPl-1] if crrntPl != 0 else '')
                     gameEmb = discord.Embed()
                     gameEmb.add_field(name='Tic-Tac-Toe!', value=gameDsp())
                     winCmbs = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]
@@ -495,12 +397,8 @@ Bored? try some minigames! currently there's only 2048 and tictactoe _but_ there
                 elif ctx[1] == "simon":
                     sequence = [choice([0, 1, 2, 3])]
                     gameDat = [0 for i in range(4)]
-                    gameDsp = lambda : '%s%s\n%s%s' % (
-                        ':green_square:'  if gameDat[0] == 0 else ':white_large_square:',
-                        ':red_square:'    if gameDat[1] == 0 else ':white_large_square:',
-                        ':yellow_square:' if gameDat[2] == 0 else ':white_large_square:',
-                        ':blue_square:'   if gameDat[3] == 0 else ':white_large_square:'
-                    )
+                    gameDsp = lambda : '%s%s\n%s%s' % (':green_square:' if gameDat[0] == 0 else ':white_large_square:', ':red_square:' if gameDat[1] == 0 else ':white_large_square:',
+                        ':yellow_square:' if gameDat[2] == 0 else ':white_large_square:', ':blue_square:' if gameDat[3] == 0 else ':white_large_square:')
                     gameMsg = await m.channel.send(embed=discord.Embed(title="Simon!", description=gameDsp()))
                     [await gameMsg.add_reaction(i) for i in ['🟩', '🟥', '🟨', '🟦']]
                     await asyncio.sleep(0.1)
@@ -517,23 +415,16 @@ Bored? try some minigames! currently there's only 2048 and tictactoe _but_ there
 
                         for i in sequence:
                             try:
-                                r, u = await self.wait_for('reaction_add',
-                                    check=lambda r, u: u == m.author and str(r.emoji) in ['🟩', '🟥', '🟨', '🟦'],
-                                    timeout=240
-                                )
+                                r, u = await self.wait_for('reaction_add', check=lambda r, u: u == m.author and str(r.emoji) in ['🟩', '🟥', '🟨', '🟦'], timeout=240)
 
                             except asyncio.TimeoutError:
-                                await gameMsg.edit(embed=discord.Embed(title="Timed out × -×",
-                                    description=''.join([
-                                        [':green_square:', ':red_square:', ':yellow_square:', ':blue_square:'][i] for i in sequence
-                                ])))
+                                await gameMsg.edit(embed=discord.Embed(title="Timed out × -×", 
+                                    description=''.join([[':green_square:', ':red_square:', ':yellow_square:', ':blue_square:'][ii] for ii in sequence])))
 
                             await r.remove(u)
                             if str(r.emoji) != ['🟩', '🟥', '🟨', '🟦'][i]:
                                 await gameMsg.edit(embed=discord.Embed(title="Game over , -,",
-                                    description=''.join([
-                                        [':green_square:', ':red_square:', ':yellow_square:', ':blue_square:'][ii] for ii in sequence
-                                ])))
+                                    description=''.join([[':green_square:', ':red_square:', ':yellow_square:', ':blue_square:'][ii] for ii in sequence])))
                                 return 1
 
                         sequence.append(choice([0, 1, 2, 3]))
@@ -567,34 +458,13 @@ Bored? try some minigames! currently there's only 2048 and tictactoe _but_ there
             elif cm == "stats":
                 embed = discord.Embed(color=0x301baa, title="**Here are some numbers I found**")
 
-                embed.add_field(
-                    name="**Time Metrics:**",
-                    value='''
-**Uptime :** %s (%s seconds)
-**Time since last disconnect: ** %s (%s seconds)
-**Connection load time :** %s
-**Load time after connection :** %s
-                    ''' % (
-                        timedelta(seconds=round(time()-initTime)),
-                        round(time()-initTime, 2),
-                        timedelta(seconds=round(time()-self.readyTime)),
-                        round(time()-self.readyTime, 2),
-                        round(self.readyTime-initTime, 2),
-                        round(self.loadTime-self.readyTime, 2)
-                    )
-                )
-
-                embed.add_field(
-                    name="**Usage data:**",
-                    value='''
-**Server Count :** %s
-**CPU :** %s
-**RAM :** %s
-**Swap :** %s
-                    ''' % (
-                        len(self.guilds), psutil.cpu_percent(), psutil.virtual_memory().percent, psutil.swap_memory().percent
-                    )
-                )
+                embed.add_field(name="**Time Metrics:**",
+                                value="**Uptime :** %s (%s seconds)\n**Time since last disconnect: ** %s (%s seconds)\n**Connection load time :** %s\n**Load time after connection :** %s" % (
+                                    timedelta(seconds=round(time()-initTime)), round(time()-initTime, 2), timedelta(seconds=round(time()-self.readyTime)), round(time()-self.readyTime, 2),
+                                    round(self.readyTime-initTime, 2), round(self.loadTime-self.readyTime, 2)))
+                embed.add_field(name="**Usage data:**",
+                                value="**Server Count :** %s\n**CPU :** %s\n**RAM :** %s\n**Swap :** %s" % (
+                                    len(self.guilds), psutil.cpu_percent(), psutil.virtual_memory().percent, psutil.swap_memory().percent))
 
                 embed.set_footer(text="version %s - bot made by leninnog" % self.version)
                 await m.channel.send(embed=embed)
@@ -618,10 +488,7 @@ Bored? try some minigames! currently there's only 2048 and tictactoe _but_ there
                     await ball8msg.add_reaction("🔄")
 
                     try:
-                        r, u = await self.wait_for(
-                            'reaction_add',
-                            check=lambda r, u:  str(r.emoji) == "🔄" and r.message.id == ball8msg.id and u == m.author,
-                            timeout=240)
+                        r, u = await self.wait_for('reaction_add', check=lambda r, u:  str(r.emoji) == "🔄" and r.message.id == ball8msg.id and u == m.author, timeout=240)
 
                     except asyncio.TimeoutError:
                         return 1
@@ -648,20 +515,9 @@ Bored? try some minigames! currently there's only 2048 and tictactoe _but_ there
 
         elif self.user.id == 740006457805635678 and m.channel in self.get_channel(741765710971142175).channels and m.channel.id != 745400744303394917:
             data = requests.get('https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q='+quote_plus(m.clean_content)).content.decode()
-            embed = discord.Embed(
-                color=0x301baa,
-                title="from channel "+m.channel.name,
-                description='''
-**message content:** %s
-**from:** %s
-**translation:** %s
-                ''' % (
-                    m.clean_content, m.author.name, json.loads(data)[0][0][0]
-                )
-            )
-
+            embed = discord.Embed(color=0x301baa, title="from channel "+m.channel.name, description="\n**message content:** %s\n**from:** %s\n**translation:** %s" % (
+                m.clean_content, m.author.name, json.loads(data)[0][0][0]))
             embed.set_footer(text="Powered by Google Translator")
-
             await self.get_channel(745400744303394917).send(embed=embed)
 
         elif self.get_user(310449948011528192) in m.mentions and not m.author.bot:
@@ -677,23 +533,9 @@ Bored? try some minigames! currently there's only 2048 and tictactoe _but_ there
         if exc_info()[1] == discord.Forbidden:
             return 1
 
-        embed = discord.Embed(
-            color=0xfa0505,
-            title="**Error!**",
-            description='''
-**Exception info:**
-**Type :** %s
-
-**Value :** %s
-
-**At line :** %s
-
-**Traceback :**
-```py
-%s
-```
-            ''' % (exc_info()[0], exc_info()[1], exc_info()[2].tb_lineno, traceback.format_exc())
-        )
+        embed = discord.Embed(color=0xfa0505, title="**Error!**", 
+            description="\n\n**Exception info:**\n**Type :** %s\n\n**Value :** %s\n\n**At line :** %s\n\n**Traceback :**\n```py\n%s\n```" % (
+                exc_info()[0], exc_info()[1], exc_info()[2].tb_lineno, traceback.format_exc()))
 
         if func == "on_message":
             embed.description = "**Message content :** %s\n%s" % (args[0].content, embed.description)
