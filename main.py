@@ -9,7 +9,6 @@ import emailhandler
 import statushandler
 import numpy as np
 import traceback
-import threading
 import requests
 import asyncio
 import discord
@@ -248,7 +247,7 @@ The avaiable areas are: Africa, America, Antartica, Asia, Atlantic, Australia, C
                             description='''
 You can use this command using the standard json format, without the outer brackets, example:
 
-%embed "title": "Example Title", "description": "Example desc"
+`%embed "title": "Example Title", "description": "Example desc"`
 
 for reference, the valid keywords can be seen [here](https://discord.com/developers/docs/resources/channel#embed-object-embed-structure) and you can check it on [this visualizer](https://leovoel.github.io/embed-visualizer/)
                             '''
@@ -268,12 +267,9 @@ for reference, the valid keywords can be seen [here](https://discord.com/develop
                 await m.channel.send(
                     embed=discord.Embed(
                         color=0x301baa,
-                        title="Hey, there are %s categories loaded" % len(self.reDb),
-                        description='''
-**categories:** %s
-
-you may use the categories as a command, and I'll pick an image/gif from there!
-                        ''' % str(self.reDb.keys())[10:].strip("()[]").replace("'", '')
+                        description="**Available categories (%s):** `%s`" % (
+                            len(self.reDb), '`, `'.join(self.reDb.keys())
+                        )
                     )
                 )
 
