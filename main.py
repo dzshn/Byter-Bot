@@ -6,6 +6,7 @@ from sys import exc_info
 from time import time
 from re import sub
 import emailhandler
+import statushandler
 import numpy as np
 import traceback
 import threading
@@ -47,8 +48,8 @@ class byterbot(discord.Client):
         async for i in self.get_channel(742479941504860341).history():
             self.ball8[i.content] = i.attachments[0].url
 
-        emailthread = threading.Thread(target=await emailhandler.start(self.get_channel(754876413043146823)))
-        emailthread.run()
+        asyncio.ensure_future(emailhandler.start(self.get_channel(754876413043146823)))
+        asyncio.ensure_future(statushandler.start(self))
 
         self.loadTime = time()
 
@@ -622,8 +623,8 @@ Bored? try some minigames! currently there's only 2048 and tictactoe _but_ there
 
                     try:
                         r, u = await self.wait_for(
-                            'reaction_add', 
-                            check=lambda r, u:  str(r.emoji) == "🔄" and r.message.id == ball8msg.id and u == m.author, 
+                            'reaction_add',
+                            check=lambda r, u:  str(r.emoji) == "🔄" and r.message.id == ball8msg.id and u == m.author,
                             timeout=240)
 
                     except asyncio.TimeoutError:
