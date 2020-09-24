@@ -507,9 +507,6 @@ class byterbot(discord.Client):
 
                         await r.remove(u)
 
-                elif cm == "error":
-                    0/0
-
                 elif cm in self.reDb:
                     await m.channel.send(choice(self.reDb[cm]))
 
