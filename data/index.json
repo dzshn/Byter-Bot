@@ -1,7 +1,4 @@
 {
-    "help": "data/help/main.json",
-    "apih": "data/help/api.json",
-    "mngh": "data/help/minigame.json",
     "char": "data/characters.json",
     "ming": "data/minigame.json"
 }

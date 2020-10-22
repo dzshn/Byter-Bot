@@ -15,7 +15,7 @@ init_status, init_messages = imap.select("INBOX")
 async def start(emailchannel):
     global init_status, init_messages
     while True:
-        status, messages = imap.select("INBOX")
+        messages = imap.select("INBOX")[1]
         if int(messages[0]) > int(init_messages[0]):
             msg = str(email.message_from_bytes(imap.fetch(messages[0].decode(), "(RFC822)")[1][0][1]))
             embed = Embed(

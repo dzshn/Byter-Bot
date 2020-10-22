@@ -1,4 +1,12 @@
 {
+    "unknown": {
+        "color": "0xD3D152",
+        "thumb": "https://cdn.discordapp.com/attachments/741457274530299954/741553915740422204/thonk.png",
+        "name": "Character Not found",
+        "desc": "???",
+        "favs": ["???","???","???"],
+        "img": "https://cdn.discordapp.com/attachments/741457274530299954/741553915740422204/thonk.png"
+    },
     "creu": {
         "color": "0xf2f4f5",
         "thumb": "https://cdn.discordapp.com/attachments/741457274530299954/741460429733101678/BUTTON_creu.webp",
@@ -7,7 +15,7 @@
         "favs": ["Latte","Coconut","Funk"],
         "img": "https://cdn.discordapp.com/attachments/741457274530299954/741460469960802424/CHARCREUcreu.webp"
     },
-    "petita": {    
+    "petita": {
         "color": "0x0a0201",
         "thumb": "https://cdn.discordapp.com/attachments/741457274530299954/741476662469984316/BUTTON_petita.webp",
         "name": "Petita",
