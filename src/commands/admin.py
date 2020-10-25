@@ -1,3 +1,4 @@
+import inspect
 import traceback
 from contextlib import redirect_stdout
 from functools import wraps
@@ -5,24 +6,25 @@ from io import StringIO
 
 import discord
 
-from ..utils import utils
-
+from ..utils import utils, errors
 
 def check(m, c):
     if m.author == c.get_user(310449948011528192):
         return True
 
     else:
-        raise Exception("User doesn't have permission to run command")
+        raise errors.CommandError("User doesn't have permission to run command")
 
-async def bot_eval(m, c, con):
+async def bot_eval(m, c, con : str):
     if not check(m, c):
         return
 
     try:
         eval_stdout = StringIO()
         with redirect_stdout(eval_stdout):
-            exec(con, {"message": m, "client": c})
+            result = eval(con, {"message": m, "client": c})
+            if inspect.isawaitable(result):
+                await result
 
         out = eval_stdout.getvalue()
         out = out.replace('`', "'")
@@ -54,7 +56,7 @@ async def restart(m, c, arg):
                 title="Rebooting **now**"
         ))
         await utils.bot_reload(c, update=False, delay=False)
-    
+
     else:
         await m.channel.send(
             embed=discord.Embed(

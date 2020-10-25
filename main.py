@@ -42,6 +42,7 @@ async def on_ready():
 
     client.loadTime = time()
 
+
 @client.event
 async def on_message(m):
     if m.webhook_id == 740524198165872711 and client.user.id == 740006457805635678:
@@ -59,12 +60,6 @@ async def on_message(m):
 
         except:
             await utils.handle_error(client, message=m)
-            await m.channel.send(
-                embed=discord.Embed(
-                    color=0xfa0505, 
-                    title='An unknown error ocurred',
-                    description='this error has been anonimously reported to my dev, if possible please open a issue [on my server](https://discord.gg/h4sFrNj)'
-            ))
 
     elif m.channel.id == 740539699134857337:
         if m.content in client.reDb:
@@ -76,11 +71,13 @@ async def on_message(m):
     elif m.channel in client.get_channel(741765710971142175).channels and m.channel.id != 745400744303394917:
         data = requests.get('https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q='+quote_plus(m.clean_content)).content.decode()
         embed = discord.Embed(
-            color=0x301baa, 
-            title="from channel %s" % m.channel.name,
-            description="**message content:** %s\n" % m.content     +
-                        "**from:** %s\n"            % m.author.name +
-                        "**translation:** %s"       % json.loads(data)[0][0][0]
+            color=0x301baa,
+            title=f"from channel {m.channel.name}",
+            description=(
+                f"**message content:** {m.content}\n"
+                f"**from:** {m.author.name}\n"
+                f"**translation:** {json.loads(data)[0][0][0]}"
+            )
         )
         embed.set_footer(text="Powered by Google Translate")
         await client.get_channel(745400744303394917).send(embed=embed)
@@ -100,22 +97,20 @@ async def on_message(m):
 async def on_error(func, *args, **kwargs):
     out_tb, att = utils.clean_tb()
     await client.get_channel(741024906774577201).send(
-        client.get_user(310449948011528192).mention, 
+        client.get_user(310449948011528192).mention,
         embed=discord.Embed(
-            color=0xfa0505, 
+            color=0xfa0505,
             title="**Error!**",
-            description=f'''
-**Error not made within a command? uh oh~**
-**Full data found is as following**
-
-**func :** {func}
-**args :** {args}
-**kwargs :** {kwargs}
-**exc_info :** {exc_info()}
-**Traceback :**
-```py
-{out_tb}
-```'''
+            description=(
+                "**Error not made within a command? uh oh~**\n"
+                "**Full data found is as following**\n\n"
+                f"**func :** {func}"
+                f"**args :** {args}"
+                f"**kwargs :** {kwargs}"
+                f"**exc_info :** {exc_info()}"
+                "**Traceback :**"
+                f"```py{out_tb}```"
+            )
         ),
         file=att
     )

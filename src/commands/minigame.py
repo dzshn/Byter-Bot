@@ -15,7 +15,10 @@ async def game2048(m, c):
     gameEmb.add_field(name="Score", value=gameScr)
     gEmbUpd = lambda : (gameEmb.set_field_at(0, name="2048!", value=gameDsp()), gameEmb.set_field_at(1, name="Score", value=gameScr))
     gameMsg = await m.channel.send(embed=gameEmb)
-    [await gameMsg.add_reaction(i) for i in ['⬆️', '⬇️', '⬅️', '➡️']]
+
+    for i in ['⬆️', '⬇️', '⬅️', '➡️']:
+        await gameMsg.add_reaction(i)
+
     while 0 in gameDat:
         try:
             r, u = await c.wait_for("reaction_add", check=lambda r, u: str(r.emoji) in ['⬆️', '⬇️', '⬅️', '➡️'] and r.message.id == gameMsg.id and u == m.author, timeout=120)
@@ -27,7 +30,7 @@ async def game2048(m, c):
             await r.remove(u)
 
         def move(gdat, gscr, ay, ax, r1=0, r2=4, r3=0, r4=4):
-            for i in range(4):
+            for _ in range(4):
                 for iy in range(r1, r2):
                     for ix in range(r3, r4):
                         if gdat[iy][ix] != 0:
@@ -42,10 +45,18 @@ async def game2048(m, c):
 
             return gdat, gscr
 
-        if str(r.emoji) == '⬆️':   gameDat, gameScr = move(gameDat, gameScr, -1, 0, r1=1)
-        elif str(r.emoji) == '⬇️': gameDat, gameScr = move(gameDat, gameScr, 1,  0, r2=3)
-        elif str(r.emoji) == '⬅️': gameDat, gameScr = move(gameDat, gameScr, 0, -1, r3=1)
-        elif str(r.emoji) == '➡️': gameDat, gameScr = move(gameDat, gameScr, 0,  1, r4=3)
+        if str(r.emoji) == '⬆️':
+            gameDat, gameScr = move(gameDat, gameScr, -1, 0, r1=1)
+
+        elif str(r.emoji) == '⬇️':
+            gameDat, gameScr = move(gameDat, gameScr, 1,  0, r2=3)
+
+        elif str(r.emoji) == '⬅️':
+            gameDat, gameScr = move(gameDat, gameScr, 0, -1, r3=1)
+
+        elif str(r.emoji) == '➡️':
+            gameDat, gameScr = move(gameDat, gameScr, 0,  1, r4=3)
+
 
         await gameMsg.edit(embed=gameEmb)
         await asyncio.sleep(.05)
@@ -53,10 +64,11 @@ async def game2048(m, c):
         gEmbUpd()
         await gameMsg.edit(embed=gameEmb)
 
-    await gameMsg.edit(embed=discord.Embed(title="Game over , -,", description="Played by: %s\n%s\n**Score:** %s" % (m.author.name, gameDsp(), gameScr)))
+    await gameMsg.edit(embed=discord.Embed(title="Game over , -,", description=f"Played by: {m.author.name}\n{gameDsp()}\n**Score:** {gameScr}"))
+
 
 async def tictactoe(m, c):
-    gameMsg = await m.channel.send(embed=discord.Embed(description='Waiting for acception, %s, please react with ✅ to accept' % m.mentions[0].name))
+    gameMsg = await m.channel.send(embed=discord.Embed(description=f"Waiting for acception, {m.mentions[0].name}, please react with ✅ to accept"))
     await gameMsg.add_reaction('✅')
     try:
         await c.wait_for('reaction_add', check=lambda r, u : str(r.emoji) == '✅' and u == m.mentions[0], timeout=60)
@@ -110,14 +122,21 @@ async def tictactoe(m, c):
                 await gameMsg.edit(embed=gameEmb)
 
     gameEmb.set_field_at(0, name="Game over", value=gameDsp())
-    gameEmb.add_field(name="Tie!", value="played by %s and %s" % (players[0].name, players[1].name))
+    gameEmb.add_field(name="Tie!", value=f"played by {players[0].name} and {players[1].name}")
     await gameMsg.edit(embed=gameEmb)
+
 
 async def simon(m, c):
     sequence = [choice([0, 1, 2, 3])]
     gameDat = [0 for i in range(4)]
-    gameDsp = lambda : '%s%s\n%s%s' % (':green_square:' if gameDat[0] == 0 else ':white_large_square:', ':red_square:' if gameDat[1] == 0 else ':white_large_square:',
-        ':yellow_square:' if gameDat[2] == 0 else ':white_large_square:', ':blue_square:' if gameDat[3] == 0 else ':white_large_square:')
+    gameDsp = lambda : (
+        ':green_square:' if gameDat[0] == 0 else ':white_large_square:'
+        ':red_square:' if gameDat[1] == 0 else ':white_large_square:'
+        '\n'
+        ':yellow_square:' if gameDat[2] == 0 else ':white_large_square:'
+        ':blue_square:' if gameDat[3] == 0 else ':white_large_square:'
+    )
+
     gameMsg = await m.channel.send(embed=discord.Embed(title="Simon!", description=gameDsp()))
     [await gameMsg.add_reaction(i) for i in ['🟩', '🟥', '🟨', '🟦']]
     await asyncio.sleep(0.1)

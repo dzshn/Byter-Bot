@@ -8,9 +8,10 @@ import requests
 
 async def avatar(m, text):
     embed = discord.Embed()
-    embed.set_image(url="https://api.adorable.io/avatars/285/%s.png" % quote_plus(text))
+    embed.set_image(url=f"https://api.adorable.io/avatars/285/{quote_plus(text)}.png")
     embed.set_footer(text="Powered by avatars.adorable.io")
     await m.channel.send(embed=embed)
+
 
 async def animal(m, a):
     embed = discord.Embed()
@@ -28,17 +29,23 @@ async def animal(m, a):
 
     await m.channel.send(embed=embed)
 
+
 async def cat(m):
     await animal(m, 0)
+
 
 async def dog(m):
     await animal(m, 1)
 
+
 async def fox(m):
     await animal(m, 2)
 
+
 async def joke(m):
-    data = requests.get("https://sv443.net/jokeapi/v2/joke/Programming,Miscellaneous,Pun?blacklistFlags=nsfw,religious,political,racist,sexist").json()
+    data = requests.get(
+        "https://sv443.net/jokeapi/v2/joke/Programming,Miscellaneous,Pun?blacklistFlags=nsfw,religious,political,racist,sexist"
+    ).json()
     if data['type'] == 'single':
         embed = discord.Embed(description=data['joke'])
 
@@ -48,6 +55,7 @@ async def joke(m):
     embed.set_footer(text="Powered by sv443.net's joke API")
     await m.channel.send(embed=embed)
 
+
 async def name(m, name):
     data = [
         requests.get("https://api.agify.io/?name="+name).json(),
@@ -55,23 +63,26 @@ async def name(m, name):
         requests.get("https://api.nationalize.io/?name="+name).json()
     ]
     embed = discord.Embed(
-        description="**Age:** %s\n"                % (data[0]['age']) /
-                    "**Gender:** %s (prob. %s)\n"  % (data[1]['gender'], data[1]['probability']) /
-                    "**Nationalities:** %s"        % (', '.join([i['country_id'] for i in data[2]['country']]))
+        description=(
+            f"**Age:** {data[0]['age']}\n"
+            f"**Gender:** {data[1]['gender']} (prob. {data[1]['probability']})\n"
+            f"**Nationalities:** {', '.join([i['country_id'] for i in data[2]['country']])}"
+        )
     )
     embed.set_footer(text="Powered by agify, genderize and nationalize apis")
     await m.channel.send(embed=embed)
+
 
 async def nasa(m):
     data = requests.get("https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY").json()
     embed = discord.Embed(
         title=data['title'],
-        description=data['explanation'] /
-                    "Date: %s | Copyright: %s" % (data['date'], data['copyright'])
+        description=f"{data['explanation']}\nDate: {data['date']} | Copyright: {data['copyright']}"
     )
     embed.set_image(url=data['url'])
     embed.set_footer(text="Powered by nasa.gov's api")
     await m.channel.send(embed=embed)
+
 
 async def qr(m, text):
     embed = discord.Embed()
@@ -79,12 +90,13 @@ async def qr(m, text):
     embed.set_footer(text="Powered by goqr.me api")
     await m.channel.send(embed=embed)
 
+
 async def time(m, args):
     page = '/'.join(args)
     data = requests.get('http://worldtimeapi.org/api/'+page).json()
     embed = discord.Embed(title=page)
     if "datetime" in data:
-        embed.description = "**Current time:** %s\n**UTC offset:** %s" % (data['datetime'].split('T')[1][:8], data['utc_offset'])
+        embed.description = f"**Current time:** {data['datetime'].split('T')[1][:8]}\n**UTC offset:** {data['utc_offset']}"
         embed.title += "'s current time"
 
     elif "error" in data:
@@ -98,22 +110,26 @@ async def time(m, args):
     embed.set_footer(text="Powered by worldtimeapi.org - bot made by leninnog")
     await m.channel.send(embed=embed)
 
+
 async def wiki(m, query):
-    data = requests.get("https://en.wikipedia.org/w/api.php?action=query&list=search&utf8=1&srsearch=%s&srlimit=5&srprop=wordcount|snippet&format=json" % quote_plus(query)).json()
+    data = requests.get(
+        f"https://en.wikipedia.org/w/api.php?action=query&list=search&utf8=1&srsearch={quote_plus(query)}&srlimit=5&srprop=wordcount|snippet&format=json"
+    ).json()
+
     if data['query']['search'] == []:
-        await m.channel.send("No results for %s" % query)
+        await m.channel.send(f"No results for {query}")
         return 1
 
-    embed = discord.Embed(title="Search results for %s" % query)
+    embed = discord.Embed(title=f"Search results for {query}")
     embed.set_footer(text='Powered by Wikipedia api')
     for i in data['query']['search']:
         embed.add_field(
             name=i['title'],
-            value="%s\n" % sub('<.*?>', '', i['snippet']) /
-                  "[**link**](https://en.wikipedia.org/wiki/%s)" % quote_plus(i['title']).replace('+', '_')
+            value=f"{sub('<.*?>', '', i['snippet'])}\n[**link**](https://en.wikipedia.org/wiki/{quote_plus(i['title']).replace('+', '_')}"
         )
 
     await m.channel.send(embed=embed)
+
 
 async def xkcd(m, ref):
     if ref != None:
@@ -122,7 +138,7 @@ async def xkcd(m, ref):
 
         else:
             try:
-                data = requests.get("https://xkcd.com/%s/info.0.json" % ref).json()
+                data = requests.get(f"https://xkcd.com/{ref}/info.0.json").json()
 
             except json.JSONDecodeError:
                 await m.channel.send("An error occurred, it's possible that the given id was invalid")

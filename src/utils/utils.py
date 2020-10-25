@@ -45,13 +45,13 @@ async def handle_error(c, message):
             embed=discord.Embed(
                 color=0xfa0505,
                 title='An error ocurred',
-                description='Error is %s' % exception
+                description=f"Error is {exception}"
         ))
 
     else:
         await message.channel.send(
             embed=discord.Embed(
-                color=0xfa0505, 
+                color=0xfa0505,
                 title='An unknown error ocurred',
                 description='this error has been anonimously reported to my dev, if possible please open a issue [on my server](https://discord.gg/h4sFrNj)'
         ))
@@ -63,14 +63,13 @@ async def handle_error(c, message):
             embed=discord.Embed(
                 color=0xfa0505,
                 title="**Error!**",
-                description=f'''**Message content :** {message.content}
-
-                                **Exception info:**
-                                **Value :** {exception}
-                                **Traceback :**
-                                ```py
-                                {traceback.format_exc()}
-                                ```'''
+                description=(
+                    f"**Message content :** {message.content}\n\n"
+                    f"**Exception info:**\n"
+                    f"**Value :** {exception}\n"
+                    f"**Traceback :**\n"
+                    f"```py\n{out_tb}```"
+                )
             ),
             file=att
         )
