@@ -1,5 +1,5 @@
 from . import admin, api, minigame, other
-
+from ..utils import errors
 
 async def parse_command(m, c):
     con = m.content[1:] if m.content.startswith('%') else m.content[2:]
@@ -10,9 +10,13 @@ async def parse_command(m, c):
         return
 
     cmds = {
+        'eval': {
+            'func': admin.bot_eval,
+            'args': [c, '\n'.join(con[5:].strip('\n').split('\n')[1:-1])]
+        },
         'restart': {
             'func': admin.restart,
-            'args': [c]
+            'args': [c, con[8:] if len(ctx)>1 else ""]
         },
         'api avatar': {
             'func': api.avatar,
@@ -116,7 +120,7 @@ async def parse_command(m, c):
         if con.startswith(i):
             if isinstance(cmds[i], dict):
                 if None in cmds[i]['args']:
-                    raise Exception("Missing arguments")
+                    raise errors.CommandError("Missing arguments")
 
                 await cmds[i]['func'](m, *cmds[i]['args'])
 

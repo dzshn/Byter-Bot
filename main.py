@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 import asyncio
+import hashlib
 import json
-import os
 import traceback
 from sys import exc_info
-from secrets import choice
 from time import time
 from urllib.parse import quote_plus
 
@@ -13,11 +12,11 @@ import requests
 
 from src.commands import command_parser
 from src.utils import utils, statushandler, emailhandler
-from src.subbot import subbot
 
 client = discord.Client(intents=discord.Intents(guild_messages=True, guilds=True))
 
 client.initTime = time()
+client.main_script_hash = hashlib.sha512(open("./main.py").read().encode()).hexdigest()
 client.readyTime = 0
 client.loadTime = 0
 client.reDb = {}
@@ -40,7 +39,6 @@ async def on_ready():
 
     asyncio.create_task(emailhandler.start(client.get_channel(754876413043146823)), name="emailhandler")
     asyncio.create_task(statushandler.start(client), name="statushandler")
-    #asyncio.create_task(subbot.run(), name="subbot")
 
     client.loadTime = time()
 
@@ -60,15 +58,13 @@ async def on_message(m):
             await command_parser.parse_command(m, client)
 
         except:
+            await utils.handle_error(client, message=m)
             await m.channel.send(
                 embed=discord.Embed(
                     color=0xfa0505, 
                     title='An unknown error ocurred',
                     description='this error has been anonimously reported to my dev, if possible please open a issue [on my server](https://discord.gg/h4sFrNj)'
             ))
-
-            raise Exception("Unknown error on command")
-
 
     elif m.channel.id == 740539699134857337:
         if m.content in client.reDb:
@@ -77,24 +73,52 @@ async def on_message(m):
         else:
             client.reDb[m.content] = [m.attachments[0].url]
 
+    elif m.channel in client.get_channel(741765710971142175).channels and m.channel.id != 745400744303394917:
+        data = requests.get('https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q='+quote_plus(m.clean_content)).content.decode()
+        embed = discord.Embed(
+            color=0x301baa, 
+            title="from channel %s" % m.channel.name,
+            description="**message content:** %s\n" % m.content     +
+                        "**from:** %s\n"            % m.author.name +
+                        "**translation:** %s"       % json.loads(data)[0][0][0]
+        )
+        embed.set_footer(text="Powered by Google Translate")
+        await client.get_channel(745400744303394917).send(embed=embed)
+
+    elif client.get_user(310449948011528192) in m.mentions and not m.author.bot:
+        await m.add_reaction(client.get_emoji(748824813501546559))
+
+    if m.guild == client.get_guild(725421276562325514):
+        if "good night" in m.content.lower() or "goodnight" in m.content.lower():
+            await m.add_reaction("❤️")
+
+        elif "dreamworks" in m.content.lower():
+            await m.add_reaction(client.get_emoji(726611950200553502))
+
+
 @client.event
 async def on_error(func, *args, **kwargs):
-    embed = discord.Embed(
-        color=0xfa0505, 
-        title="**Error!**",
-        description="\n\n**Exception info:**\n"          +
-                    "**Type :** %s\n"  % exc_info()[0] + 
-                    "**Value :** %s\n" % exc_info()[1] +
-                    "**Traceback :**\n"                  +
-                    "```py\n%s\n```"     % traceback.format_exc()
+    out_tb, att = utils.clean_tb()
+    await client.get_channel(741024906774577201).send(
+        client.get_user(310449948011528192).mention, 
+        embed=discord.Embed(
+            color=0xfa0505, 
+            title="**Error!**",
+            description=f'''
+**Error not made within a command? uh oh~**
+**Full data found is as following**
+
+**func :** {func}
+**args :** {args}
+**kwargs :** {kwargs}
+**exc_info :** {exc_info()}
+**Traceback :**
+```py
+{out_tb}
+```'''
+        ),
+        file=att
     )
 
-    if func == "on_message":
-        embed.description = "**Message content :** %s" % args[0].content + embed.description
-
-    else:
-        embed.description = "**Function :** %s\n\n**Args :** %s\n\n**Kwargs :** %s\n" % (func, args, kwargs) +embed.description
-
-    await client.get_channel(741024906774577201).send(client.get_user(310449948011528192).mention, embed=embed)
 
 client.run(open('TOKEN').read())

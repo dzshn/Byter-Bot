@@ -18,7 +18,7 @@ async def embed(m, arg):
 async def gifs(m, c):
     await m.channel.send(embed=discord.Embed(
         color=0x301baa,
-        description="**Available categories (%s):** `%s`" % (len(c.reDb), '`, `'.join(c.reDb.keys()))
+        description=f"**Available categories ({len(c.reDb)}):** `{'`, `'.join(c.reDb.keys())}`"
     ))
 
 async def helpb(m, arg):
@@ -82,21 +82,32 @@ async def poll(m, c, arg):
 async def stats(m, c):
     embed = discord.Embed(color=0x301baa, title="**Here are some numbers I found**")
     t = time()
-    embed.add_field(name="**Time Metrics:**",
-                    value="**Total uptime :** %s\n"           % timedelta(seconds=round(t-c.initTime))  +
-                          "**Last disconnect :** %s ago\n"    % timedelta(seconds=round(t-c.readyTime)) +
-                          "**Connection load time :** %ss \n" % round(c.readyTime-c.initTime, 2)        +
-                          "**Total load time :** %ss"         % round(c.loadTime-c.readyTime, 2))
+    embed.add_field(
+        name="**Time Metrics:**",
+        value=(
+            f"**Total uptime :** {timedelta(seconds=round(t-c.initTime))}\n"
+            f"**Last disconnect :** {timedelta(seconds=round(t-c.readyTime))} ago\n"
+            f"**Connection load time :** {round(c.readyTime-c.initTime, 2)}s\n"
+            f"**Total load time :** {round(c.loadTime-c.readyTime, 2)}s"
+        )
+    )
 
-    embed.add_field(name="**Usage data:**",
-                    value="**Server Count :** %s\n" % len(c.guilds)                   +
-                          "**Latency :** %sms\n"    % round(c.latency, 3)             +
-                          "**CPU :** %s\n"          % psutil.cpu_percent()            +
-                          "**RAM :** %s\n"          % psutil.virtual_memory().percent + 
-                          "**Swap :** %s"           % psutil.swap_memory().percent)
+    embed.add_field(
+        name="**Usage data:**",
+        value=(
+            f"**Server Count :** {len(c.guilds)}"
+            f"**Latency :** {round(c.latency, 3)}ms"
+            f"**CPU :** {psutil.cpu_percent()}"
+            f"**RAM :** {psutil.virtual_memory().percent}"
+            f"**Swap :** {psutil.swap_memory().percent}"
+        )
+    )
 
     embed.set_footer(text="version %s - bot made by leninnog" % c.version)
     await m.channel.send(embed=embed)
+
+async def userinfo(m):
+    await m.channel.send()
 
 async def ball8(m, c):
     ball8msg = None
