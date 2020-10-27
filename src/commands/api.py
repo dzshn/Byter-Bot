@@ -44,8 +44,8 @@ async def fox(m):
 
 async def joke(m):
     data = requests.get(
-        "https://sv443.net/jokeapi/v2/joke/Programming,Miscellaneous,Pun?blacklistFlags=nsfw,religious,political,racist,sexist"
-    ).json()
+        "https://sv443.net/jokeapi/v2/joke/Programming,Miscellaneous,Pun?blacklistFlags=nsfw,religious,political,racist,sexist").json()
+
     if data['type'] == 'single':
         embed = discord.Embed(description=data['joke'])
 
@@ -113,8 +113,7 @@ async def time(m, args):
 
 async def wiki(m, query):
     data = requests.get(
-        f"https://en.wikipedia.org/w/api.php?action=query&list=search&utf8=1&srsearch={quote_plus(query)}&srlimit=5&srprop=wordcount|snippet&format=json"
-    ).json()
+        f"https://en.wikipedia.org/w/api.php?action=query&list=search&utf8=1&srsearch={quote_plus(query)}&srlimit=5&srprop=wordcount|snippet&format=json").json()
 
     if data['query']['search'] == []:
         await m.channel.send(f"No results for {query}")

@@ -18,34 +18,6 @@ async def parse_command(m, c):
             'func': admin.restart,
             'args': [c, con[8:] if len(ctx)>1 else ""]
         },
-        'api avatar': {
-            'func': api.avatar,
-            'args': [con[11:] if len(ctx)>2 else None]
-        },
-        'api cat': api.cat,
-        'api dog': api.dog,
-        'api fox': api.fox,
-        'api joke': api.joke,
-        'api name': {
-            'func': api.name,
-            'args': [con[9:] if len(ctx)>2 else None]
-        },
-        'api qr': {
-            'func': api.qr,
-            'args': [con[7:] if len(ctx)>2 else None]
-        },
-        'api time': {
-            'func': api.time,
-            'args': [ctx[2:] if len(ctx)>2 else None]
-        },
-        'api wiki': {
-            'func': api.wiki,
-            'args': [con[9:] if len(ctx)>2 else None]
-        },
-        'api xkcd': {
-            'func': api.xkcd,
-            'args': [con[9:] if len(ctx)>2 else None]
-        },
         'avatar': {
             'func': api.avatar,
             'args': [con[7:] if len(ctx)>1 else None]
@@ -67,6 +39,10 @@ async def parse_command(m, c):
             'args': [ctx[1:] if len(ctx)>1 else None]
         },
         'wiki': {
+            'func': api.wiki,
+            'args': [con[5:] if len(ctx)>1 else None]
+        },
+        'wikipedia': {
             'func': api.wiki,
             'args': [con[5:] if len(ctx)>1 else None]
         },
