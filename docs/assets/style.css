@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
+
+body {
+    background: url("background.webp") repeat;
+    background-position-x: 50%;
+    margin: 0;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: #DBC886;
+}
+
+a {
+    text-decoration: none;
+    color: #DBC886;
+    background-color: #ffffff20;
+    border-radius: 3px;
+    padding: 0 5px;
+    transition-duration: 200ms;
+}
+
+a:hover {
+    background-color: #ffffff50;
+}
+
+li {
+    text-align: left;
+    color: #DBC886;
+    margin: 3px 3px 3px 20px;
+}
+
+ul h2 {
+    display: list-item;
+    color: #DBC886;
+    text-align: left;
+}
+
+nav, footer {
+    display: grid;
+    grid-auto-flow: column;
+}
+
+nav, main div, .bubble {
+    display: grid;
+    padding: 30px;
+    background-color: #5c584b;
+    border-radius: 30px;
+    margin: 0 auto 100px;
+    font-size: x-large;
+    text-align: center;
+    width: 75%;
+}
+
+.doc {
+    text-align: left;
+}
+
+.doc * {
+    margin: 3px;
+}
+
+.alias {
+    opacity: 0.75;
+    float: right;
+}
+
+h1 {
+    font: 74px 'Nunito', sans-serif;
+    text-align: center;
+    text-shadow: 3px 5px #0000004c;
+    color: #FAC905;
+    margin-bottom: -35px;
+}
+
+footer {
+    background-color: #080e35f0;
+    border-top: 20px solid #181e45f0;
+    padding: 60px;
+}
