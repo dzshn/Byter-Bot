@@ -8,6 +8,8 @@ from time import time
 import discord
 import psutil
 
+from ..utils import errors
+
 
 async def embed(m, arg):
     embed = discord.Embed()
@@ -24,9 +26,25 @@ async def gifs(m, c):
         ))
 
 
-async def helpb(m, arg):
-    pass
+async def helpb(m, c, arg):
+    if arg in c.jsonfiles['help']:
+        page = c.jsonfiles['help'][arg]
+        if 'aliasto' in page:
+            page = c.jsonfiles['help'][page['aliasto']]
 
+        embed = discord.Embed(title=page['title'], description=page['desc'])
+        embed.add_field(name='Usage:', value=f"`{page['usage']}`")
+        if 'alias' in page:
+            embed.add_field(name='Alias', value=page['alias'])
+
+        if 'example' in page:
+            embed.add_field(name='Example:', value=page['example'])
+
+        embed.add_field(name="Link:", value=f"https://docs.byterbot.com/{page['link']}")
+
+        await m.channel.send(embed)
+    else:
+        raise errors.CommandError("Page not found")
 
 async def info(m, c, arg):
     page = arg.split(' ')

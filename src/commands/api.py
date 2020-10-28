@@ -5,6 +5,8 @@ from urllib.parse import quote_plus
 import discord
 import requests
 
+from ..utils import errors
+
 
 async def avatar(m, text):
     embed = discord.Embed()
@@ -140,7 +142,7 @@ async def xkcd(m, ref):
                 data = requests.get(f"https://xkcd.com/{ref}/info.0.json").json()
 
             except json.JSONDecodeError:
-                await m.channel.send("An error occurred, it's possible that the given id was invalid")
+                raise errors.CommandError("invalid id")
 
     else:
         data = requests.get(requests.get("https://c.xkcd.com/random/comic").url+"info.0.json").json()
