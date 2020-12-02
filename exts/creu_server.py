@@ -32,11 +32,6 @@ class CreuServerStuff(commands.Cog):
                     "/775223895786782730/Speedy_Creu_but_Bigger.gif"
         ))
 
-    @commands.command(hidden=True)
-    async def æ(self, ctx):
-        """æ"""
-        await ctx.send('æ')
-
 
 def setup(bot):
     bot.add_cog(CreuServerStuff(bot))
