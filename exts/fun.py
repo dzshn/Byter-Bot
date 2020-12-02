@@ -15,6 +15,61 @@ class Fun(commands.Cog):
         self.bot = bot
         self.session = self.bot.session
 
+    def _bf(self, code):
+        """Internal function for executing brainf code, used only on the command"""
+        tape = [0]*256
+        tape_pttr = 0
+        code_pttr = 0
+        out = ''
+        braces_openings = [pos for pos, instr in enumerate(code) if instr == '[']
+        braces_closings = [pos for pos, instr in enumerate(code) if instr == ']']
+        bracemap = {
+            **dict(zip(braces_closings, braces_openings)),
+            **dict(zip(braces_openings, braces_closings))
+        }
+        while code_pttr < len(code):
+            instruction = code[code_pttr]
+            if instruction == '+':
+                if tape[tape_pttr] < 255:
+                    tape[tape_pttr] += 1
+
+                else:
+                    tape[tape_pttr] -= 255
+
+            if instruction == '-':
+                if tape[tape_pttr] > 0:
+                    tape[tape_pttr] -= 1
+
+                else:
+                    tape[tape_pttr] += 255
+
+            if instruction == '>':
+                if tape_pttr < 255:
+                    tape_pttr += 1
+
+                else:
+                    tape_pttr -= 255
+
+            if instruction == '<':
+                if tape_pttr > 0:
+                    tape_pttr -= 1
+
+                else:
+                    tape_pttr += 255
+
+            if instruction == '.':
+                out += chr(tape[tape_pttr])
+
+            if instruction == "[" and tape[tape_pttr] == 0:
+                code_pttr = bracemap[code_pttr]
+
+            if instruction == "]" and tape[tape_pttr] != 0:
+                code_pttr = bracemap[code_pttr]
+
+            code_pttr += 1
+
+        return out
+
     @commands.command(aliases=['bf'])
     async def brainf(self, ctx, *, code):
         """
@@ -23,63 +78,9 @@ class Fun(commands.Cog):
         Code is executed on a 256 length tape, max cell size is 255, timeout is 10 seconds.
         [Wikipedia](https://en.wikipedia.org/wiki/BrainF)
         """
-        def _bf(code):
-            tape = [0]*256
-            tape_pttr = 0
-            code_pttr = 0
-            out = ''
-            braces_openings = [pos for pos, instr in enumerate(code) if instr == '[']
-            braces_closings = [pos for pos, instr in enumerate(code) if instr == ']']
-            bracemap = {
-                **dict(zip(braces_closings, braces_openings)),
-                **dict(zip(braces_openings, braces_closings))
-            }
-            while code_pttr < len(code):
-                instruction = code[code_pttr]
-                if instruction == '+':
-                    if tape[tape_pttr] < 255:
-                        tape[tape_pttr] += 1
-
-                    else:
-                        tape[tape_pttr] -= 255
-
-                if instruction == '-':
-                    if tape[tape_pttr] > 0:
-                        tape[tape_pttr] -= 1
-
-                    else:
-                        tape[tape_pttr] += 255
-
-                if instruction == '>':
-                    if tape_pttr < 255:
-                        tape_pttr += 1
-
-                    else:
-                        tape_pttr -= 255
-
-                if instruction == '<':
-                    if tape_pttr > 0:
-                        tape_pttr -= 1
-
-                    else:
-                        tape_pttr += 255
-
-                if instruction == '.':
-                    out += chr(tape[tape_pttr])
-
-                if instruction == "[" and tape[tape_pttr] == 0:
-                    code_pttr = bracemap[code_pttr]
-
-                if instruction == "]" and tape[tape_pttr] != 0:
-                    code_pttr = bracemap[code_pttr]
-
-                code_pttr += 1
-
-            return out
-
         try:
             out = await asyncio.wait_for(
-                self.bot.loop.run_in_executor(None, _bf, code),
+                self.bot.loop.run_in_executor(None, self._bf, code),
                 timeout=10.0
             )
 
