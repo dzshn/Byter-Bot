@@ -112,7 +112,17 @@ class Utils(commands.Cog):
         if not 0 < max_results < 6:
             raise commands.UserInputError('Max results must be between 1 and 5')
 
-        async with self.session.get(f"https://en.wikipedia.org/w/api.php?action=query&list=search&utf8=1&srsearch={query}&srlimit={max_results}&srprop=wordcount|snippet&format=json") as response:
+        params = {
+            "action": "query",
+            "list": "search",
+            "utf8": 1,
+            "srsearch": query,
+            "srlimit": max_results,
+            "srprop": "wordcount|snippet",
+            "format": "json"
+        }
+
+        async with self.session.get(f"https://en.wikipedia.org/w/api.php", params=params) as response:
             if response.status == 200:
                 json = await response.json()
                 embed = discord.Embed(title=f'Search results for {query}')
