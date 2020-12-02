@@ -31,7 +31,7 @@ class Stats(commands.Cog):
         embed.add_field(
             name="General",
             value=(
-                f"**Commands hit/done:** {self.bot.commands_hit}/{self.bot.commands_done}\n"
+                f"**Commands hit/done:** {self.commands_hit}/{self.commands_done}\n"
                 f"**Uptime:** {timedelta(seconds=upt)}\n"
                 f"**Server Count:** {len(self.bot.guilds)}\n"
                 f"**Latency:** {round(self.bot.latency*1000)}ms\n"
