@@ -25,6 +25,8 @@ jobs:
         python -m pip install --upgrade pip
         pip install pylint
         pip install -r requirements.txt
+    - name: Create blank config.py
+      run: touch config.py
     - name: Lint with pylint
       run: |
         pylint exts/ main.py --disable=all --enable=E
