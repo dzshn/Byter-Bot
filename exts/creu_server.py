@@ -20,7 +20,7 @@ class CreuServerStuff(commands.Cog):
             if "good night" in lowered or "goodnight" in lowered or "qnight" in lowered:
                 await message.add_reaction("❤️")
 
-            if "dreamworks" in lowered or  "poop" in lowered:
+            if "dreamworks" in lowered or "poop" in lowered:
                 await message.add_reaction(self.bot.get_emoji(726611950200553502))
 
     @commands.command(hidden=True)
