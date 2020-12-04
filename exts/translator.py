@@ -2,11 +2,8 @@ import asyncio
 
 import discord
 from discord.ext import commands
-try:
-    from googletrans import Translator as GTr
+from googletrans import Translator as GTr
 
-except ImportError:
-    pass
 
 class Translator(commands.Cog):
     def __init__(self, bot):
@@ -50,5 +47,4 @@ class Translator(commands.Cog):
 
 
 def setup(bot):
-    if 'GTr' in globals():
-        bot.add_cog(Translator(bot))
+    bot.add_cog(Translator(bot))
