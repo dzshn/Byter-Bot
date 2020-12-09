@@ -13,7 +13,6 @@ from . import utils # pylint: disable=relative-beyond-top-level
 class Fun(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.session = self.bot.session
 
     def _bf(self, code):
         """Internal function for executing brainf code, used only on the command"""
@@ -155,7 +154,7 @@ class Fun(commands.Cog):
     async def name(self, ctx, name: urllib.parse.quote_plus):
         """Returns most probable age and gender for given name"""
         embed = discord.Embed()
-        async with self.session.get('https://api.agify.io/?name=' + name) as response:
+        async with self.bot.session.get('https://api.agify.io/?name=' + name) as response:
             if response.status == 200:
                 json = await response.json()
                 embed.description = f"**Age:** {json['age']}\n"
@@ -163,7 +162,7 @@ class Fun(commands.Cog):
             else:
                 embed.description = "**Age:** Unknown error\n"
 
-        async with self.session.get('https://api.genderize.io/?name=' + name) as response:
+        async with self.bot.session.get('https://api.genderize.io/?name=' + name) as response:
             if response.status == 200:
                 json = await response.json()
                 embed.description += f"**Gender:** {json['gender']} (prob. {json['probability']})\n"

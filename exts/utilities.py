@@ -11,7 +11,6 @@ from discord.ext import commands
 class Utils(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.session = bot.session
 
     @commands.command()
     async def embed(self, ctx, *, data):
@@ -82,7 +81,7 @@ class Utils(commands.Cog):
         EET, EST, EST5EDT, Etc, Europe, HST, Indian, MET, MST, MST7MDT, MST7MDT,
         PST8PDT, Pacific, WET
         """
-        async with self.session.get('https://worldtimeapi.org/api/' + zone) as response:
+        async with self.bot.session.get('https://worldtimeapi.org/api/' + zone) as response:
             if response.status == 200:
                 json = await response.json()
                 if 'datetime' in json:
@@ -122,7 +121,7 @@ class Utils(commands.Cog):
             "format": "json"
         }
 
-        async with self.session.get(f"https://en.wikipedia.org/w/api.php", params=params) as response:
+        async with self.bot.session.get(f"https://en.wikipedia.org/w/api.php", params=params) as response:
             if response.status == 200:
                 json = await response.json()
                 embed = discord.Embed(title=f'Search results for {query}')

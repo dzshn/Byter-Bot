@@ -9,13 +9,12 @@ from discord.ext import commands
 class Images(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.session = bot.session
 
     @commands.command()
     async def cat(self, ctx):
         """Returns a random cat image"""
         embed = discord.Embed()
-        async with self.session.get("https://api.thecatapi.com/v1/images/search") as response:
+        async with self.bot.session.get("https://api.thecatapi.com/v1/images/search") as response:
             if response.status == 200:
                 json = await response.json()
                 embed.set_image(url=json[0]['url'])
@@ -30,7 +29,7 @@ class Images(commands.Cog):
     async def dog(self, ctx):
         """Returns a random dog image"""
         embed = discord.Embed()
-        async with self.session.get("https://random.dog/woof.json") as response:
+        async with self.bot.session.get("https://random.dog/woof.json") as response:
             if response.status == 200:
                 json = await response.json()
                 embed.set_image(url=json['url'])
@@ -45,7 +44,7 @@ class Images(commands.Cog):
     async def fox(self, ctx):
         """Returns a random fox image"""
         embed = discord.Embed()
-        async with self.session.get("https://randomfox.ca/floof/") as response:
+        async with self.bot.session.get("https://randomfox.ca/floof/") as response:
             if response.status == 200:
                 json = await response.json()
                 embed.set_image(url=json['image'])
@@ -74,18 +73,18 @@ class Images(commands.Cog):
         """
         embed = discord.Embed()
         if ref == "random":
-            async with self.session.get("https://c.xkcd.com/random/comic") as rand_redir:
-                async with self.session.get(f"{rand_redir.url}info.0.json") as response:
+            async with self.bot.session.get("https://c.xkcd.com/random/comic") as rand_redir:
+                async with self.bot.session.get(f"{rand_redir.url}info.0.json") as response:
                     if response.status == 200:
                         json = await response.json()
 
         elif ref == "current":
-            async with self.session.get("https://xkcd.com/info.0.json") as response:
+            async with self.bot.session.get("https://xkcd.com/info.0.json") as response:
                 if response.status == 200:
                     json = await response.json()
 
         elif ref.isdecimal():
-            async with self.session.get(f"https://xkcd.com/{ref}/info.0.json") as response:
+            async with self.bot.session.get(f"https://xkcd.com/{ref}/info.0.json") as response:
                 if response.status == 200:
                     json = await response.json()
 
