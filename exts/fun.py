@@ -179,7 +179,15 @@ class Fun(commands.Cog):
 
         you may optionally pass length (bytes) and encoding, both default to 64 and utf-8
         """
-        await ctx.send(os.urandom(length).decode(encoding=encoding, errors='replace'))
+        if length > 2000:
+            await ctx.send(f"Length {length} is too big")
+            return
+
+        try:
+            await ctx.send(os.urandom(length).decode(encoding=encoding, errors='replace'))
+
+        except LookupError:
+            await ctx.send(f"Encoding {encoding} isn't valid")
 
 
 def setup(bot):
