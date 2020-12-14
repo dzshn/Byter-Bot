@@ -147,7 +147,10 @@ class Admin(commands.Cog, command_attrs={'hidden': True}):
     @commands.command(aliases=['uv'])
     async def updatever(self, ctx, *, arg):
         """Update version in stats cog"""
-        self.bot.get_cog('Stats').version = open('VERSION').read()
+        old_ver = self.bot.get_cog('Stats').version
+        new_ver = open('VERSION').read()
+        self.bot.get_cog('Stats').version = new_ver
+        await ctx.send(f"Version updated from {old_ver} to {new_ver}")
 
     @commands.command()
     async def say(self, ctx, where: typing.Optional[discord.TextChannel]=None, *, text):
