@@ -144,10 +144,10 @@ class Admin(commands.Cog, command_attrs={'hidden': True}):
             except commands.ExtensionError as exc:
                 await ctx.send(exc)
 
-    @commands.command(name="raise")
-    async def _raise(self, ctx, *, arg):
-        """Raises given exception, passed trough eval, careful"""
-        raise eval(arg)
+    @commands.command(aliases=['uv'])
+    async def updatever(self, ctx, *, arg):
+        """Update version in stats cog"""
+        self.bot.get_cog('Stats').version = open('VERSION').read()
 
     @commands.command()
     async def say(self, ctx, where: typing.Optional[discord.TextChannel]=None, *, text):
