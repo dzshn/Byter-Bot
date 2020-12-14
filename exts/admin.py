@@ -145,7 +145,7 @@ class Admin(commands.Cog, command_attrs={'hidden': True}):
                 await ctx.send(exc)
 
     @commands.command(aliases=['uv'])
-    async def updatever(self, ctx, *, arg):
+    async def updatever(self, ctx):
         """Update version in stats cog"""
         old_ver = self.bot.get_cog('Stats').version
         new_ver = open('VERSION').read()
