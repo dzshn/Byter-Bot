@@ -26,9 +26,9 @@ class Utils(commands.Cog):
 
         """
         try:
-            await ctx.send(embed=discord.Embed.from_dict(json.loads(data)))
+            await ctx.send(embed=discord.Embed.from_dict(json.loads('{'+data+'}')))
 
-        except json.JSONDecodeError:
+        except (json.JSONDecodeError, discord.errors.HTTPException):
             await ctx.send("Invalid data given")
 
     @commands.command()
