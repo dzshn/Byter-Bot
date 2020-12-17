@@ -13,6 +13,9 @@ class ErrorHandler(commands.Cog):
         if isinstance(error, commands.BotMissingPermissions):
             await ctx.message.add_reaction('❗')
 
+        elif isinstance(error, commands.MissingPermissions):
+            await ctx.send("Missing {', '.join(error.missing_perms)} perms")
+
         elif isinstance(error, commands.CommandNotFound):
             command = ctx.message.content.split()[0][len(ctx.prefix):]
             suggestion = extractOne(command, self.bot.commands)[0]

@@ -13,6 +13,7 @@ class Utils(commands.Cog):
         self.bot = bot
 
     @commands.command()
+    @commands.has_permissions(manage_messages=True)
     async def embed(self, ctx, *, data):
         """
         Generates an embed
@@ -20,6 +21,8 @@ class Utils(commands.Cog):
         The data given must be in a "parameter": "value" syntax (aka json)
         valid parameters can be found [here](https://docs.byterbot.com/#extras.embed_params)
         (or in the [Official developer documentation](https://discord.com/developers/docs/resources/channel#embed-object), if you will)
+
+        Requires "Manage messages" permissions
 
         Example:
         embed "title": "Look!", "description": "I'm a embed!"
