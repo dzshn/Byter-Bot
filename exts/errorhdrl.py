@@ -14,7 +14,7 @@ class ErrorHandler(commands.Cog):
             await ctx.message.add_reaction('❗')
 
         elif isinstance(error, commands.MissingPermissions):
-            await ctx.send("Missing {', '.join(error.missing_perms)} perms")
+            embed.description = f"Missing {', '.join(error.missing_perms)} perms"
 
         elif isinstance(error, commands.CommandNotFound):
             command = ctx.message.content.split()[0][len(ctx.prefix):]
