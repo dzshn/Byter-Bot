@@ -23,6 +23,9 @@ class CreuServerStuff(commands.Cog):
             if "dreamworks" in lowered or "poop" in lowered:
                 await message.add_reaction(self.bot.get_emoji(726611950200553502))
 
+            if "alastor" in lowered:
+                await message.add_reaction(self.bot.get_emoji(779946643859832833))
+
     @commands.command(hidden=True)
     async def mewhen(self, ctx):
         """me when"""
