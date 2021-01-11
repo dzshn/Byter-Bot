@@ -17,6 +17,9 @@ class CreuServerStuff(commands.Cog):
 
         if message.guild == self.cguild:
             lowered = message.content.lower()
+            if lowered == 'p':
+                await message.delete()
+
             if "good night" in lowered or "goodnight" in lowered or "qnight" in lowered:
                 await message.add_reaction("❤️")
 
