@@ -16,7 +16,7 @@ class CreuServerStuff(commands.Cog):
             await message.add_reaction(self.bot.get_emoji(748824813501546559))
 
         if message.guild == self.cguild:
-            lowered = message.content.lower()
+            lowered = message.content.lower().strip()
             if lowered == 'p':
                 await message.delete()
 
