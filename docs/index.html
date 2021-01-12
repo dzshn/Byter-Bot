@@ -50,22 +50,120 @@
                     an esoteric programming language, iconic for it's only four possible characters <br><br>
                     code is run on a 256 length tape, with max cell size being 255, and times out after 10 seconds, and no input can be given
                 </p>
+				<h2 id="fun.8ball">8 ball</h2>
+				<h3>%8ball</h3>
+				<p>
+					Rolls an 8 ball, text can be given but doesn't alter anything
+				</p>
+				<h2 id="fun.gifs">GIFs<h2>
+				<h3>%[gifs|g|image] &lt;Opt. name&gt;</h3>
+				<p>
+					Picks a random reaction with given name from our database <br>
+					You can run the command without giving a name to list available names
+				</p>
+				<h2 id="fun.name">Name</h2>
+				<h3>%name &lt;name&gt;</h3>
+				<p>
+					Gives most probable age and gender for given name, powered by <a href="https://agify.io">agify.io</a> and <a href="https://genderize.io">genderize.io</a>
+				</p>
+				<h2 id="fun.urandom">URandom</h2>
+				<h3>%urandom &lt;Opt. bytes&gt; &lt;Opt. encoding&gt;</h3>
+				<p>
+					Spits random text from /dev/urandom, guaranteed to be non-sense unreadable characters <br>
+					You may optionally give how much bytes* for increasing text size and encoding* for further weirdness <br>
+					May or may not be a joke that I like too much to remove xD <br>
+					*bytes being most of the time close to the character amount <br>
+					*encoding being one within the table <a href="https://docs.python.org/3.9/library/codecs.html#standard-encodings">here</a>
+				</p>
             </div>
             <h1>Images</h1>
             <div class="doc" id="images">
                 <h2 id="images.animals">Animals</h2>
+				<h3>%[cat|dog|fox]</h3>
                 <p>
                     Animal images! Cats, dogs and foxes, to be exact, since these commands function similarly, I have them here in one place: <br>
                     <b>%cat, %dog, %fox</b>
                 </p>
-                <h2 id="images.qr"></h2>
+                <h2 id="images.qr">QR</h2>
+				<h3>%qr &lt;text&gt;</h3>
+				<p>
+					Sends a QR code generated from text, powered by <a href="https://goqr.me">goqr.me</a>
+				</p>
+				<h2 id="images.xkcd">xkcd</h2>
+				<h3>%xkcd &lt;Opt ref&gt;</h3>
+				<p>
+					Sends a random / current / per id <a href="https://xkcd.com">xkcd comic</a>, ref defaults to random but may be 'current' or an id
+				</p>
             </div>
             <h1>Stats</h1>
-            <div class="doc" id="">
+            <div class="doc" id="stats">
+				<h2 id="stats.stats">Stats</h2>
+				<h3>%stats</h3>
+				<p>
+					Returns statistics about the bot, commands requested and commands that went without a error, uptime, server count, latency, version and CPU / RAM usage
+				</p>
+				<h2 id="stats.invite">Invite</h2>
+				<h3>%invite</h3>
+				<p>
+					Simple command for getting my bot invite, not much
+				</p>
+				<h2 id="stats.version">Version</h2>
+				<h3>%version</h3>
+				<p>
+					Returns current version for the bot, python and discord.py / psutil packages
+				</p>
             </div>
             <h1>Utils</h1>
-            <div class="doc" id="embed">
+            <div class="doc" id="utils">
                 <h2 id="utils.embed">Embed</h2>
+                <h3>%embed &lt;data&gt;</h3>
+                <p>
+                	Makes an embed with given data, in a json syntax ("parameter": "value", ) <br>
+                	Valid parameters <a href="#extras.embed_parameters">here</a> <br><br>
+                	<b>Example:</b> <br>
+                	%embed "title": "Hey, look!", "description": "I'm a embed!"
+                </p>
+                <h2 id="utils.poll">
+                <h3>%poll &lt;Opt. title&gt;, &lt;Opt option 1&gt;...</h3>
+                <p>
+                	Makes a poll with given title and options, split by commas <br><br>
+                	<b>Example:</b> <br>
+                	%poll What's the best pet?, Cats, Dogs, Ferrets, Foxes, Other
+                </p>
+                <h2 id="utils.time">Time</h2>
+                <h3>%time &lt;zone&gt;</h3>
+                <p>
+                	Returns current time in given zone, powered by <a href="https://worldtimeapi.org/">worldtimeapi</a> <br>
+                	Zones can be found <a href="https://worldtimeapi.org/timezones">here</a> or <a href="https://worldtimeapi.org/api/timezone.txt">here as plaintext</a>
+                </p>
+                <h2 id="utils.wiki">Wiki</h2>
+                <h3>%wiki &lt;Opt. max results&gt; &lt;query&gt;</h3>
+				<p>
+					Searches wikipedia with given query, optionally accepting a maximum amount of results between 1 and 5 (defaults to 3)
+				</p>
+            </div>
+            <h1>Extras</h1>
+            <div class="doc" id="extras">
+				<h2 id="extras.embed_parameters">Embed parameters</h2>
+				<p>
+					The following are valid embed parameters:
+					<ul>
+						<li><b>"title": "Text"</b> - Title of the embed</li>
+						<li><b>"description": "Text"</b> - Description of the embed</li>
+						<li><b>"timestamp": "2021-01-10T07:30:15" </b> - Timestamp following a 'Year'-'Month'-'Day'T'Hour':'Minute':'Second' syntax</li>
+						<li><b>"color": 3152810</b> - Color in decimal form</li>
+						<li><b>"footer": {"text": "Text", "icon_url": "https://example.com"}</b> - Footer of the embed with optionally an icon</li>
+						<li><b>"image": {"url": "https://example.com"}</b> - Embed image from url</li>
+						<li><b>"author": {"name": "Byter", "url": "https://example.com", "icon_url": "https://example.com"}</b> - Embed author field with given name, url and icon</li>
+						<li><b>"fields": [{"name": "Title", "value": "Desc."}, ...]</b> - Array of embed fields</li>
+					</ul>
+				</p>
+				<h2 id="extras.error_data">Error handler data</h2>
+				<p>
+					Whenever an unknown error occurs, it gets automatically sent to my creator with minimal information, command, message content and the error itself <br>
+					<img src="assets/error_example.png" alt="Example image of the error data"> <br>
+					If you ever encounter one or has already found one, you may want to report it on my server, they would sure try to fix it as soon as possible
+				</p>
             </div>
         </main>
         <footer>
@@ -84,9 +182,9 @@
             <div>
                 <h3>External links:</h3>
                 <ul>
-                    <li><a href="https://discord.com/api/oauth2/authorize?client_id=740006457805635678&permissions=537259072&scope=bot" target="_blank">Invite me</a></li>
-                    <li><a href="https://github.com/leninnog/Byter-Bot" target="_blank">Source code</a></li>
-                    <li><a href="https://www.patreon.com/leninnog" target="_blank">Support me</a></li>
+                    <li><a href="https://discord.com/api/oauth2/authorize?client_id=740006457805635678&permissions=537259072&scope=bot" target="_blank">Invite me!</a></li>
+                    <li><a href="https://github.com/dzshn/Byter-Bot" target="_blank">Source code!</a></li>
+                    <li><a href="https://www.patreon.com/dzshn" target="_blank">Support me!</a></li>
                 </ul>
             </div>
         </footer>

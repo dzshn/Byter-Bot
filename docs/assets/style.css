@@ -33,6 +33,15 @@ ul h2 {
     text-align: left;
 }
 
+.doc p {
+	border: dotted #ffffff20;
+	border-top: none;
+	border-left: none;
+	border-right: none;
+	padding-bottom: 5px; 
+	margin-bottom: 25px;
+}
+
 nav, footer {
     display: grid;
     grid-auto-flow: column;
@@ -74,4 +83,8 @@ footer {
     background-color: #080e35f0;
     border-top: 20px solid #181e45f0;
     padding: 60px;
+}
+
+img {
+	border-radius: 5px;
 }
