@@ -7,10 +7,47 @@ import re
 import discord
 from discord.ext import commands
 
+from . import utils # pylint: disable=relative-beyond-top-level
+
 
 class Utils(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+
+    @commands.command(aliases=['bin'])
+    async def binary(self, ctx, *, text : str):
+        """
+        Binary encoder and decoder
+
+        If given text is detected as binary code it gets decoded, if not I encode the text
+        """
+        if [i for i in text if i not in (' ', '0', '1')]:
+            out, att = utils.format_output(' '.join(f'{ord(char):0>8b}' for char in text))
+            await ctx.send(
+                embed=discord.Embed(
+                    color=0x05ba05,
+                    title="Binary output",
+                    description=f"```{out}```"
+                ),
+                file=att
+            )
+
+        else:
+            text = text.replace(' ', '')
+            out, att = utils.format_output(
+                ''.join(
+                    chr(int(text[i:i+8], base=2))
+                    for i in range(0, len(text), 8) 
+                )                
+            )
+            await ctx.send(
+                embed=discord.Embed(
+                    color=0x05ba05,
+                    title="Decoded output",
+                    description=f"```{out}```"
+                ),
+                file=att
+            )
 
     @commands.command()
     @commands.has_permissions(manage_messages=True)
