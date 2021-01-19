@@ -50,7 +50,23 @@ class CreuServerStuff(commands.Cog):
             embed=discord.Embed(title="me when").set_image(
                 url="https://cdn.discordapp.com/attachments/775223088534388767" \
                     "/775223895786782730/Speedy_Creu_but_Bigger.gif"
-        ))
+            )
+        )
+
+    @commands.command(aliases=['z'], hidden=True)
+    async def zxyvw(self, ctx, *, text):
+        """z"""
+        if [z for z in text if z not in 'z0123456789abcdef']:
+            await ctx.send('z'.join(f"{ord(z):x}" for z in text))
+
+        else:
+            await ctx.send(
+                embed=discord.Embed(
+                    color=0x301baa,
+                    title='z',
+                    description=''.join(chr(int(z, base=16)) for z in text.split('z'))
+                )
+            )
 
 
 def setup(bot):
