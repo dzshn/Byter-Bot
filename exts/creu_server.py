@@ -24,11 +24,7 @@ class CreuServerStuff(commands.Cog):
             await message.add_reaction(self.bot.get_emoji(748824813501546559))
 
         if message.guild == self.cguild:
-            lowered = ''.join(i for i in message.clean_content.lower() if i in 'abcdefghijklmnopqrstuvwxyz ').strip()
-            if lowered == 'p':
-                await message.delete()
-                return
-
+            lowered = ''.join(i for i in message.clean_content.lower() if i in 'abcdefghijklmnopqrstuvwxyz')
             for obj in self.reactions:
                 for trigger in obj['triggers']:
                     if trigger in lowered:
