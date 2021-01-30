@@ -36,22 +36,6 @@ class Qa(commands.Cog, command_attrs={'hidden': True}):
     async def qa_stop(self, ctx):
         """Stops the Q&A session"""
         async with ctx.channel.typing():
-            await ctx.send("Dumping data...")
-            await ctx.send(
-                file=discord.File(
-                    BytesIO(
-                        (
-                            '-------------\n'.join(
-                                [
-                                    f"From: {i['a']} ({i['a'].id})\nQuestion: {i['q']}"
-                                    for i in self.questions
-                                ]
-                            )
-                        ).encode()
-                    ),
-                    filename="qadump.txt"
-                )
-            )
             self.is_qa_running = False
             self.questions = None
             await ctx.send("All clear!")
