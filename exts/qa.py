@@ -9,26 +9,24 @@ class Qa(commands.Cog, command_attrs={'hidden': True}):
     def __init__(self, bot):
         self.bot = bot
         self.is_qa_running = False
-        self.creu_guild = None
-        self.allowed_roles = None
+        self.creu_guild_id = 725421276562325514
+        self.allowed_role_ids = [
+            728875097808699473,
+            777720322446983179,
+            726615159459676180
+        ]
         self.questions = None
 
     @commands.group()
     async def qa(self, ctx):
         """Commands used for an Q&A event"""
         if ctx.invoked_subcommand is None:
-            await ctx.send("Missing subcommand")
+            await ctx.send("Missing or invalid subcommand")
 
     @qa.command(name="start")
     @commands.is_owner()
     async def qa_start(self, ctx):
         """Starts up the Q&A session"""
-        self.is_qa_running = True
-        self.creu_guild = self.bot.get_guild(725421276562325514)
-        self.allowed_roles = [
-            self.creu_guild.get_role(728875097808699473),
-            self.creu_guild.get_role(726615159459676180)
-        ]
         self.questions = []
         await ctx.send("All set!")
 
@@ -54,7 +52,7 @@ class Qa(commands.Cog, command_attrs={'hidden': True}):
     async def qa_ask(self, ctx, *, question):
         """Ask a question, which later be picked at random"""
         if self.is_qa_running:
-            self.questions.append({"from": ctx.author, "question": question})
+            self.questions.append({"a": ctx.author, "q": question})
 
         else:
             await ctx.send("Ey! there isn't a Q&A session yet")
@@ -62,7 +60,7 @@ class Qa(commands.Cog, command_attrs={'hidden': True}):
     @qa.command(name="pick")
     async def qa_pick(self, ctx):
         """Picks up a random question"""
-        if ctx.author.top_role not in self.allowed_roles:
+        if ctx.author.top_role.id not in self.allowed_role_ids:
             await ctx.send("Sorry but you don't have permission to do that :/")
             return
 
@@ -71,12 +69,14 @@ class Qa(commands.Cog, command_attrs={'hidden': True}):
             return
 
         if len(self.questions) > 0:
-            question = self.questions.pop(random.randint(0, len(self.questions)-1))
+            q_obj = self.questions.pop(random.randint(0, len(self.questions)-1))
             await ctx.send(
                 embed=discord.Embed(
                     color=0x301baa,
-                    title=f"From {question['from'].name}",
-                    description=question['question']
+                    description=q_obj['q']
+                ).set_author(
+                    name=f"{q_obj['a']} ({q_obj['a'].id})",
+                    icon_url=q_obj['q'].avatar_url
                 )
             )
 
