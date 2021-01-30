@@ -35,10 +35,9 @@ class Qa(commands.Cog, command_attrs={'hidden': True}):
     @commands.is_owner()
     async def qa_stop(self, ctx):
         """Stops the Q&A session"""
-        async with ctx.channel.typing():
-            self.is_qa_running = False
-            self.questions = None
-            await ctx.send("All clear!")
+        self.is_qa_running = False
+        self.questions = None
+        await ctx.send("All clear!")
 
     @qa.command(name="ask")
     async def qa_ask(self, ctx, *, question):
