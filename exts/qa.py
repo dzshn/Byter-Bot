@@ -28,6 +28,7 @@ class Qa(commands.Cog, command_attrs={'hidden': True}):
     async def qa_start(self, ctx):
         """Starts up the Q&A session"""
         self.questions = []
+        self.is_qa_running = True
         await ctx.send("All set!")
 
     @qa.command(name="stop")
