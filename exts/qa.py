@@ -40,7 +40,14 @@ class Qa(commands.Cog, command_attrs={'hidden': True}):
             await ctx.send(
                 file=discord.File(
                     BytesIO(
-                        ('-------------\n'.join([f"From: {i['from']}\nQuestion: {i['question']}" for i in self.questions])).encode()
+                        (
+                            '-------------\n'.join(
+                                [
+                                    f"From: {i['a']} ({i['a'].id})\nQuestion: {i['q']}"
+                                    for i in self.questions
+                                ]
+                            )
+                        ).encode()
                     ),
                     filename="qadump.txt"
                 )
@@ -54,6 +61,9 @@ class Qa(commands.Cog, command_attrs={'hidden': True}):
         """Ask a question, which later be picked at random"""
         if self.is_qa_running:
             self.questions.append({"a": ctx.author, "q": question})
+            await ctx.message.add_reaction(
+                self.bot.get_emoji(757023230073634922)
+            )
 
         else:
             await ctx.send("Ey! there isn't a Q&A session yet")
