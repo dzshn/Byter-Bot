@@ -77,7 +77,7 @@ class Qa(commands.Cog, command_attrs={'hidden': True}):
                     description=q_obj['q']
                 ).set_author(
                     name=f"{q_obj['a']} ({q_obj['a'].id})",
-                    icon_url=q_obj['q'].avatar_url
+                    icon_url=q_obj['a'].avatar_url
                 )
             )
 
