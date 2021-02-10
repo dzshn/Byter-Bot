@@ -183,6 +183,7 @@ class Utils(commands.Cog):
 
     @commands.command()
     async def userinfo(self, ctx, user: typing.Optional[discord.Member]=None):
+        """Return some info about given user / you"""
         user = ctx.author if user == None else user
         await ctx.send(
             embed=discord.Embed(
