@@ -181,6 +181,26 @@ class Utils(commands.Cog):
             else:
                 await ctx.send('Something went wrong')
 
+    @commands.command()
+    async def userinfo(self, ctx, user: typing.Optional[discord.Member]=None):
+        user = ctx.author if user == None else user
+        await ctx.send(
+            embed=discord.Embed(
+                color=ctx.author.color.value,
+                title=f"Info for {user}" + (f" ({user.nick})" if user.nick else ''),
+                description=(
+                    f"**ID:** {user.id}\n"
+                    f"**Created at:** {user.created_at}\n"
+                    f"**Joined at:** {user.joined_at}\n"
+                    f"**Roles:** {', '.join([i.name for i in user.roles[1:]]) if user.roles else 'none'}\n"
+                )
+            ).set_thumbnail(
+                url=user.avatar_url
+            ).set_footer(
+                text=f"Fetched at {datetime.datetime.now()} by {ctx.author}"
+            )
+        )
+
 
 def setup(bot):
     bot.add_cog(Utils(bot))
